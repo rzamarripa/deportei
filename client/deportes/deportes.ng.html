@@ -1,0 +1,113 @@
+<h2>Deportes</h2>  	
+<form name="form" class="form-horizontal" role="form" novalidate>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-{{dep.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="nuevodeporte" ng-click="dep.nuevoDeporte()">
+		  {{dep.nuevo == true ? 'Nuevo' : 'Cancelar'}}
+		</a>
+		<div class="collapse" id="collapseExample">
+		  	<div class="well">	    
+			    <div class="row">
+			    	<div class="col-sm-4" valida>
+				    	<label>Nombre *</label>
+					    <input name="nombre" type="text" class="form-control" ng-model="dep.deporte.nombre" required>
+			    	</div>
+			    	<div class="col-sm-4" valida>
+							<label >Evento</label>
+								<select name="evento" class="form-control select2" placeholder="Seleccione" ng-model="dep.deporte.evento_id" required>
+									<option  value="{{evento._id}}" ng-repeat="evento in dep.eventos">
+										{{evento.nombre}}
+									</option>
+								</select>
+					  </div>
+			    </div>	
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" value="Guardar" ng-click="dep.guardar(dep.deporte,form)" class="btn btn-primary" ng-show="dep.action" valida-form formulario="form">
+						<input type="submit" ng-click="dep.actualizar(dep.deporte,form)" value="Actualizar" class="btn btn-primary" ng-show="!dep.action" valida-form formulario="form">				
+					</div>
+				</div>	  
+		</div>
+	</div>
+</div>
+</form>
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<div class="well">	    
+	<div class="row">
+		<div class="col-md-4">
+				<label >Buscar Deporte</label>
+				<div class="icon-addon addon-md">
+					<input type="text" class="form-control" placeholder="..." ng-model="query">
+					<label for="buscar" class="glyphicon glyphicon-search" rel="tooltip" title="" data-original-title="Buscar"></label>
+	      </div>
+		</div>
+		<div class="col-sm-4" valida>
+			<label >Evento</label>
+				<select name="evento" class="form-control select2" placeholder="Seleccione" ng-model="dep.deporte.buscarEvento_id" required>
+					<option  value="{{evento._id}}" ng-repeat="evento in dep.eventos">
+						{{evento.nombre}}
+					</option>
+				</select>
+	  </div>
+	</div>
+</div>
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered" bs-table>
+			<thead>
+				<tr>
+					<th width="20%"><div class="text-center">Nombre</div></th>
+					<th width="10%"><div class="text-center">Evento</div></th>						
+					<th width="10%">
+						<div class="text-center">
+							Estatus
+						</div>
+					</th>
+					<th width="10%">
+						<div class="text-center">
+							Acciones
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+		    <tr ng-repeat="deporte in dep.deportes | filter:query">
+			    <td>{{deporte.nombre}} </td>
+			    <td>{{dep.getEvento(deporte.evento_id)}} </td>
+			    <td>
+				    <div class="text-center">
+				    	<span ng-if="deporte.estatus" class="label label-success">
+							  Activo
+							</span>
+							<span ng-if="!deporte.estatus" class="label label-danger">
+							  Inactivo
+							</span>
+				    </div>
+			    </td>
+			    <td>
+				    <div class="text-center">
+					    <div class="btn-group">
+							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="caret"></span>
+							    <span class="sr-only">Toggle Dropdown</span>
+							  </button>
+							  <ul class="dropdown-menu text-left dropdown-menu-right">
+							    <li><a href="#" ng-click="dep.editar(deporte._id)"><i class="fa fa-pencil"></i> Editar</a></li>
+							    <li><a href="#" ng-click="dep.cambiarEstatus(deporte._id)">
+							    				<i class="fa fa-{{deporte.estatus ? 'trash' : 'check' }}"></i> {{deporte.estatus ? "Desactivar" : "Activar" }}
+							    		</a>
+							    </li>
+							  </ul>
+							</div>
+				    </div>				    
+			    </td>
+		    </tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+

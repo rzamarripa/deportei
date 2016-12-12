@@ -1,0 +1,32 @@
+<div class="container">
+	<div class="row">
+		<div class="col-lg-3 col-sm-6">
+            <div class="card hovercard">
+                <div class="cardheader">
+
+                </div>
+                <div class="avatar">
+                    <img alt="" src="{{pv.tieneFoto(pv.participante.sexo, pv.participante.foto)}}">
+                </div>
+                <div class="info">
+                    <div class="title">
+                        <span>{{pv.participante.nombre}}</span>
+											  <br />
+												<span>{{pv.participante.apellidoPaterno}} {{pv.participante.apellidoMaterno}}</span>
+                    </div>
+                    <div class="desc">{{pv.participante.curp}}</div>
+                    <div class="desc">{{pv.participante.sexo}}</div>
+                    <div class="desc">{{pv.participante.funcionespecifica}}</div>
+                    <div class="desc">{{pv.evento.nombre}}</div>
+                    <div class="desc">{{pv.deporte.nombre}}</div>
+                    <div class="desc">{{pv.categoria.nombre}}</div>
+                    <div class="desc">{{pv.rama.nombre}}</div>
+										<!--<div class="desc">{{participante.municipio.nombre}}</div>-->
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+
+
+

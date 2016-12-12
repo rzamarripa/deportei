@@ -1,0 +1,23 @@
+<h2>Eventos</h2>
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th width="20%"><div class="text-center">Nombre</div></th>
+					<th width="10%"><div class="text-center">Fecha Inicio</div></th>
+					<th width="10%"><div class="text-center">Fecha Fin</div></th>
+				</tr>
+			</thead>
+			<tbody>
+		    <tr ng-repeat="evento in em.eventos">
+			    <td><a href="/participantesnuevo/{{evento._id}}">{{evento.nombre}} </a></td>
+			    <td>{{evento.fechainicio.getUTCDate() +"/"+ (evento.fechainicio.getUTCMonth()+1) +"/"+ evento.fechainicio.getUTCFullYear()}} </td>
+			    <td>{{evento.fechafin.getUTCDate() +"/"+ (evento.fechafin.getUTCMonth()+1) +"/"+ evento.fechafin.getUTCFullYear()}} </td>
+		    </tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+

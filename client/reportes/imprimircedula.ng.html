@@ -1,0 +1,99 @@
+<table class="table" width="600" align="center" >
+	<thead>
+		<tr>
+			 <td colspan="2">Evento: {{impced.evento.nombre}}</td>
+			 <td>Municipio: {{impced.municipio.nombre}}</td>
+			 <td>Deporte: {{impced.deporte.nombre}}</td>
+		</tr>	
+  </thead>
+	<tbody>
+		<tr ng-repeat="participante in impced.participantes"> 
+			<td width="20%">
+					<img src="{{impced.tieneFoto(participante.sexo, participante.foto)}}" alt="" class="img-rounded img-responsive" style="width:100px; height:100px;" />
+			</td>	
+			<td>
+	            <strong>NOMBRE:</strong> {{participante.nombre}}
+						  <br />
+							{{participante.apellidoPaterno}} {{participante.apellidoMaterno}}
+							<br />
+	            <strong>FN: </strong>{{participante.fechaNacimiento.getUTCDate() +"-"+ (participante.fechaNacimiento.getUTCMonth()+1) +"-"+ participante.fechaNacimiento.getUTCFullYear()}} - <strong>SEXO:</strong> {{participante.sexo}}
+              <br />
+              <strong>CURP:</strong> {{participante.curp}} 
+      </td>
+			<td>
+             	<span>{{participante.funcionEspecifica}}</span>
+              <br />
+              <span>{{participante.categoria.nombre}}</span>
+              <br />
+              <span>{{participante.deporte.nombre}}</span>
+              <br />
+			        <ol>
+			          <li ng-repeat="prueba in participante.pruebasNombre">
+			             	(&nbsp;&nbsp;&nbsp;) {{prueba.nombre}}
+			          </li>
+		          </ol>
+			</td>
+			<td width="20%">
+          <table style="width: 110px; height: 113px" border="1" >
+	          <tbody>
+		          <tr>
+			          <td>
+											<!--<br /><br /><br /><br /><br />-->
+			          </td>
+		          </tr> 
+	          </tbody> 
+          </table>			
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<div class="divFooter">
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>____________________________</span>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>____________________________</span><br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<span>	Director del Instituto			</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																								 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																								 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																								 &nbsp;&nbsp;&nbsp;
+																								 <span>Vo. Bo. Conade	</span><br />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<span>Nombre, Firma y Sello</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						 														  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						 														  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																					<span>Nombre, Firma y Sello </span> 				
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<span>Fecha Emisión:</span><span id="Fecha"></span>
+</div>
+
+<script>
+var d = new Date();
+document.getElementById("Fecha").innerHTML = d.getDate() + "/" + (d.getMonth()+1)  + "/" +d.getFullYear();
+
+</script>
+
+<style type="text/css">
+
+   @page {
+      size: auto;   /* auto is the initial value */
+      margin: 0;
+   }
+
+   @media print {
+		  div.divFooter {
+		    position: fixed;
+		    bottom: 7.9375mm;
+		  }
+	 }   
+   
+</style>
+
+
+
+
+
+
+
+

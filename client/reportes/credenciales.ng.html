@@ -1,0 +1,83 @@
+	<table class="table" align="center" border="1" style="width: 880px" >				
+		<tbody>
+			<tr ng-repeat="participante in cre.participantes"> 
+				<td style="padding: 0.5; position: relative; width: 420px; height: 250px">
+					<img src="/img/fondo_credencial_con_pleca.png" style="position:absolute; width: 420px; height: 239px;"/>
+					<br/>
+					<br/>
+					<br/>
+					<table> 
+						<tbody>
+							<tr>
+								<td style="width: auto">
+										<div style="position:relative; left: 30px; top:0;">
+							         	<h6 style="margin: 0">CURP<small><strong>{{participante.curp}}</strong></small></h6>
+						          	<h6 style="margin: 0">Nombre<small><strong>{{participante.nombre}}<br /> 
+							          	{{participante.apellidoPaterno}} {{participante.apellidoMaterno}}</strong></small></h6>
+						            <h6 style="margin: 0">Deporte<small><strong>{{participante.deporte.nombre}}</strong></small></h6>
+						            <h6 style="margin: 0">Modalidad<small><strong>{{participante.funcionespecifica}}</strong></small></h6>
+												<h6 style="margin: 0">Vigencia<small><strong>poner vigencia</strong></small></h6>
+												<h6 style="margin: 0">Entidad<small><strong>{{participante.municipio.nombre}}</strong></small></h6>
+										</div>									
+								</td>
+								<td>
+										<div style="position:relative; left: 0; top:0;">
+										  <img src="{{cre.tieneFoto(participante.sexo, participante.foto)}}" style="position:relative; top:0;left:140px; width:100px; height:100px;"/>
+										  <img src="/img/sellito_foto.png" style="position:absolute; absolute; top: 5px; left: 100px;width:100px; height:100px;"/>
+							      	<p style="position:absolute; absolute; top: 110px; left: 130px;width:100px; height:100px;">
+								      	___________________
+							      	</p>
+							      	<p style="position:absolute; absolute; top: 125px; left: 170px;width:100px; height:100px;">
+								      	<strong>FIRMA</strong>
+							      	</p>
+										</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+				<td style="padding: 0.5; position: relative; width: 420px; height: 250px;">
+						<img src="/img/parte_de_atras.png" style="position:absolute;width: 420px; height: 239px;" />
+						<table> 
+						<tbody>
+							<tr>
+								<td>
+										<div style="position:relative; left: 20px; top:0;">
+							      	<img src="/img/firma_director_insude.png" style="position:relative; top:70px;left:10px;"/>
+							      	<br />
+							      	<br />
+							      	<br />
+							      	<br />
+							      	<br />
+							      	<p>
+								      	<strong>CP JOSÉ ÁVILA GERALDO</strong>
+								      	<br />
+								      	DIRECTOR GENERAL DEL INSUDE
+							      	</p>
+							      </div>
+							     									
+								</td>
+								<td>	
+										<div style="position:relative; left: 0; top:0;">
+										  <img src="https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=http://insude.mazoft.com/participantesver/{{participante._id}}/{{participante.evento_id}}/{{participante.deporte_id}}/{{participante.categoria_id}}/{{participante.rama_id}}" style="position:relative; top:40px;left:40px;"/>
+										</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>	
+		</tbody>
+	</table>
+	
+<style type="text/css">
+
+   @page {
+      size: auto;   /* auto is the initial value */
+      margin: 0;
+   }
+
+    
+</style>
+
+

@@ -1,0 +1,164 @@
+<h2>Pruebas</h2> 
+<form name="form" class="form-horizontal" role="form" novalidate> 	
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-{{pru.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="nuevoprueba" ng-click="pru.nuevoPrueba()">
+		  {{pru.nuevo == true ? 'Nuevo' : 'Cancelar'}}
+		</a>
+		<div class="collapse" id="collapseExample">
+		  	<div class="well">	    
+			    <div class="row">
+				    <div class="col-sm-4" valida>
+				    	<label>Nombre *</label>
+					    <input name="nombre" type="text" class="form-control" ng-model="pru.prueba.nombre" required>
+			    	</div>
+				    <div class="col-sm-4" valida>
+							<label >Evento *</label>
+							<select name="evento" class="form-control select2" placeholder="Seleccione" ng-model="pru.prueba.evento_id" required>
+								<option  value="{{evento._id}}" ng-repeat="evento in pru.eventos">
+									{{evento.nombre}}
+								</option>
+							</select>
+					  </div>
+						<div class="col-sm-2" valida>
+							<label >Deporte *</label>
+							<select name="deporte" class="form-control select2" placeholder="Seleccione" ng-model="pru.prueba.deporte_id" required>
+								<option  value="{{deporte._id}}" ng-repeat="deporte in pru.deportes">
+									{{deporte.nombre}}
+								</option>
+							</select>
+						</div>
+			    </div>
+			     <div class="row">		
+						<div class="col-sm-4" valida>
+							<label >Categoria *</label>
+							<select name="categoria" class="form-control select2" placeholder="Seleccione" ng-model="pru.prueba.categoria_id" required>
+								<option  value="{{categoria._id}}" ng-repeat="categoria in pru.categorias">
+									{{categoria.nombre}}
+								</option>
+							</select>
+						</div>
+			    	<div class="col-sm-2" valida>
+							<label >Rama *</label>
+							<select name="rama" class="form-control select2" placeholder="Seleccione" ng-model="pru.prueba.rama_id" required>
+								<option  value="{{rama._id}}" ng-repeat="rama in pru.ramas">
+									{{rama.nombre}}
+								</option>
+							</select>
+						</div>
+			    </div>	
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" value="Guardar" ng-click="pru.guardar(pru.prueba,form)" class="btn btn-primary" ng-show="pru.action" valida-form formulario="form">
+						<input type="submit" ng-click="pru.actualizar(pru.prueba,form)" value="Actualizar" class="btn btn-primary" ng-show="!pru.action" valida-form formulario="form">				
+					</div>
+				</div>
+		</div>
+	</div>
+</div>
+</form>
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<div class="well">	    
+	<div class="row">
+		<div class="col-md-4">
+				<label>Categoria</label>
+				<div class="icon-addon addon-md">
+					<input type="text" class="form-control" placeholder="Buscar... Categoria" ng-model="query">
+					<label for="buscar" class="glyphicon glyphicon-search" rel="tooltip" title="" data-original-title="Buscar"></label>
+	      </div>
+		</div>
+		<div class="col-sm-4">
+			<label >Evento</label>
+			<select name="buscarevento" class="form-control select2" placeholder="Seleccione" ng-model="pru.buscar.buscarEvento_id">
+				<option  value="{{evento._id}}" ng-repeat="evento in pru.eventos">
+					{{evento.nombre}}
+				</option>
+			</select>
+	  </div>
+		<div class="col-sm-2">
+			<label >Deporte</label>
+			<select name="buscardeporte" class="form-control select2" placeholder="Seleccione" ng-model="pru.buscar.buscarDeporte_id">
+				<option  value="{{deporte._id}}" ng-repeat="deporte in pru.deportesBuscar">
+					{{deporte.nombre}}
+				</option>
+			</select>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">
+			<label >Categoria</label>
+			<select name="buscarcategoria" class="form-control select2" placeholder="Seleccione" ng-model="pru.buscar.buscarCategoria_id">
+				<option  value="{{categoria._id}}" ng-repeat="categoria in pru.categoriasBuscar">
+					{{categoria.nombre}}
+				</option>
+			</select>
+		</div>
+		<div class="col-sm-2">
+			<label >Rama *</label>
+			<select name="buscarrama" class="form-control select2" placeholder="Seleccione" ng-model="pru.buscar.buscarRama_id">
+				<option  value="{{rama._id}}" ng-repeat="rama in pru.ramas">
+					{{rama.nombre}}
+				</option>
+			</select>
+		</div>
+
+	</div>
+</div>
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th width="20%"><div class="text-center">Nombre</div></th>					
+					<th width="10%">
+						<div class="text-center">
+							Estatus
+						</div>
+					</th>
+					<th width="10%">
+						<div class="text-center">
+							Acciones
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+		    <tr ng-repeat="prueba in pru.pruebas | filter:query">
+			    <td>{{prueba.nombre}} </td>
+			    <td>
+				    <div class="text-center">
+				    	<span ng-if="prueba.estatus" class="label label-success">
+							  Activo
+							</span>
+							<span ng-if="!prueba.estatus" class="label label-danger">
+							  Inactivo
+							</span>
+				    </div>
+			    </td>
+			    <td>
+				    <div class="text-center">
+					    <div class="btn-group">
+							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="caret"></span>
+							    <span class="sr-only">Toggle Dropdown</span>
+							  </button>
+							  <ul class="dropdown-menu text-left dropdown-menu-right">
+							    <li><a href="#" ng-click="pru.editar(prueba._id)"><i class="fa fa-pencil"></i> Editar</a></li>
+							    <li><a href="#" ng-click="pru.cambiarEstatus(prueba._id)">
+							    				<i class="fa fa-{{prueba.estatus ? 'trash' : 'check' }}"></i> {{prueba.estatus ? "Desactivar" : "Activar" }}
+							    		</a>
+							    </li>
+							  </ul>
+							</div>
+				    </div>				    
+			    </td>
+		    </tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+

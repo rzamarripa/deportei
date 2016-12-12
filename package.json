@@ -1,0 +1,27 @@
+{
+  "name": "deporteb",
+  "version": "1.0.0",
+  "description": "Sistema Para el deporte",
+  "main": "index.js",
+  "dependencies": {
+    "docxtemplater": "^3.0.0",
+    "docxtemplater-image-module": "^3.0.0",
+    "jszip": "^2.6.1",
+    "office2pdf": "0.0.2",
+    "unoconv": "^0.1.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rzamarripa/deporteb.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rzamarripa/deporteb/issues"
+  },
+  "homepage": "https://github.com/rzamarripa/deporteb"
+}
