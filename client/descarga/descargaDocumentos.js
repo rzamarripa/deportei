@@ -27,14 +27,7 @@ function descargaDocumentosCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 						,estatus: true				
 			}]
 	});
-	
-	/*
-	this.subscribe('buscarNombre',()=>{
-		return [{$and:[ {municipio_id : this.getReactively('evento.municipio_id')!= undefined ? this.getReactively('evento.municipio_id'): ""}
-										,{evento_id: this.getReactively('evento.evento_id')!= undefined ? this.getReactively('evento.evento_id'): "" }]}]
-	});
-	*/
-	
+
 	
 	this.subscribe('municipios',()=>{
 		return [{estatus: true}]

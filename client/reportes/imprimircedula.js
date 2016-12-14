@@ -19,22 +19,15 @@ function imprimirCedulaCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	
 	this.evento_id = $stateParams.evento;
 	
-	let part = this.subscribe('participantesCred',()=>{
+	let part = this.subscribe('participanteEventos',()=>{
 		return [{evento_id: $stateParams.evento 
 					  ,municipio_id : Meteor.user() != undefined ? Meteor.user().profile.municipio_id : ""
 					  ,deporte_id: $stateParams.deporte
 						,categoria_id: $stateParams.categoria
 					  ,rama_id: $stateParams.rama
-					  ,funcionEspecifica: $stateParams.funcionEspecifica
-						,estatus: true}]
+					  ,funcionEspecifica: $stateParams.funcionEspecifica}]
 	});
 	
-	/*
-	this.subscribe('buscarNombre',()=>{
-		return [{$and:[ {municipio_id : Meteor.user() != undefined ? Meteor.user().profile.municipio_id : ""}
-										,{evento_id: $stateParams.evento }]}]
-	});
-	*/
 	
 	this.subscribe('municipios',()=>{
 		return [{_id: Meteor.user() != undefined ? Meteor.user().profile.municipio_id : ""}]
@@ -64,7 +57,7 @@ function imprimirCedulaCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	
 	this.helpers({
 	  participantes : () => {
-		  return Participantes.find();
+		  return ParticipanteEventos.find();
 	  },
 		municipio : () => {
 			return Municipios.findOne();

@@ -50,6 +50,12 @@ function CategoriasCtrl($scope, $meteor, $reactive, $state, toastr) {
 	      toastr.error('Error al guardar los datos.');
 	      return;
 	    }
+	    
+	    if (categoria.anioinicio < categoria.aniofin)
+	    {
+		    	toastr.error('Año Inicio debe ser mayor o igual al Año Fin.');
+					return;
+	    }
 			
 			categoria.estatus = true;
 			categoria.usuarioInserto = Meteor.userId();

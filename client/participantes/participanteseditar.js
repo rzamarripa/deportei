@@ -10,13 +10,19 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 	Window = rc;
 	
 	this.action = true;
-	this.participante = {}; 
+	this.participante = {};
+	this.participanteEventos = {}; 
 	
 	this.participante.evento_id = $stateParams.id;
+	this.participanteEventos.evento_id = $stateParams.id;
 	
 	
 	this.subscribe('participantes',()=>{
 		return [{_id : $stateParams.id}]
+	});
+	
+	let pe = this.subscribe('participanteEventos',()=>{
+		return [{participante_id : $stateParams.id}]
 	});
 	
 	
@@ -58,6 +64,9 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 	  participante : () => {	
 		  return Participantes.findOne();
 	  },
+	  participanteEventos : () => {	
+		  return ParticipanteEventos.findOne();
+	  },
 	  eventos : () => {
 		  return Eventos.find();
 	  },
@@ -79,7 +88,7 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
   });
   	  
   	
-	this.actualizar = function(participante,form)
+	this.actualizar = function(participante, participanteEventos,form)
 	{
 	    if(form.$invalid){
 	      toastr.error('Error al guardar los datos.');
@@ -119,10 +128,7 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 	    {
 	        edad--;
 	    }
-	    console.log("Final:",edad);
-			console.log("Maxima:", EdadMaxima);
-			console.log("Minima:", EdadMinima);
-			
+	   			
 			
 			//Validar la edad del particpante en relación a la categoria
 			if (edad >= EdadMinima && edad <= EdadMaxima)
@@ -193,16 +199,19 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 			var fileInput1 = document.getElementById('fileInput1');
 			var fileDisplayArea1 = document.getElementById('fileDisplayArea1');
 			
-			console.log(rc.participante);
-
-					
-			
-			var x = document.getElementById("prueba"); 
-			var optionVal = new Array();
-			for (i = 0; i <  rc.participante.pruebas.length; i++) { 
-					optionVal.push(rc.participante.pruebas[i]);
+			if(pe.ready()){
+				console.log("Participantes:",rc.participanteEventos);
 			}
-			
+			/*		
+			if (rc.participanteEventos.pruebas != undefined)
+			{
+					var x = document.getElementById("prueba"); 
+					var optionVal = new Array();
+					for (i = 0; i <  rc.participanteEventos.pruebas.length; i++) { 
+							optionVal.push(rc.participanteEventos.pruebas[i]);
+					}
+			}
+			*/
 			
 				//JavaScript para agregar la imagen 1
 			fileInput1.addEventListener('change', function(e) {

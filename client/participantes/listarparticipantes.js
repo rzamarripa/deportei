@@ -22,9 +22,7 @@ function ListarParticipantesCtrl($scope, $meteor, $reactive, $state, toastr, $st
 	});
 	*/
 	
-	this.subscribe('buscarNombre', () => {
-		
-
+	this.subscribe('buscarNombreEventos', () => {
 		if (this.getReactively('buscar.evento_id') != undefined && this.getReactively('buscar.deporte_id') != undefined && this.getReactively('buscar.categoria_id') != undefined && this.getReactively('buscar.rama_id') != undefined && this.getReactively('buscar.nombre') != undefined )
 		{			
 	    return [{
@@ -62,7 +60,7 @@ function ListarParticipantesCtrl($scope, $meteor, $reactive, $state, toastr, $st
 	
 	this.helpers({
 	  participantes : () => {
-		  return Participantes.find();
+		  return ParticipanteEventos.find();
 	  },
 	  eventos : () => {
 			return Eventos.find();

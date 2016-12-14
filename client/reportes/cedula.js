@@ -20,21 +20,15 @@ function CedulaCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 	this.categoriaNombre = "";
 	
 	
-	let part = this.subscribe('participantesCred',()=>{
+	let part = this.subscribe('participanteEventos',()=>{
 		return [{evento_id: this.getReactively('evento.evento_id')!= undefined ? this.getReactively('evento.evento_id'): "" 
 					  ,municipio_id : Meteor.user() != undefined ? Meteor.user().profile.municipio_id : ""
 					  ,deporte_id: this.getReactively('evento.deporte_id')!= undefined ? this.getReactively('evento.deporte_id'): ""
 						,categoria_id: this.getReactively('evento.categoria_id')!= undefined ? this.getReactively('evento.categoria_id'): ""
 					  ,rama_id: this.getReactively('evento.rama_id')!= undefined ? this.getReactively('evento.rama_id'): ""
-					  ,funcionEspecifica: this.getReactively('evento.funcionEspecifica')!= undefined ? this.getReactively('evento.funcionEspecifica'): ""
-						,estatus: true}]
+					  ,funcionEspecifica: this.getReactively('evento.funcionEspecifica')!= undefined ? this.getReactively('evento.funcionEspecifica'): ""}]
 	});
-	/*
-	this.subscribe('buscarNombre',()=>{
-		return [{$and:[ {municipio_id : Meteor.user() != undefined ? Meteor.user().profile.municipio_id : ""}
-	 								 ,{evento_id: this.getReactively('evento.evento_id')!= undefined ? this.getReactively('evento.evento_id'): "" }]}]
-	});
-	*/
+	
 	this.subscribe('municipios',()=>{
 		return [{estatus: true}]
 	});
@@ -69,7 +63,7 @@ function CedulaCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 	
 	this.helpers({
 	  participantes : () => {
-		  return Participantes.find();
+		  return ParticipanteEventos.find();
 	  },
 		municipios : () => {
 			return Municipios.find();
@@ -91,7 +85,7 @@ function CedulaCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 		},
 		todosParticipantes : () => {
 			if(part.ready()){
-				
+					console.log("Entro");
 				_.each(rc.participantes, function(participante){
 					var m = Municipios.findOne(participante.municipio_id);
 					participante.municipio = m.nombre;
@@ -105,7 +99,7 @@ function CedulaCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 					this.categoriaNombre = c.nombre;
 					var r = Ramas.findOne(participante.rama_id);
 					participante.rama = 	r.nombre;	
-										
+															
 					participante.pruebasNombre = [];
 					_.each(participante.pruebas, function(prueba){
 							//participante.pruebasNombre.push(Pruebas.findOne(prueba, { fields : { nombre : 1}}))

@@ -167,7 +167,7 @@
 											    <div class="row">
 											    	<div class="col-sm-4" valida>
 													    <label for="funcionespecifica">Función Especifica *</label>
-													    <select name="funcionespecifica" ng-model="pn.participante.funcionEspecifica" data-placeholder="Seleccione" ng-change="pn.funcionEspecifica(pn.participante)" class="form-control" required>
+													    <select name="funcionespecifica" ng-model="pn.participanteEventos.funcionEspecifica" data-placeholder="Seleccione" ng-change="pn.funcionEspecifica(pn.participante)" class="form-control" required>
 															    <option value=""></option>
 															    <option value="DEPORTISTA">Deportista</option>
 															    <option value="ENTRENADOR">Entrenador</option>
@@ -184,7 +184,7 @@
 											    	</div>
 														<div class="col-sm-2" valida>
 															<label >Deporte *</label>
-															<select name="deporte" class="form-control select2" placeholder="Seleccione" ng-model="pn.participante.deporte_id" required>
+															<select name="deporte" class="form-control select2" placeholder="Seleccione" ng-model="pn.participanteEventos.deporte_id" required>
 																<option  value="{{deporte._id}}" ng-repeat="deporte in pn.deportes">
 																	{{deporte.nombre}}
 																</option>
@@ -192,7 +192,7 @@
 														</div>
 														<div class="col-sm-4" valida>
 															<label >Categoria *</label>
-															<select name="categoria" class="form-control select2" placeholder="Seleccione" ng-model="pn.participante.categoria_id" required>
+															<select name="categoria" class="form-control select2" placeholder="Seleccione" ng-model="pn.participanteEventos.categoria_id" required>
 																<option  value="{{categoria._id}}" ng-repeat="categoria in pn.categorias">
 																	{{categoria.nombre}}
 																</option>
@@ -200,7 +200,7 @@
 														</div>
 														<div class="col-sm-4" valida>
 															<label >Rama *</label>
-															<select name="rama" class="form-control select2" placeholder="Seleccione" ng-model="pn.participante.rama_id" required>
+															<select name="rama" class="form-control select2" placeholder="Seleccione" ng-model="pn.participanteEventos.rama_id" required>
 																<option  value="{{rama._id}}" ng-repeat="rama in pn.ramas">
 																	{{rama.nombre}}
 																</option>
@@ -208,7 +208,7 @@
 														</div>
 														<div class="col-sm-4" ng-show="pn.pruebas.length > 0">
 															<label >Pruebas</label>
-															<select multiple name="prueba" class="js-example-basic-single Mselect2" style="width: 200%; border: white 0px;" placeholder="Seleccione" ng-model="pn.participante.pruebas">
+															<select multiple name="prueba" class="js-example-basic-single Mselect2" style="width: 200%; border: white 0px;" placeholder="Seleccione" ng-model="pn.participanteEventos.pruebas">
 																<option  value="{{prueba._id}}" ng-repeat="prueba in pn.pruebas">
 																	{{prueba.nombre}}
 																</option>
@@ -258,7 +258,7 @@
 												<div class="text-center">
 													<h4>Click en Registrar para Finalizar</h4>
 													<br/>
-													<button id="registrar" type="submit" ng-click="pn.guardar(pn.participante, form)" class="btn btn-lg btn-primary" valida-form formulario="form">Registrar</button>
+													<button id="registrar" type="submit" ng-click="pn.guardar(pn.participante, pn.participanteEventos, form)" class="btn btn-lg btn-primary" valida-form formulario="form">Registrar</button>
 													<br>
 													<br> 	
 												</div>												
