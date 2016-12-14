@@ -17,34 +17,16 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
   this.buscar.nombre = '';
 	this.validation = false;
 	
-	/*
-	let part = this.subscribe('participantes',()=>{
-		return [{$and:[ {municipio_id: this.getReactively('evento.municipio_id')!= undefined ? this.getReactively('evento.municipio_id'): ""}
-										,{evento_id: this.getReactively('evento.evento_id')!= undefined ? this.getReactively('evento.evento_id'): "" }
-										,{deporte_id: this.getReactively('evento.deporte_id')!= undefined ? this.getReactively('evento.deporte_id'): "" }
-										,{categoria_id: this.getReactively('evento.categoria_id')!= undefined ? this.getReactively('evento.categoria_id'): "" }]
-						,estatus: true				
-			}]
-	});
-	*/
-	
-	let part = this.subscribe('participantesCred',()=>{
+		
+	let part = this.subscribe('participanteEventos',()=>{
 		return [{municipio_id: this.getReactively('evento.municipio_id')!= undefined ? this.getReactively('evento.municipio_id'): ""
 						,evento_id: this.getReactively('evento.evento_id')!= undefined ? this.getReactively('evento.evento_id'): "" 
 						,deporte_id: this.getReactively('evento.deporte_id')!= undefined ? this.getReactively('evento.deporte_id'): "" 
 						,categoria_id: this.getReactively('evento.categoria_id')!= undefined ? this.getReactively('evento.categoria_id'): "" 
-						,rama_id: this.getReactively('evento.rama_id')!= undefined ? this.getReactively('evento.rama_id'): "" 
-						,estatus: true				
+						,rama_id: this.getReactively('evento.rama_id')!= undefined ? this.getReactively('evento.rama_id'): "" 			
 			}]
 	});
-	
-	/*
-	this.subscribe('buscarNombre',()=>{
-		return [{$and:[ {municipio_id : this.getReactively('evento.municipio_id')!= undefined ? this.getReactively('evento.municipio_id'): ""}
-										,{evento_id: this.getReactively('evento.evento_id')!= undefined ? this.getReactively('evento.evento_id'): "" }]}]
-	});
-	*/
-	
+		
 	
 	this.subscribe('municipios',()=>{
 		return [{estatus: true}]
@@ -77,7 +59,7 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 	
 	this.helpers({
 	  participantes : () => {
-		  return Participantes.find();
+		  return ParticipanteEventos.find();
 	  },
 		municipios : () => {
 			return Municipios.find();

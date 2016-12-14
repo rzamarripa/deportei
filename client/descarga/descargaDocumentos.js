@@ -18,14 +18,12 @@ function descargaDocumentosCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 	this.validation = false;
 	
 	
-	let part = this.subscribe('participantesCred',()=>{
+	let part = this.subscribe('participanteEventos',()=>{
 		return [{municipio_id: this.getReactively('evento.municipio_id')!= undefined ? this.getReactively('evento.municipio_id'): ""
 						,evento_id: this.getReactively('evento.evento_id')!= undefined ? this.getReactively('evento.evento_id'): "" 
 						,deporte_id: this.getReactively('evento.deporte_id')!= undefined ? this.getReactively('evento.deporte_id'): "" 
 						,categoria_id: this.getReactively('evento.categoria_id')!= undefined ? this.getReactively('evento.categoria_id'): "" 
-						,rama_id: this.getReactively('evento.rama_id')!= undefined ? this.getReactively('evento.rama_id'): "" 
-						,estatus: true				
-			}]
+						,rama_id: this.getReactively('evento.rama_id')!= undefined ? this.getReactively('evento.rama_id'): "" }]
 	});
 
 	
@@ -63,7 +61,7 @@ function descargaDocumentosCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 	
 	this.helpers({
 	  participantes : () => {
-		  return Participantes.find();
+		  return ParticipanteEventos.find();
 	  },
 		municipios : () => {
 			return Municipios.find();
@@ -106,7 +104,7 @@ function descargaDocumentosCtrl($scope, $meteor, $reactive, $state, toastr, $sta
   {
 		var participante = {};
 		
-		Meteor.call('getParticipante', p._id, function(error, response) {
+		Meteor.call('getParticipante', p.participante_id, function(error, response) {
 		   if(error){
 		    console.log('ERROR :', error);
 		    return;

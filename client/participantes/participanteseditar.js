@@ -40,22 +40,22 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 	
 	this.subscribe('deportes',()=>{
 		
-		return [{evento_id: this.getReactively('participante.evento_id')? this.getReactively('participante.evento_id'):""
+		return [{evento_id: this.getReactively('participanteEventos.evento_id')? this.getReactively('participanteEventos.evento_id'):""
 						,estatus: true}]
 	});
 	
 	this.subscribe('categorias',()=>{
-		return [{evento_id:  this.getReactively('participante.evento_id')? this.getReactively('participante.evento_id'):"" 
-						,deporte_id: this.getReactively('participante.deporte_id')? this.getReactively('participante.deporte_id'):""
+		return [{evento_id:  this.getReactively('participanteEventos.evento_id')? this.getReactively('participanteEventos.evento_id'):"" 
+						,deporte_id: this.getReactively('participanteEventos.deporte_id')? this.getReactively('participanteEventos.deporte_id'):""
 						,estatus: true
 		}]
 	});
 	
 	this.subscribe('pruebas',()=>{
-		return [{evento_id:  this.getReactively('participante.evento_id')? this.getReactively('participante.evento_id'):"" 
-						,deporte_id: this.getReactively('participante.deporte_id')? this.getReactively('participante.deporte_id'):""			
-						,categoria_id: this.getReactively('participante.categoria_id')? this.getReactively('participante.categoria_id'):""
-						,rama_id: this.getReactively('participante.rama_id')? this.getReactively('participante.rama_id'):""			
+		return [{evento_id:  this.getReactively('participanteEventos.evento_id')? this.getReactively('participanteEventos.evento_id'):"" 
+						,deporte_id: this.getReactively('participanteEventos.deporte_id')? this.getReactively('participanteEventos.deporte_id'):""			
+						,categoria_id: this.getReactively('participanteEventos.categoria_id')? this.getReactively('participanteEventos.categoria_id'):""
+						,rama_id: this.getReactively('participanteEventos.rama_id')? this.getReactively('participanteEventos.rama_id'):""			
 		}]
 	});
 	
@@ -199,9 +199,10 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 			var fileInput1 = document.getElementById('fileInput1');
 			var fileDisplayArea1 = document.getElementById('fileDisplayArea1');
 			
-			if(pe.ready()){
-				console.log("Participantes:",rc.participanteEventos);
-			}
+			
+			console.log("Participantes:",rc.participanteEventos);
+			console.log("Participantes this:",this.participanteEventos);
+			
 			/*		
 			if (rc.participanteEventos.pruebas != undefined)
 			{

@@ -5,6 +5,7 @@ angular
 function DeportesCtrl($scope, $meteor, $reactive, $state, toastr) {
 	$reactive(this).attach($scope);
 	this.action = true;
+	this.deporte = {};
 	
 	this.subscribe('deportes',()=>{
 		return [{evento_id: this.getReactively('deporte.buscarEvento_id')? this.getReactively('deporte.buscarEvento_id'):""}]
@@ -29,7 +30,6 @@ function DeportesCtrl($scope, $meteor, $reactive, $state, toastr) {
     this.action = true;
     this.nuevo = !this.nuevo;
     this.deporte.nombre = "";
-    		
   };
 	
   this.guardar = function(deporte,form)

@@ -11,8 +11,25 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 	
 	this.participante = {};
 	this.participanteEventos = {}; 
+	this.buscar = {};
+  this.buscar.nombre = '';
 	
 	this.participanteEventos.evento_id = $stateParams.id;
+	
+	
+	this.subscribe('buscarNombreNuevo', () => {
+		if (this.getReactively('buscar.nombre') != undefined &&  this.getReactively('buscar.nombre') != "" )
+		{			
+	    return [{
+		    options : { limit: 20 },
+		    where : { 
+			    nombreCompleto : this.getReactively('buscar.nombre'),
+			    municipio_id : Meteor.user() != undefined ? Meteor.user().profile.municipio_id : ""	  
+			  }  
+	    }];
+    }
+  });
+
 	
 	this.subscribe('ramas',()=>{
 		return [{estatus: true}]
@@ -66,6 +83,9 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 	  },
 	  modalidaddeportivas : () => {
 		  return ModalidadDeportivas.find();
+	  },
+	  participantes : () => {
+		  return Participantes.find();
 	  },
   });
 	
@@ -369,6 +389,21 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 					this.participante.identificacion = imagen;		
 						
 	}
+	
+	this.tieneFoto = function(sexo, foto){
+	  if(foto === undefined){
+		  if(sexo === "Hombre")
+			  return "img/badmenprofile.jpeg";
+			else if(sexo === "Mujer"){
+				return "img/badgirlprofile.jpeg";
+			}else{
+				return "img/badprofile.jpeg";
+			}
+			  
+	  }else{
+		  return foto;
+	  }
+  }  
 	
 	
 	$(document).ready( function() {

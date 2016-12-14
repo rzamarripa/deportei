@@ -152,7 +152,7 @@
 																<input name="foto" type="file" id="fileInput1">																
 																<div id="fileDisplayArea1"></div>
 																 <!--<img class="thumbnail" src="{{pn.participante.foto}}" ng-if="{{pn.participante.foto}}" width="200" height="200"/>-->										
-															</div>												    	
+															</div>			
 											    </div>
 										  	</div>
 											</div>
@@ -288,6 +288,38 @@
 		</div>
 	</div>
 </div>
+<!--Buscar a un particiante-->
+<div class="well">
+	<div class="row">
+		<div class="col-sm-6">
+				<label>Participantes</label>
+				<input class="form-control" type="text" placeholder="Buscar..." ng-model="pn.buscar.nombre">
+		</div>									    	
+	</div>
+</div>
+<table class="table" width="600" align="center" bs-table>
+	<thead>
+		 <tr>
+			 <th>Foto</th>
+			 <th>CURP</th>
+			 <th>Nombre</th>
+			 <th>Sexo</th>
+			 <th>Fecha Nacimiento</th>	 
+		 </tr> 
+	</thead>	
+	<tbody>
+		<tr ng-repeat="participante in pn.participantes"> 
+			<td>
+					<img src="{{pn.tieneFoto(participante.sexo, participante.foto)}}" alt="" class="img-rounded img-responsive" style="width:60px; height:60px;" />
+			</td>	
+			<td>{{participante.curp}}</td>
+			<td>{{participante.nombre}} {{participante.apellidoPaterno}} {{participante.apellidoMaterno}}</td>
+			<td>{{participante.sexo}}</td>
+			<td>{{participante.fechaNacimiento.getUTCDate() +"/"+ (participante.fechaNacimiento.getUTCMonth()+1) +"/"+ participante.fechaNacimiento.getUTCFullYear()}}</td>						
+		</tr>	
+	</tbody>
+</table>
+
 
 <script>
 	$('#bootstrap-wizard-1').bootstrapWizard({
