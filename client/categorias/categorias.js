@@ -83,6 +83,11 @@ function CategoriasCtrl($scope, $meteor, $reactive, $state, toastr) {
 	        toastr.error('Error al actualizar los datos.');
 	        return;
 	    }
+	    if (categoria.anioinicio < categoria.aniofin)
+	    {
+		    	toastr.error('Año Inicio debe ser mayor o igual al Año Fin.');
+					return;
+	    }
 		 	var idTemp = categoria._id;
 			delete categoria._id;		
 			categoria.usuarioActualizo = Meteor.userId(); 
