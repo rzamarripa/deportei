@@ -230,19 +230,21 @@
 															<label>CURP * (máximo 1MB)</label>
 															<div>
 																<input type="file" id="fileInputCurp" accept="application/pdf, image/jpeg">
-																<!--<a class="btn btn-primary" ui-sref="window.open(escape(pe.participante.curpImage))" ng-if="pe.participante.curpImagen != " target="_blank">ver</a>-->
+																<input type="button" class="btn btn-primary" ng-click="pe.download(pe.participante.curpImagen,1)" ng-if="pe.participante.curpImagen" value="descargar" />	
 															</div>
 														</div>
 														<div class="col-sm-4">
 															<label>Acta de Nacimiento * (máximo 1MB)</label>
 															<div>
 																<input type="file" id="fileInputActa" accept="application/pdf, image/jpeg">
+																<input type="button" class="btn btn-primary" ng-click="pe.download(pe.participante.actaNacimiento,2)" ng-if="pe.participante.actaNacimiento" value="descargar" />
 															</div>
 														</div>
 														<div class="col-sm-4">
 															<label>Identificación Oficial * (máximo 1MB)</label>
 															<div>
 																<input type="file" id="fileInputIdentificacion" accept="application/pdf, image/jpeg">
+																<input type="button" class="btn btn-primary" ng-click="pe.download(pe.participante.identificacion,3)" ng-if="pe.participante.identificacion" value="descargar" />
 															</div>
 														</div>								
 											    </div>
@@ -299,3 +301,5 @@
     }
   });
 </script>
+
+ <a id='dwnldLnk' style="display:none;" hidden="true"></a>  

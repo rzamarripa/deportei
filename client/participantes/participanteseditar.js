@@ -439,12 +439,6 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 						
 	}
 	
-					
-	
-	
-
-	
-	
 	$(document).ready( function() {
 		
 
@@ -698,6 +692,48 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 			
 			return e;		
 	}	
+	
+	this.download = function(archivo, op) 
+  {
+
+		    if (archivo.indexOf("application") > 0)
+		    {
+
+			    	var pdf = 'data:application/octet-stream;base64,';
+			  		var d = archivo.replace('data:application/pdf;base64,','');  
+						var dlnk = document.getElementById('dwnldLnk');
+						if (op==1)
+							 dlnk.download= "curp.pdf";
+						else if (op==2)
+							 dlnk.download= "AN.pdf";
+						else if (op==3)
+							 dlnk.download= "Ide.pdf";
+				    dlnk.href = pdf+d;
+				    dlnk.click();
+		    }
+		    else if(archivo.indexOf("image") > 0)
+		    {
+
+			    	var jpeg = 'data:image/jpeg;base64,';
+			  		var d = archivo.replace('data:image/jpeg;base64,','');  
+						var dlnk = document.getElementById('dwnldLnk');
+				    if (op==1)
+							 dlnk.download= "curp.pdf";
+						else if (op==2)
+							 dlnk.download= "AN.pdf";
+						else if (op==3)
+							 dlnk.download= "Ide.pdf";				    
+						dlnk.href = jpeg+d;
+				    dlnk.click();
+		    }
+		    else
+		    {
+			    console.log("no entro")
+		    }
+		    
+
+
+	};
 	
 	
 };

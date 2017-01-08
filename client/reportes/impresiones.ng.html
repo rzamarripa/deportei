@@ -58,13 +58,15 @@
 <div class="well">		
 	<div class="row">
 		<div class="col-sm-3">
+				<!--
 				<a class="btn btn-primary" ui-sref="anon.credenciales({evento:imp.evento.evento_id
 																															,municipio:imp.evento.municipio_id
 																															,deporte:imp.evento.deporte_id
 																															,categoria:imp.evento.categoria_id
 																															,rama:imp.evento.rama_id})" target="_blank">
 				  Credenciales
-				</a>
+				</a>-->
+				<input class="btn btn-primary" type="button" ng-click="imp.download(imp.participantes)" value="Credenciales" disabled="true" />
 		</div>
 		<div class="col-sm-3">
 				<!--<a class="btn btn-primary" ui-sref="anon.gafetes({evento:imp.evento.evento_id
@@ -74,7 +76,7 @@
 																												 ,rama:imp.evento.rama_id})" target="_blank">
 				  Gafetes
 				</a>-->
-				<input class="btn btn-primary" type="button" ng-click="imp.download(imp.participantes)" value="Gafetes" />
+				<input class="btn btn-primary" type="button" ng-click="imp.download(imp.participantes)" value="Gafetes" disabled="true"/>
 		</div>
 	</div>
 </div>		
