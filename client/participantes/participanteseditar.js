@@ -15,7 +15,7 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 	
 	this.participante.evento_id = $stateParams.id;
 	this.participanteEventos.evento_id = $stateParams.id;
-	
+
 	
 	this.subscribe('participantes',()=>{
 		return [{_id : $stateParams.id}]
@@ -30,10 +30,10 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 		return [{estatus: true}]
 	});
 	
-	this.subscribe('modalidaddeportivas',()=>{
+	this.subscribe('municipios',()=>{
 		return [{estatus: true}]
 	});
-	
+		
 	this.subscribe('eventos',()=>{
 		return [{estatus: true}]
 	});
@@ -62,7 +62,23 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
   
   this.helpers({
 	  participante : () => {	
-		  return Participantes.findOne();
+		  
+		  var p = Participantes.findOne(); 
+		  
+		  if (p)
+		  {
+			  var img = new Image();
+												
+				img.id = "fotoCargada";
+				img.src = p.foto;
+				img.width =200;
+				img.height=200;
+											
+				fileDisplayArea1.appendChild(img);
+		  
+		  }
+		  
+		  return p;
 	  },
 	  participanteEventos : () => {	
 		  return ParticipanteEventos.findOne();
@@ -82,8 +98,8 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 	  ramas : () => {
 		  return Ramas.find();
 	  },
-	  modalidaddeportivas : () => {
-		  return ModalidadDeportivas.find();
+	  municipios : () => {
+		  return Municipios.find();
 	  },
   });
   	  
@@ -97,124 +113,352 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 	    
 	    if (participante.foto == undefined)
 	    {
-		    toastr.error('Error no se ha cargado la foto del particpante.');
+		    toastr.error('Error no se ha cargado la foto del participante.');
 	      return;
 	    }
-			
-			//Obtener las Edades de la Categoria			
-			var cat = Categorias.findOne({ _id: participante.categoria_id});
-			
-			var d = new Date();
-			var anioActual = d.getFullYear();
-			
-			var anioInicio = cat.anioinicio;
-			var anioFin = cat.aniofin;
 
-			var EdadMinima = anioActual - anioInicio;	//22
-			var EdadMaxima = anioActual - anioFin;    //23
-			
-			//Obtener la Edad del participante
-			
-	    var today_year = d.getFullYear();
-	    var today_month = d.getMonth();
-	    var today_day = d.getDate();
-	    var edad = today_year - participante.fechaNacimiento.getFullYear();
-			
-	    if ( today_month < (participante.fechaNacimiento.getMonth() - 1))
+	    if (participante.curpImagen == undefined)
 	    {
-	        edad--;
+		    toastr.error('Error no se ha cargado el comprobante del CURP del participante.');
+	      return;
 	    }
-	    if (((participante.fechaNacimiento.getMonth() - 1) == today_month) && (today_day < participante.fechaNacimiento.getDay()))
+	    if (participante.actaNacimiento == undefined)
 	    {
-	        edad--;
+		    toastr.error('Error no se ha cargado el comprobante del Acta de Nacimiento del participante.');
+	      return;
 	    }
-	   			
-			
-			//Validar la edad del particpante en relación a la categoria
-			if (edad >= EdadMinima && edad <= EdadMaxima)
+			var mun = String(Meteor.user() != undefined ? Meteor.user().profile.municipio_id : "");
+			//console.log(mun);
+			            
+	    	    
+			if (participante.identificacion == undefined)
 			{
-					
-						var idTemp = participante._id;
-						delete participante._id;		
-						participante.usuarioActualizo = Meteor.userId(); 
-						Participantes.update({_id:idTemp},{$set:participante});
-						toastr.success('Actualizado correctamente.');
-						//console.log(ciclo);
-						$('.collapse').collapse('hide');
-						this.nuevo = true;
-						form.$setPristine();
-				    form.$setUntouched();
-				    $state.go('root.listarparticipantes');
-
-			}	 
-			else
-			{
-					 toastr.error('La edad no corresponde a la categoria verificar por favor.');
-					 
+				toastr.error('Error no se ha cargado el comprobante de la Identificación Oficial del participante.');
+			  return;
 			}
 	    
+	    
+	    // Enable #x
+			$( "#registrar" ).prop( "disabled", true );
+			
+			
+			if (participanteEventos.categoria_id != "s/a")
+	    {
+			
+					//Obtener las Edades de la Categoria			
+					var cat = Categorias.findOne({ _id: participanteEventos.categoria_id});
+					
+					var d = new Date();
+					var anioActual = d.getFullYear();
+					
+					var anioInicio = cat.anioinicio;
+					var anioFin = cat.aniofin;
+					
+					//Obtener la Edad del participante
+					
+			    var today_year = d.getFullYear();
+			    var today_month = d.getMonth();
+			    var today_day = d.getDate();
+			    //var edad = today_year - participante.fechaNacimiento.getFullYear();
+					
+					var anioNacimiento = participante.fechaNacimiento.getFullYear();
+										
+					//Estos son los participantes que no son deportistas
+					if (participanteEventos.funcionEspecifica != 'DEPORTISTA')
+					{
+						
+							Meteor.call('getParticipanteCurp', participante.curp, function(error, response) {
+									   if(error){
+										    console.log('ERROR :', error);
+										    return;
+									   }
+										   		//Ya Existe
+										 			if (response)
+										 			{
+											 				var idTemp = participante._id;
+															delete participante._id;		
+															Participantes.update({_id:idTemp},{$set:participante}, 
+																									function(error,result){
+																											if (error){
+																													$( "#registar" ).prop( "disabled", false );
+																													console.log("Error:",error);
+																													return;		
+																											}
+																											if (result)
+																											{
+																														participanteEventos.participante_id = idTemp;
+																														
+																														participanteEventos.foto = participante.foto;
+																														participanteEventos.nombre = participante.nombre;
+																														participanteEventos.apellidoPaterno = participante.apellidoPaterno;
+																														participanteEventos.apellidoMaterno = participante.apellidoMaterno;
+																														participanteEventos.sexo = participante.sexo;
+																														participanteEventos.curp = participante.curp;
+																														participanteEventos.fechaNacimiento = participante.fechaNacimiento;
+																														participanteEventos.nombreCompleto = participante.nombreCompleto
+																														
+																														participanteEventos.municipio_id = participante.municipio_id;
+																														participanteEventos.usuarioInserto = Meteor.userId();
+																														
+																														var idTempPE = participanteEventos._id;
+																														delete participanteEventos._id;
+																														
+																														
+																														ParticipanteEventos.update({_id:idTempPE},{$set:participanteEventos},
+																																													function(error, result){
+																																															if (error){
+																																																 $( "#registar" ).prop( "disabled", false );																																																  	 																				 return;		
+																																															}	
+																																															
+																																															if (result)
+																																															{
+																																																
+																																																 	toastr.success('Actualizado correctamente.');
+																																																	participante = {};
+																																																	participanteEvento = {};
+																																																	$('.collapse').collapse('hide');
+																																																	this.nuevo = true;
+																																																	$state.go('root.listarparticipantes');
+																																																	
+																																																	form.$setPristine();
+																																															    form.$setUntouched();	
+																																															}	
+																														});
+																											}	 																											
+																									}
+															);
+										 			}  
+							});			    
+
+					}//Estos son los deportistas
+					else if (anioNacimiento <= anioInicio && anioNacimiento >= anioFin)
+					{
+							Meteor.call('getParticipanteCurp', participante.curp, function(error, response) {
+									   if(error){
+										    console.log('ERROR :', error);
+										    return;
+									   }
+
+										   		//Ya Existe
+										 			if (response)
+										 			{
+											 				var idTemp = participante._id;
+															delete participante._id;		
+															Participantes.update({_id:idTemp},{$set:participante}, 
+																									function(error,result){
+																											if (error){
+																													$( "#registar" ).prop( "disabled", false );
+																													console.log("Error:",error);
+																													return;		
+																											}
+																											if (result)
+																											{
+																														participanteEventos.participante_id = idTemp;
+																														
+																														participanteEventos.foto = participante.foto;
+																														participanteEventos.nombre = participante.nombre;
+																														participanteEventos.apellidoPaterno = participante.apellidoPaterno;
+																														participanteEventos.apellidoMaterno = participante.apellidoMaterno;
+																														participanteEventos.sexo = participante.sexo;
+																														participanteEventos.curp = participante.curp;
+																														participanteEventos.fechaNacimiento = participante.fechaNacimiento;
+																														participanteEventos.nombreCompleto = participante.nombreCompleto
+																														
+																														participanteEventos.municipio_id = participante.municipio_id;
+																														participanteEventos.usuarioInserto = Meteor.userId();
+																														
+																														var idTempPE = participanteEventos._id;
+																														delete participanteEventos._id;
+																														
+																														
+																														ParticipanteEventos.update({_id:idTempPE},{$set:participanteEventos},
+																																													function(error, result){
+																																															if (error){
+																																																 $( "#registar" ).prop( "disabled", false );																																																  	 																				 return;		
+																																															}	
+																																															
+																																															if (result)
+																																															{
+																																																
+																																																 	toastr.success('Actualizado correctamente.');
+																																																	participante = {};
+																																																	participanteEvento = {};
+																																																	$('.collapse').collapse('hide');
+																																																	this.nuevo = true;
+																																																	$state.go('root.listarparticipantes');
+																																																	
+																																																	form.$setPristine();
+																																															    form.$setUntouched();	
+																																															}	
+																														});
+																											}	 																											
+																									}
+															);			 
+										 			}  	 			 		
+							});							
+					}	 
+					else
+					{
+							 toastr.error('La edad no corresponde a la categoria verificar por favor.');
+							 $( "#registrar" ).prop( "disabled", false );
+							 return;
+							 
+					}
+
+			}else
+			{
+							Meteor.call('getParticipanteCurp', participante.curp, function(error, response) {
+									   if(error){
+										    console.log('ERROR :', error);
+										    return;
+									   }
+
+										   		//Ya Existe
+										 			if (response)
+										 			{
+											 				var idTemp = participante._id;
+															delete participante._id;		
+															Participantes.update({_id:idTemp},{$set:participante}, 
+																									function(error,result){
+																											if (error){
+																													$( "#registar" ).prop( "disabled", false );
+																													console.log("Error:",error);
+																													return;		
+																											}
+																											if (result)
+																											{
+																														participanteEventos.participante_id = idTemp;
+																														
+																														participanteEventos.foto = participante.foto;
+																														participanteEventos.nombre = participante.nombre;
+																														participanteEventos.apellidoPaterno = participante.apellidoPaterno;
+																														participanteEventos.apellidoMaterno = participante.apellidoMaterno;
+																														participanteEventos.sexo = participante.sexo;
+																														participanteEventos.curp = participante.curp;
+																														participanteEventos.fechaNacimiento = participante.fechaNacimiento;
+																														participanteEventos.nombreCompleto = participante.nombreCompleto
+																														
+																														participanteEventos.municipio_id = participante.municipio_id;
+																														participanteEventos.usuarioInserto = Meteor.userId();
+																														
+																														var idTempPE = participanteEventos._id;
+																														delete participanteEventos._id;
+																														
+																														
+																														ParticipanteEventos.update({_id:idTempPE},{$set:participanteEventos},
+																																													function(error, result){
+																																															if (error){
+																																																 $( "#registar" ).prop( "disabled", false );																																																  	 																				 return;		
+																																															}	
+																																															
+																																															if (result)
+																																															{
+																																																
+																																																 	toastr.success('Actualizado correctamente.');
+																																																	participante = {};
+																																																	participanteEvento = {};
+																																																	$('.collapse').collapse('hide');
+																																																	this.nuevo = true;
+																																																	$state.go('root.listarparticipantes');
+																																																	
+																																																	form.$setPristine();
+																																															    form.$setUntouched();	
+																																															}	
+																														});
+																											}	 																											
+																									}
+															);	
+										 			}  	 		
+							});
+				
+			}
+			
+			
+			
 
 	};
 		
-	
-	this.getEvento = function(evento_id)
-	{		
-			var evento = Eventos.findOne({_id:evento_id});
-
-			if (evento)
-				 return evento.nombre;
-				 
-	};
-	
-	this.getDeporte = function(rama_id)
-	{		
-			var deporte = Deporte.findOne({_id:deporte_id});
-
-			if (deporte)
-				 return deporte.nombre;
-				 
-	};
-	
-	this.getCategoria= function(categoria_id)
-	{		
-			var categoria = ModalidadDeportivas.findOne({_id:categoria_id});
-
-			if (categoria)
-				 return categoria.nombre;
-				 
-	};
-	
-	this.AlmacenaImagen = function(imagen)
+	this.ValidaCurpParticipante = function(curp)
 	{
-			this.participante.foto = imagen;
+				
+				Meteor.call('getParticipanteCurp', curp, function(error, response) {
+							if(error){
+									console.log('ERROR :', error);
+							    return;
+							}else{
+							    if (response)
+							    {
+									    toastr.info('El Participante ya se encuentra en la base de datos se cargara sus datos de Curp, Acta de Nacimiento e Identificación');
+									    rc.participante = response;
+									    
+									    fileDisplayArea1.innerHTML = "";
+		
+											var img = new Image();
+											
+											img.id = "fotoCargada";
+											img.src = rc.participante.foto;
+											img.width =200;
+											img.height=200;
+											
+											fileDisplayArea1.appendChild(img);
+
+							    }
+						  }
+				});
 	}
+
+	
+	this.funcionEspecifica = function(participante,participanteEvento)
+	{		
+			
+			console.log(participante);
+			if (participanteEvento != "DEPORTISTA")
+			{
+							participante.fechaNacimiento= new Date();
+							participante.estado = "BAJA CALIFORNIA SUR";
+							participante.curpImagen = "s/a";
+							participante.actaNacimiento = "s/a";
+							participante.identificacion = "s/a";
+							this.participanteEventos.categoria_id = "s/a";
+							this.participanteEventos.rama_id = "s/a";
+				
+			}
+	}
+
+	
+	this.AlmacenaImagen = function(imagen, tipo)
+	{
+			if (tipo == 1)
+					this.participante.foto = imagen;
+			else if (tipo == 2)		
+					this.participante.curpImagen = imagen;
+			else if (tipo == 3)
+					this.participante.actaNacimiento = imagen;		
+			else
+					this.participante.identificacion = imagen;		
+						
+	}
+	
+					
+	
+	
+
 	
 	
 	$(document).ready( function() {
 		
-			
-			
+
 			$(".Mselect2").select2();
 					
 			var fileInput1 = document.getElementById('fileInput1');
+			var fileInputCurp = document.getElementById('fileInputCurp');
+			var fileInputActa = document.getElementById('fileInputActa');
+			var fileInputIdentificacion = document.getElementById('fileInputIdentificacion');
+			
 			var fileDisplayArea1 = document.getElementById('fileDisplayArea1');
 			
 			
-			console.log("Participantes:",rc.participanteEventos);
-			console.log("Participantes this:",this.participanteEventos);
-			
-			/*		
-			if (rc.participanteEventos.pruebas != undefined)
-			{
-					var x = document.getElementById("prueba"); 
-					var optionVal = new Array();
-					for (i = 0; i <  rc.participanteEventos.pruebas.length; i++) { 
-							optionVal.push(rc.participanteEventos.pruebas[i]);
-					}
-			}
-			*/
-			
-				//JavaScript para agregar la imagen 1
+			//JavaScript para agregar la Foto
 			fileInput1.addEventListener('change', function(e) {
 				var file = fileInput1.files[0];
 				var imageType = /image.*/;
@@ -231,20 +475,19 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 		
 							var img = new Image();
 							
-							
+							img.id = "fotoCargada";
 							img.src = reader.result;
 							img.width =200;
 							img.height=200;
-		
-							rc.AlmacenaImagen(reader.result);
-							//this.folio.imagen1 = reader.result;
+							
+							rc.AlmacenaImagen(reader.result, 1);
 							
 							fileDisplayArea1.appendChild(img);
-							//console.log(fileDisplayArea1);
+							
 						}
 						reader.readAsDataURL(file);			
 					}else {
-						toastr.error("Error Imagin supera los 512 KB");
+						toastr.error("Error la Imagen supera los 512 KB");
 						return;
 					}
 					
@@ -252,9 +495,209 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 					fileDisplayArea1.innerHTML = "File not supported!";
 				}
 			});
+			
+			//JavaScript para agregar el Curp Imagen
+			fileInputCurp.addEventListener('change', function(e) {
+				var file = fileInputCurp.files[0];
+				
+				var imageType;
+				
+				if (file.type == "application/pdf")
+						imageType = /application.*/;
+				else
+						imageType = /image.*/;		
+		
+				//console.log(imageType);
+				
+				if (file.type.match(imageType)) {
+					
+					if (file.size <= 1000000)
+					{
+						
+						var reader = new FileReader();
+		
+						reader.onload = function(e) {
+		
+						rc.AlmacenaImagen(reader.result, 2);
+
+						}
+						reader.readAsDataURL(file);			
+					}else {
+						toastr.error("Error el archivo supera 1 MB");
+						return;
+					}
+					
+				} else {
+					fileDisplayArea1.innerHTML = "File not supported!";
+				}
+								
+			});
+			
+			//JavaScript para agregar el Acta Nacimiento
+			fileInputActa.addEventListener('change', function(e) {
+				var file = fileInputActa.files[0];
+				
+				//console.log(file.type);
+				var imageType;
+				
+				if (file.type == "application/pdf")
+						imageType = /application.*/;
+				else
+						imageType = /image.*/;		
+				
+				if (file.type.match(imageType)) {
+					
+					if (file.size <= 1000000)
+					{
+						
+						var reader = new FileReader();
+		
+						reader.onload = function(e) {
+		
+							rc.AlmacenaImagen(reader.result, 3);
+
+						}
+						reader.readAsDataURL(file);			
+					}else {
+						toastr.error("Error el archivo supera 1 MB");
+						return;
+					}
+					
+				} else {
+					fileDisplayArea1.innerHTML = "File not supported!";
+				}
+								
+			});
+			
+			//JavaScript para agregar el Identificacion Oficial
+			fileInputIdentificacion.addEventListener('change', function(e) {
+				var file = fileInputCurp.files[0];
+				
+				var imageType;
+				
+				if (file.type == "application/pdf")
+						imageType = /application.*/;
+				else
+						imageType = /image.*/;		
+				
+				if (file.type.match(imageType)) {
+					
+					if (file.size <= 1000000)
+					{
+						
+						var reader = new FileReader();
+		
+						reader.onload = function(e) {
+		
+							rc.AlmacenaImagen(reader.result, 4);
+
+						}
+						reader.readAsDataURL(file);			
+					}else {
+						toastr.error("Error el archivo supera 1 MB");
+						return;
+					}
+					
+				} else {
+					fileDisplayArea1.innerHTML = "File not supported!";
+				}
+								
+			});
 
 	});
 	
+	this.GeneraCurp = function(participante)
+	{
+			if (participante.nombre == undefined)
+			{
+					toastr.error('Falta proporcionar el nombre.');
+					return;
+			}
+			
+			if (participante.apellidoPaterno == undefined)
+			{
+					toastr.error('Falta proporcionar el apellido paterno.');
+					return;
+				
+			}
+			
+			if (participante.fechaNacimiento == undefined)
+			{
+					toastr.error('Falta proporcionar la fecha de nacimiento.');
+					return;
+				
+			}
+			
+			if (participante.sexo == undefined)
+			{
+					toastr.error('Falta proporcionar el sexo.');
+					return;
+				
+			}
+			
+			if (participante.estado == undefined)
+			{
+					toastr.error('Falta seleccionar el estado.');
+					return;
+				
+			}
+			
+			var curp = generaCurp({
+			  nombre            : participante.nombre,
+			  apellido_paterno  : participante.apellidoPaterno,
+			  apellido_materno  : participante.apellidoMaterno,
+			  sexo              : participante.sexo == 'Hombre'?'H':'M',
+			  estado            : Estado(participante.estado),
+			  fecha_nacimiento  : [participante.fechaNacimiento.getUTCDate(), participante.fechaNacimiento.getUTCMonth()+1, participante.fechaNacimiento.getUTCFullYear()]
+			});
+			
+		  participante.curp = curp;
+		  
+		  this.ValidaCurpParticipante(curp);
+		
+	};
+	
+	function Estado(estado)
+	{	
+			var e = '';
+			switch(estado)
+			{
+					case 'AGUASCALIENTES': e = 'AS'; break;
+					case 'BAJA CALIFORNIA NTE.': e = 'BC'; break;
+					case 'BAJA CALIFORNIA SUR': e = 'BS'; break;
+					case 'CAMPECHE': e = 'CC'; break;
+					case 'COAHUILA': e = 'CL'; break;
+					case 'COLIMA': e = 'CM'; break;
+					case 'CHIAPAS': e = 'CS'; break;
+					case 'CHIHUAHUA': e = 'CH'; break;
+					case 'DISTRITO FEDERAL': e = 'DF'; break;
+					case 'DURANGO': e = 'DG'; break;
+					case 'GUANAJUATO': e = 'GT'; break;
+					case 'GUERRERO': e = 'GR'; break;
+					case 'HIDALGO': e = 'HG'; break;
+					case 'JALISCO': e = 'JC'; break;
+					case 'MEXICO': e = 'MC'; break;
+					case 'MICHOACAN': e = 'MN'; break;
+					case 'NAYARIT': e = 'NT'; break;
+					case 'NUEVO LEON': e = 'NL'; break;
+					case 'PUEBLA': e = 'PL'; break;
+					case 'QUERETARO': e = 'QT'; break;
+					case 'QUINTANA ROO': e = 'QR'; break;
+					case 'SAN LUIS POTOSI': e = 'SP'; break;
+					case 'SINALOA': e = 'SL'; break;
+					case 'SONORA': e = 'SR'; break;
+					case 'TABASCO': e = 'TC'; break;
+					case 'TAMAULIPAS': e = 'TS'; break;
+					case 'TLAXCALA': e = 'TL'; break;
+					case 'VERACRUZ': e = 'VZ'; break;
+					case 'YUCATAN': e = 'YN'; break;
+					case 'ZACATECAS': e = 'ZS'; break;
+					case 'SERV. EXTERIOR MEXICANO': e = 'SM'; break;
+					case 'NACIDO EN EL EXTRANJERO': e = 'NE'; break;
+			}	
+			
+			return e;		
+	}	
 	
 	
 };

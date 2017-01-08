@@ -1,29 +1,18 @@
 <div class="row">
-	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
-		<h1 class="page-title txt-color-blueDark">
-			<i class="fa fa-pencil-square-o fa-fw "></i> 
-				Asistente de
-			<span>&gt; 
-				Registro de Participantes
-			</span>
-		</h1>
+	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
+		<h2 class="page-title txt-color-blueDark">
+			<i class="fa fa-pencil-square-o fa-fw"></i> 
+				Actualización de Participantes
+		</h2>
 	</div>
 </div>
-<div class="row">
-	<div class="col-sm-12">
-		<a class="btn btn-primary" ui-sref="root.listarparticipantes">
-		  Listar Participantes
-		</a>
-	</div>
-</div>
-<br/>
 <div class="row">
 	<div class="col-sm-12">
 		<div class="jarviswidget jarviswidget-color-darken jarviswidget-sortable" id="wid-id-0" role="widget">
 			
 			<header role="heading">
 				<span class="widget-icon"> <i class="fa fa-check"></i> </span>
-				<h2>Proceso de Registro </h2>
+				<h2>Proceso de Actualización </h2>
 	
 			<span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span></header>
 	
@@ -43,10 +32,10 @@
 											<a href="#tab1" data-toggle="tab"> <span class="step">1</span> <span class="title">Información Básica</span></a>
 										</li>
 										<li data-target="#step2">
-											<a href="#tab2" data-toggle="tab"> <span class="step">2</span> <span class="title">Documentación</span></a>
+											<a href="#tab2" data-toggle="tab"> <span class="step">2</span> <span class="title">Información Deportiva</span></a>
 										</li>
-										<li data-target="#step2">
-											<a href="#tab3" data-toggle="tab"> <span class="step">3</span> <span class="title">Información Deportiva</span></a>
+										<li data-target="#step3">
+											<a href="#tab3" data-toggle="tab"> <span class="step">3</span> <span class="title">Documentación</span></a>
 										</li>
 										<li data-target="#step3">
 											<a href="#tab4" data-toggle="tab"> <span class="step">3</span> <span class="title">Finalizar Actualización</span></a>
@@ -71,8 +60,8 @@
 															<input name="apellidomaterno" type="text" class="form-control" ng-model="pe.participante.apellidoPaterno" required>
 														</div>
 														<div class="col-sm-4" valida>
-															<label>Apellido Materno *</label>												
-															<input name="apellidopaterno" type="text" class="form-control" ng-model="pe.participante.apellidoMaterno" required>
+															<label>Apellido Materno</label>												
+															<input name="apellidopaterno" type="text" class="form-control" ng-model="pe.participante.apellidoMaterno">
 														</div>
 														<div class="col-sm-4" valida>					    
 												    	<label>Fecha Nacimiento *</label>
@@ -91,7 +80,7 @@
 													    <select name="estado" ng-model="pe.participante.estado" data-placeholder="Seleccione" class="form-control" required>
 															    <option value="AGUASCALIENTES">AGUASCALIENTES</option>
 																	<option value="BAJA CALIFORNIA NTE">BAJA CALIFORNIA NTE</option>
-																	<option value="AJA CALIFORNIA SUR">BAJA CALIFORNIA SUR</option>
+																	<option value="BAJA CALIFORNIA SUR">BAJA CALIFORNIA SUR</option>
 																	<option value="CAMPECHE">CAMPECHE</option>
 																	<option value="COAHUILA">COAHUILA</option>
 																	<option value="COLIMA">COLIMA</option>
@@ -122,40 +111,36 @@
 																	<option value="YUCATAN">YUCATAN</option>
 																	<option value="ZACATECAS">ZACATECAS</option>
 																	<option value="SERV. EXTERIOR MEXICANO">SERV. EXTERIOR MEXICANO</option>
-																	<option value="NACIDO EN EL EXTRANJERO">NACIDO EN EL EXTRANJERO</option>  
+																	<option value="NACIDO EN EL EXTRANJERO">NACIDO EN EL EXTRANJERO</option> 
 															</select>
 											    	</div>
 											    </div>	
 											    <div class="row">
 												    <div class="col-sm-4" valida>
 															<label>CURP *</label>												
-															<input name="curp" type="text" class="form-control" ng-model="pe.participante.curp" required>
+															<input name="curp" type="text" class="form-control" ng-model="pe.participante.curp" ng-change="pe.ValidaCurpParticipante(pe.participante.curp)" required>
+															<input type="button" ng-click="pe.GeneraCurp(pe.participante)" value="Generar CURP">
 														</div>
 														<div class="col-sm-4" valida>
 													    <label for="formacionacademica">Formación Académica</label>
 													    <select name="formacionacademica" ng-model="pe.participante.formacionacademica" data-placeholder="Seleccione" class="form-control">
 															    <option value=""></option>
-															    <option value="DEPORTISTA">Deportista</option>
-															    <option value="ENTRENADOR">Entrenador</option>
-															    <option value="DELEGADO POR DEPORTE">Delegado Por Deporte</option>
-															    <option value="AUXILIAR GENERAL">Auxiliar General</option>
-															    <option value="ASOCIACIÓN">Asociación</option>
-															    <option value="JUEZ/ARBITRO">Juez/Arbitro</option>
-															    <option value="JEFE DE MISIÓN">Jefe de Misión</option>
-															    <option value="OFICIAL">Oficial</option>
-															    <option value="MÉDICO">Médico</option>
-															    <option value="PRENSA">Prensa</option>
-															    <option value="INVITADO ESPECIAL">Invitado Especial</option>
+															    <option value="Doctorado">Doctorado</option>
+															    <option value="Maestria">Maestria</option>
+															    <option value="MediaSuperior">Media Superior</option>
+															    <option value="Posgrado">Posgrado</option>
+															    <option value="Primaria">Primaria</option>
+															    <option value="Secundaria">Secundaria</option>
+															    <option value="Superior">Superior</option>
 															</select>
 											    	</div>
 											    </div>
 											    <div class="row">
 												    	<div class="col-sm-4">
-																<label>Foto (máximo 512Kb)</label>
+																<label>Foto * (máximo 512Kb)</label>
 																<input name="foto" type="file" id="fileInput1">																
 																<div id="fileDisplayArea1"></div>
-																 	<img class="thumbnail" src="{{pe.participante.foto}}" width="200" height="200"/>
-															</div>												    	
+															</div>			
 											    </div>
 										  	</div>
 											</div>
@@ -163,49 +148,38 @@
 									</div>
 									<div class="tab-pane" id="tab2">
 										<br>
-										<h3><strong>Paso 2</strong> - Documentación</h3>
+										<h3><strong>Paso 2</strong> - Información Deportiva</h3>
 										<div class="row">
 											<div class="col-sm-12">
 												<div class="well">												
 											    <div class="row">
-											    	<div class="col-sm-4">
-															<label>CURP *</label>
-															<div>
-																<input type="file" id="fileInput1">
-															</div>
+												    <div class="col-sm-2" ng-if="currentUser.roles[0] == 'admin'" valida>
+															<label >Municipio *</label>
+															<select name="municipio" class="form-control select2" placeholder="Seleccione" ng-model="pe.participante.municipio_id" required>
+																<option  value="{{municipio._id}}" ng-repeat="municipio in pe.municipios">
+																	{{municipio.nombre}}
+																</option>
+															</select>
 														</div>
-														<div class="col-sm-4">
-															<label>Acta de Nacimiento</label>
-															<div>
-																<input type="file" id="fileInput2">
-															</div>
-														</div>
-														<div class="col-sm-4">
-															<label>Identificación Oficial</label>
-															<div>
-																<input type="file" id="fileInput3">
-															</div>
-														</div>								
-											    </div>
-										  	</div>	
-											</div>
-										</div>
-									</div>
-									<div class="tab-pane" id="tab3">
-										<br>
-										<h3><strong>Paso 3</strong> - Información Deportiva</h3>
-										<div class="row">
-											<div class="col-sm-12">
-												<div class="well">												
-											    <div class="row">
 											    	<div class="col-sm-4" valida>
 													    <label for="funcionespecifica">Función Especifica *</label>
-													    <select name="funcionespecifica" ng-model="pe.participanteEventos.funcionEspecifica" data-placeholder="Seleccione" class="form-control" required>
+													    <select name="funcionespecifica" ng-model="pe.participanteEventos.funcionEspecifica" data-placeholder="Seleccione" ng-change="pe.funcionEspecifica(pe.participante,pe.participanteEventos.funcionEspecifica)" class="form-control" required>
 															    <option value=""></option>
 															    <option value="DEPORTISTA">Deportista</option>
 															    <option value="ENTRENADOR">Entrenador</option>
-															    <option value="DELEGADO POR DEPORTE">Delegado Por Deporte</option>
+															    <option value="ENTRENADOR AUXILIAR">Entrenador Auxiliar</option>
+															    <option value="DELEGADO POR DEPORTE" ng-if="currentUser.roles[0] == 'admin'">Delegado Por Deporte</option>
+															    <option value="DELEGADO GENERAL">Delegado General</option>
 															    <option value="AUXILIAR GENERAL">Auxiliar General</option>
+															    <option value="ASOCIACIÓN" ng-if="currentUser.roles[0] == 'admin'">Asociación</option>
+															    <option value="JUEZ/ARBITRO" ng-if="currentUser.roles[0] == 'admin'">Juez/Arbitro</option>
+															    <option value="JEFE DE MISIÓN" ng-if="currentUser.roles[0] == 'admin'">Jefe de Misión</option>
+															    <option value="OFICIAL">Oficial</option>
+															    <option value="MÉDICO" ng-if="currentUser.roles[0] == 'admin'">Médico</option>
+															    <option value="PRENSA" ng-if="currentUser.roles[0] == 'admin'">Prensa</option>
+															    <option value="INVITADO ESPECIAL" ng-if="currentUser.roles[0] == 'admin'">Invitado Especial</option>
+															    <option value="COMITÉ ORGANIZADOR" ng-if="currentUser.roles[0] == 'admin'">Comité Organizador</option>
+															    <option value="TRASPORTE" ng-if="currentUser.roles[0] == 'admin'">Transporte</option>
 															</select>
 											    	</div>
 														<div class="col-sm-2" valida>
@@ -239,7 +213,38 @@
 																	{{prueba.nombre}}
 																</option>
 															</select>
+														</div>	
+											    </div>
+										  	</div>	
+											</div>
+										</div>
+									</div>
+									<div class="tab-pane" id="tab3">
+										<br>
+										<h3><strong>Paso 3</strong> - Documentación</h3>
+										<div class="row">
+											<div class="col-sm-12">
+												<div class="well">												
+											    <div class="row">
+											    	<div class="col-sm-4">
+															<label>CURP * (máximo 1MB)</label>
+															<div>
+																<input type="file" id="fileInputCurp" accept="application/pdf, image/jpeg">
+																<!--<a class="btn btn-primary" ui-sref="window.open(escape(pe.participante.curpImage))" ng-if="pe.participante.curpImagen != " target="_blank">ver</a>-->
+															</div>
 														</div>
+														<div class="col-sm-4">
+															<label>Acta de Nacimiento * (máximo 1MB)</label>
+															<div>
+																<input type="file" id="fileInputActa" accept="application/pdf, image/jpeg">
+															</div>
+														</div>
+														<div class="col-sm-4">
+															<label>Identificación Oficial * (máximo 1MB)</label>
+															<div>
+																<input type="file" id="fileInputIdentificacion" accept="application/pdf, image/jpeg">
+															</div>
+														</div>								
 											    </div>
 										  	</div>	
 											</div>
@@ -254,7 +259,7 @@
 												<div class="text-center">
 													<h4>Click en Actualizar para Finalizar</h4>
 													<br/>
-													<button type="submit" ng-click="pe.actualizar(pe.participante, pe.participanteEventos, form)" class="btn btn-lg btn-primary" valida-form formulario="form">Actualizar</button>
+													<button id="registrar" type="submit" ng-click="pe.actualizar(pe.participante, pe.participanteEventos, form)" class="btn btn-lg btn-primary" valida-form formulario="form">Actualizar</button>
 													<br>
 													<br> 	
 												</div>												

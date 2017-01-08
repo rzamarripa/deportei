@@ -19,9 +19,19 @@ function imprimirCedulaCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 	
 	this.evento_id = $stateParams.evento;
 	
+	this.mun_id = "";
+	
+		
 	let part = this.subscribe('participanteEventos',()=>{
+		
+
+		if ($stateParams.municipio == "")
+			 this.mun_id = Meteor.user().profile.municipio_id;
+		else
+			 this.mun_id = $stateParams.municipio;
+			 
 		return [{evento_id: $stateParams.evento 
-					  ,municipio_id : Meteor.user() != undefined ? Meteor.user().profile.municipio_id : ""
+					  ,municipio_id : this.mun_id
 					  ,deporte_id: $stateParams.deporte
 						,categoria_id: $stateParams.categoria
 					  ,rama_id: $stateParams.rama
@@ -124,5 +134,8 @@ function imprimirCedulaCtrl($scope, $meteor, $reactive, $state, toastr, $statePa
 		  return foto;
 	  }
   }  
+  
+
+  
   	
 };	

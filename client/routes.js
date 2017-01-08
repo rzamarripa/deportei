@@ -221,7 +221,7 @@ angular.module('insude').config(['$injector', function ($injector) {
 	    }
     })
     .state('anon.imprimircedula', {
-      url: '/cedula/:evento/:deporte/:categoria/:rama/:funcionEspecifica',
+      url: '/cedula/:evento/:deporte/:categoria/:rama/:funcionEspecifica/:municipio',
       templateUrl: 'client/reportes/imprimircedula.ng.html',
       controller: 'imprimirCedulaCtrl as impced',
       resolve: {

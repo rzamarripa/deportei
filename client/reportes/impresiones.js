@@ -82,16 +82,27 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 		todosParticipantes : () => {
 			if(part.ready()){
 				_.each(rc.participantes, function(participante){
-					participante.municipio = Municipios.findOne(participante.municipio_id);
-					participante.evento = Eventos.findOne(participante.evento_id);
-					participante.deporte = Deportes.findOne(participante.deporte_id);
-					participante.categoria = Categorias.findOne(participante.categoria_id);	
+					var m = Municipios.findOne(participante.municipio_id);
+					participante.municipio = m.nombre;
+					var e = Eventos.findOne(participante.evento_id);
+					participante.evento = e.nombre;
+					var d = Deportes.findOne(participante.deporte_id);
+					participante.deporte = d.nombre;
+					this.deporteNombre = d.nombre;
+					var c = Categorias.findOne(participante.categoria_id);
+					participante.categoria = 	c.nombre;
+					this.categoriaNombre = c.nombre;
+					var r = Ramas.findOne(participante.rama_id);
+					participante.rama = 	r.nombre;	
 					
+					/*										
 					participante.pruebasNombre = [];
 					_.each(participante.pruebas, function(prueba){
-							participante.pruebasNombre.push(Pruebas.findOne(prueba, { fields : { nombre : 1}}))
+							//participante.pruebasNombre.push(Pruebas.findOne(prueba, { fields : { nombre : 1}}))
+							var p = Pruebas.findOne(prueba,{ fields : { nombre : 1}});
+							participante.pruebasNombre.push({"nombre": p.nombre});
 					})
-					
+					*/
 				})
 			}
 		}
@@ -112,5 +123,32 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 		  return foto;
 	  }
   }  
+  
+  this.download = function(participantes) 
+  {
+	  
+		if (participantes.length == 0)
+ 		{
+	 			toastr.error("No hay participantes para generar cédula");
+				return;
+		}
+		
+		Meteor.call('getGafetes', participantes, function(error, response) {
+		   if(error){
+		    console.log('ERROR :', error);
+		    return;
+		   }else{
+
+			  var pdf = 'data:application/docx;base64,';
+		    var dlnk = document.getElementById('dwnldLnkG');
+		    dlnk.download = this.deporteNombre+'-'+this.categoriaNombre+'.docx'; 
+				dlnk.href = pdf+response;
+				dlnk.click();
+		    		    
+		   }
+		});
+		
+	};
+
 	
 };	

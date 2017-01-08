@@ -1,16 +1,15 @@
-/*
+
 Meteor.methods({
-  
   
   getGafetes: function (participantes) {
 		
-		var fs = Npm.require('fs');
-    var Docxtemplater = Npm.require('docxtemplater');
-		var JSZip = Npm.require('jszip');
-		var ImageModule = Npm.require('docxtemplater-image-module')
-		var unoconv = require('unoconv');
+		var fs = require('fs');
+    var Docxtemplater = require('docxtemplater');
+		var JSZip = require('jszip');
+		var ImageModule = require('docxtemplater-image-module')
+		//var unoconv = require('unoconv');
 		
-	
+	  var meteor_root = Npm.require('fs').realpathSync( process.cwd() + '/../' );
 		
 		var opts = {}
 			opts.centered = false;
@@ -20,35 +19,39 @@ Meteor.methods({
 		}
 		
 		opts.getSize=function(img,tagValue, tagName) {
-		    return [80,80];
+		    return [90,90];
 		}
 		
 		var imageModule=new ImageModule(opts);
 		
-		
-		
-		//_.each(participantes, function(participante){
-										
+		_.each(participantes, function(participante){
+				if (participante.foto != "")
+				{											
+					var f = String(participante.foto);
+					participante.foto = f.replace('data:image/jpeg;base64,', '');
+					
 					// create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
-		//	    var bitmap = new Buffer(participante.foto, 'base64');
-			    // write buffer to file
-		//	    fs.writeFileSync(process.cwd()+"/fotos/"+participante.curp+".png", bitmap);
-					//participante.foto = process.cwd() + "/fotos/"+participante.curp+".png";
-		//			participante.foto = "foto.png";
-				
+			    var bitmap = new Buffer(participante.foto, 'base64');
+			    // write buffer to file					
+					
+					//Usando Meteor_root
+					fs.writeFileSync(meteor_root+"/web.browser/app/fotos/"+participante.curp+".png", bitmap);
+					participante.foto = meteor_root + "/web.browser/app/fotos/"+participante.curp+".png";
+					
+				}
 		})
-		
-		console.log();
+
 		
 		var content = fs
     							//.readFileSync("/Users/alfonsoduarte/Documents/Meteor/deporteb/cedula.docx", "binary");
-    							.readFileSync(process.cwd()+"/app/server/cedula.docx", "binary");
+    							.readFileSync(meteor_root+"/web.browser/app/archivos/gafete.docx", "binary");
 	  
 		var zip = new JSZip(content);
 		var doc=new Docxtemplater()
 								.attachModule(imageModule)
 								.loadZip(zip)
 		
+		/*
 		doc.setOptions({
 		    parser: function(tag) {
 		      return {
@@ -64,29 +67,63 @@ Meteor.methods({
 		      };
 		    },
 		})
+		*/
 		
-		
+		/*
+		participantes = [{   nombre: "Alfonso",
+								 apellidoPaterno:"Duarte",
+								 apellidoMaterno:"Jimenez",
+								 funcionEspecifica:"Deportista",
+								 categoria:"JUNIOR",
+								 municipio:"CULIACAN",
+								 rama:"VARONIL",
+								 deporte:"BIESBOL",
+								 foto:"/Users/alfonsoduarte/Documents/Meteor/isde/.meteor/local/build/programs/web.browser/app/fotos/DUJA020722HSLRMLA8.png"
+								},
+								{nombre: "Fernando",
+								 apellidoPaterno:"Duarte",
+								 apellidoMaterno:"Jimenez",
+								 funcionEspecifica:"Deportista",
+								 categoria:"JUNIOR",
+								 municipio:"CULIACAN",
+								 rama:"VARONIL",
+								 deporte:"BIESBOL",
+								 foto:"/Users/alfonsoduarte/Documents/Meteor/isde/.meteor/local/build/programs/web.browser/app/fotos/DUJA020722HSLRMLA8.png"
+								}];
+								
+    */
+		//console.log(participantes);
+		doc.setData({participantes})
 		
 		doc.render();
  
 		var buf = doc.getZip()
              		 .generate({type:"nodebuffer"});
  
-		fs.writeFileSync(process.cwd()+"/app/server/ceulaSalida.docx",buf);
+		fs.writeFileSync(meteor_root+"/web.browser/app/descargas/gafeteSalida.docx",buf);
 		
 		
+		//Pasar a base64
+		// read binary data
+    var bitmap = fs.readFileSync(meteor_root+"/web.browser/app/descargas/gafeteSalida.docx");
+    
+    // convert binary data to base64 encoded string
+    return new Buffer(bitmap).toString('base64');
+
 		
 		
   },
   getCedula: function (participantes) {
 		
-		var fs = Npm.require('fs');
-    var Docxtemplater = Npm.require('docxtemplater');
-		var JSZip = Npm.require('jszip');
-		var ImageModule = Npm.require('docxtemplater-image-module');
-		var unoconv = Npm.require('unoconv');
+		var fs = require('fs');
+    var Docxtemplater = require('docxtemplater');
+		var JSZip = require('jszip');
+		var ImageModule = require('docxtemplater-image-module');
+		//var unoconv = Npm.require('unoconv');
 		
 		var meteor_root = Npm.require('fs').realpathSync( process.cwd() + '/../' );
+		
+		console.log("Root: ", meteor_root);
 		
 		var opts = {}
 			opts.centered = false;
@@ -130,8 +167,10 @@ Meteor.methods({
 			    //fs.writeFileSync(process.cwd()+"/app/server/fotos/"+participante.curp+".png", bitmap);
 					//participante.foto = process.cwd()+"/app/server/fotos/"+participante.curp+".png";									
 					
+					//Usando Meteor_root
 					fs.writeFileSync(meteor_root+"/web.browser/app/fotos/"+participante.curp+".png", bitmap);
 					participante.foto = meteor_root + "/web.browser/app/fotos/"+participante.curp+".png";
+					
 					
 				}
 		})
@@ -139,6 +178,7 @@ Meteor.methods({
 		
 		var content = fs
     							.readFileSync(meteor_root+"/web.browser/app/archivos/cedula.docx", "binary");
+
 	  
 		var zip = new JSZip(content);
 		var doc=new Docxtemplater()
@@ -162,6 +202,7 @@ Meteor.methods({
              		 .generate({type:"nodebuffer"});
  
 		fs.writeFileSync(meteor_root+"/web.browser/app/descargas/cedulaSalida.docx",buf);
+
 		
 		
 		//Convertir a PDF
@@ -172,11 +213,10 @@ Meteor.methods({
 		//});
 		
 		
-		
-		
 		//Pasar a base64
 		// read binary data
     var bitmap = fs.readFileSync(meteor_root+"/web.browser/app/descargas/cedulaSalida.docx");
+    
     // convert binary data to base64 encoded string
     return new Buffer(bitmap).toString('base64');
 		
@@ -185,4 +225,3 @@ Meteor.methods({
   
 });
 
-*/

@@ -9,19 +9,19 @@
 <br>
 <div class="well">	    
 	<div class="row">
-		<div class="col-sm-3" valida>
-			<label >Evento</label>
-			<select name="evento" class="form-control select2" placeholder="Seleccione" ng-model="imp.evento.evento_id" required>
-					<option  value="{{evento._id}}" ng-repeat="evento in imp.eventos">
-						{{evento.nombre}}
-					</option>
-			</select>
-		</div>
 		<div class="col-sm-3">
 			<label >Municipio</label>
 			<select name="municipio" class="form-control select2" placeholder="Seleccione" ng-model="imp.evento.municipio_id">
 					<option  value="{{municipio._id}}" ng-repeat="municipio in imp.municipios">
 						{{municipio.nombre}}
+					</option>
+			</select>
+		</div>
+		<div class="col-sm-3" valida>
+			<label >Evento</label>
+			<select name="evento" class="form-control select2" placeholder="Seleccione" ng-model="imp.evento.evento_id" required>
+					<option  value="{{evento._id}}" ng-repeat="evento in imp.eventos">
+						{{evento.nombre}}
 					</option>
 			</select>
 		</div>
@@ -67,13 +67,14 @@
 				</a>
 		</div>
 		<div class="col-sm-3">
-				<a class="btn btn-primary" ui-sref="anon.gafetes({evento:imp.evento.evento_id
+				<!--<a class="btn btn-primary" ui-sref="anon.gafetes({evento:imp.evento.evento_id
 																												 ,municipio:imp.evento.municipio_id
 																												 ,deporte:imp.evento.deporte_id
 																												 ,categoria:imp.evento.categoria_id
 																												 ,rama:imp.evento.rama_id})" target="_blank">
 				  Gafetes
-				</a>
+				</a>-->
+				<input class="btn btn-primary" type="button" ng-click="imp.download(imp.participantes)" value="Gafetes" />
 		</div>
 	</div>
 </div>		
@@ -100,6 +101,8 @@
 	</tbody>
 </table>
 
+
+<a id='dwnldLnkG' href="#" download='archivo.docx' style="display:none;" hidden="true"></a>   
 
 
 

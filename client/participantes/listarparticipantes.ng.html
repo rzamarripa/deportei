@@ -9,6 +9,14 @@
 <br>
 <div class="well">	    
 	<div class="row">
+		<div class="col-sm-3" ng-if="currentUser.roles[0] == 'admin'">
+			<label >Municipio</label>
+			<select name="municipio" class="form-control select2" placeholder="Seleccione" ng-model="lp.buscar.municipio_id">
+					<option  value="{{municipio._id}}" ng-repeat="municipio in lp.municipios">
+						{{municipio.nombre}}
+					</option>
+			</select>
+		</div>
 		<div class="col-sm-3">
 			<label >Evento</label>
 			<select name="evento" class="form-control select2" placeholder="Seleccione" ng-model="lp.buscar.evento_id">
@@ -17,7 +25,8 @@
 					</option>
 			</select>
 		</div>
-		<div class="col-sm-2">
+		<!--
+		<div class="col-sm-3">
 			<label >Deporte</label>
 			<select name="deporte" class="form-control select2" placeholder="Seleccione" ng-model="lp.buscar.deporte_id">
 					<option  value="{{deporte._id}}" ng-repeat="deporte in lp.deportes">
@@ -41,6 +50,7 @@
 					</option>
 			</select>
 		</div>
+		-->
 	</div>
 </div>	
 <div class="row">
@@ -61,7 +71,6 @@
 			<div class="img-box" style="margin:20px;">
 				<img ng-src="{{lp.tieneFoto(participante.sexo, participante.foto)}}" style="width: 60px; height: 60px" data-img="img/superbox/superbox-full-1.jpg" alt="{{participante.nombreCompleto}}" title="{{participante.nombreCompleto" class="superbox-img">
 				<ul class="text-center" style="margin-left: -35px;">
-	        <!--<a href="/participantesver/{{participante._id}}"><li><i class="fa fa-eye"></i></li></a>-->
 	        <a href="/participanteseditar/{{participante.participante_id}}"><li><i class="fa fa-pencil"></i></li></a>
 	      </ul>
 			</div>

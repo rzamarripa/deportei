@@ -7,7 +7,7 @@ function CedulaCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 	
 	let rc = $reactive(this).attach($scope);
 	
-	window.rc = rc;
+	Window.rc = rc;
 	
   this.action = true;
   this.participante = {};
@@ -21,12 +21,24 @@ function CedulaCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 	
 	
 	let part = this.subscribe('participanteEventos',()=>{
+		
+		if (this.getReactively('evento.evento_id') != undefined && this.getReactively('evento.deporte_id') != undefined && this.getReactively('evento.categoria_id') != undefined && this.getReactively('evento.rama_id') != undefined)
+		{	
+			
+				if ((Meteor.user().roles[0] == 'admin') && (this.getReactively('evento.municipio_id') == undefined))
+						return;
+						
+		
 		return [{evento_id: this.getReactively('evento.evento_id')!= undefined ? this.getReactively('evento.evento_id'): "" 
-					  ,municipio_id : Meteor.user() != undefined ? Meteor.user().profile.municipio_id : ""
+					  ,municipio_id : ((Meteor.user().roles[0] == 'admin') && (this.getReactively('evento.municipio_id') != undefined)) 
+					  									? this.getReactively('evento.municipio_id')  
+					  									: Meteor.user().profile.municipio_id
 					  ,deporte_id: this.getReactively('evento.deporte_id')!= undefined ? this.getReactively('evento.deporte_id'): ""
 						,categoria_id: this.getReactively('evento.categoria_id')!= undefined ? this.getReactively('evento.categoria_id'): ""
 					  ,rama_id: this.getReactively('evento.rama_id')!= undefined ? this.getReactively('evento.rama_id'): ""
 					  ,funcionEspecifica: this.getReactively('evento.funcionEspecifica')!= undefined ? this.getReactively('evento.funcionEspecifica'): ""}]
+					  
+		}			  
 	});
 	
 	this.subscribe('municipios',()=>{
@@ -85,7 +97,6 @@ function CedulaCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 		},
 		todosParticipantes : () => {
 			if(part.ready()){
-					console.log("Entro");
 				_.each(rc.participantes, function(participante){
 					var m = Municipios.findOne(participante.municipio_id);
 					participante.municipio = m.nombre;

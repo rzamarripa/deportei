@@ -2,26 +2,26 @@
 	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
 		<h1 class="alge-title txt-color-blueDark">
 			<i class="fa fa-list fa-fw "></i>
-				Descarga de Documentos 
+				Descarga de Documentos
 		</h1>
 	</div>
 </div>
 <br>
 <div class="well">	    
 	<div class="row">
-		<div class="col-sm-3" valida>
-			<label >Evento</label>
-			<select name="evento" class="form-control select2" placeholder="Seleccione" ng-model="dc.evento.evento_id" required>
-					<option  value="{{evento._id}}" ng-repeat="evento in dc.eventos">
-						{{evento.nombre}}
-					</option>
-			</select>
-		</div>
 		<div class="col-sm-3">
 			<label >Municipio</label>
 			<select name="municipio" class="form-control select2" placeholder="Seleccione" ng-model="dc.evento.municipio_id">
 					<option  value="{{municipio._id}}" ng-repeat="municipio in dc.municipios">
 						{{municipio.nombre}}
+					</option>
+			</select>
+		</div>
+		<div class="col-sm-3" valida>
+			<label >Evento</label>
+			<select name="evento" class="form-control select2" placeholder="Seleccione" ng-model="dc.evento.evento_id" required>
+					<option  value="{{evento._id}}" ng-repeat="evento in dc.eventos">
+						{{evento.nombre}}
 					</option>
 			</select>
 		</div>
@@ -77,11 +77,9 @@
 			<td>{{participante.sexo}}</td>
 			<td>{{participante.fechaNacimiento.getUTCDate() +"/"+ (participante.fechaNacimiento.getUTCMonth()+1) +"/"+ participante.fechaNacimiento.getUTCFullYear()}}</td>		
 			<td>
-					<ul>
-						<li><input type="button" class="btn btn-primary" ng-click="dc.download(participante,1)" value="Curp" /></li>
-						<li><input type="button" class="btn btn-primary" ng-click="dc.download(participante,2)" value="Acta Nac." /></li>
-						<li><input type="button" class="btn btn-primary" ng-click="dc.download(participante,3)" value="Identificación" /></li>
-					</ul>
+					<input type="button" class="btn btn-primary" ng-click="dc.download(participante,1)" value="Curp" />
+				  <input type="button" class="btn btn-primary" ng-click="dc.download(participante,2)" value="Acta Nac." />
+					<input type="button" class="btn btn-primary" ng-click="dc.download(participante,3)" value="Identificación" />
 			</td>		
 		</tr>	
 	</tbody>
