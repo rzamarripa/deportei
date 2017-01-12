@@ -270,5 +270,16 @@ angular.module('insude').config(['$injector', function ($injector) {
 	      }]
 	    }
     })
+    .state('root.listado', {
+      url: '/listado',
+      templateUrl: 'client/reportes/listado.ng.html',
+      controller: 'listadoCtrl as lis',
+      resolve: {
+	      "currentUser": ["$meteor", function($meteor){
+	        return $meteor.requireUser();
+	      }]
+	    }
+    })
+    
     
 }]);     

@@ -3,7 +3,9 @@
 Meteor.publish("participanteEventos",function(params){
   	return ParticipanteEventos.find(params);
 });
+
 /*
+
 Meteor.publish("participanteEventos",function(params){
   	return ParticipanteEventos.find(params, {fields: { _id:1
 	  																						, nombre:1

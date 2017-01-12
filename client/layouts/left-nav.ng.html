@@ -68,7 +68,7 @@
         <i class="fa fa-lg fa-fw fa-cloud-download"></i>
         <span class="menu-item-parent">Descarga Doctos</span>
       </a>
-     </li>
+     </li>     
      <li data-ui-sref-active="active">
       <a ui-sref="root.listarparticipantes" tilte="Isde">
         <i class="fa fa-lg fa-fw fa-list"></i>
@@ -79,6 +79,12 @@
       <a ui-sref="root.cedula" tilte="Isde">
         <i class="fa fa-lg fa-fw fa-book"></i>
         <span class="menu-item-parent">Cédula</span>
+      </a>
+     </li>
+     <li data-ui-sref-active="active">
+      <a ui-sref="root.listado" tilte="Isde" ng-if="currentUser.roles[0] == 'admin'">
+        <i class="fa fa-lg fa-fw fa-table"></i>
+        <span class="menu-item-parent">Listado</span>
       </a>
      </li>
      		 

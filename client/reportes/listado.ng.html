@@ -2,7 +2,7 @@
 	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
 		<h1 class="alge-title txt-color-blueDark">
 			<i class="fa fa-list fa-fw "></i>
-				Cedula de Inscripción
+				Listado
 		</h1>
 	</div>
 </div>
@@ -11,47 +11,48 @@
 	<div class="row">
 		<div class="col-sm-3" ng-if="currentUser.roles[0] == 'admin'">
 			<label >Municipio</label>
-			<select name="municipio" class="form-control select2" placeholder="Seleccione" ng-model="ced.evento.municipio_id">
-					<option  value="{{municipio._id}}" ng-repeat="municipio in ced.municipios">
+			<select name="municipio" class="form-control select2" placeholder="Seleccione" ng-model="lis.evento.municipio_id">
+					<option  value="{{municipio._id}}" ng-repeat="municipio in lis.municipios">
 						{{municipio.nombre}}
 					</option>
 			</select>
 		</div>
 		<div class="col-sm-3">
 			<label >Evento</label>
-			<select name="evento" class="form-control select2" placeholder="Seleccione" ng-model="ced.evento.evento_id">
-					<option  value="{{evento._id}}" ng-repeat="evento in ced.eventos">
+			<select name="evento" class="form-control select2" placeholder="Seleccione" ng-model="lis.evento.evento_id">
+					<option  value="{{evento._id}}" ng-repeat="evento in lis.eventos">
 						{{evento.nombre}}
 					</option>
 			</select>
 		</div>
 		<div class="col-sm-3">
 			<label >Deporte</label>
-			<select name="deporte" class="form-control select2" placeholder="Seleccione" ng-model="ced.evento.deporte_id">
-					<option  value="{{deporte._id}}" ng-repeat="deporte in ced.deportes">
+			<select name="deporte" class="form-control select2" placeholder="Seleccione" ng-model="lis.evento.deporte_id">
+					<option  value="{{deporte._id}}" ng-repeat="deporte in lis.deportes">
 						{{deporte.nombre}}
 					</option>
 			</select>
 		</div>
 		<div class="col-sm-3">
 			<label >Categoria</label>
-			<select name="categoria" class="form-control select2" placeholder="Seleccione" ng-model="ced.evento.categoria_id">
-					<option  value="{{categoria._id}}" ng-repeat="categoria in ced.categorias">
+			<select name="categoria" class="form-control select2" placeholder="Seleccione" ng-model="lis.evento.categoria_id">
+					<option  value="{{categoria._id}}" ng-repeat="categoria in lis.categorias">
 						{{categoria.nombre}}
 					</option>
 			</select>
 		</div>
 		<div class="col-sm-2">
 			<label >Rama</label>
-			<select name="rama" class="form-control select2" placeholder="Seleccione" ng-model="ced.evento.rama_id">
-					<option  value="{{rama._id}}" ng-repeat="rama in ced.ramas">
+			<select name="rama" class="form-control select2" placeholder="Seleccione" ng-model="lis.evento.rama_id">
+					<option  value="{{rama._id}}" ng-repeat="rama in lis.ramas">
 						{{rama.nombre}}
 					</option>
 			</select>	
 		</div>
+		<!--
 		<div class="col-sm-2" valida>
 			<label for="funcionespecifica">Función Especifica</label>
-			<select name="funcionespecifica" ng-model="ced.evento.funcionEspecifica" data-placeholder="Seleccione" class="form-control">
+			<select name="funcionespecifica" ng-model="lis.evento.funcionEspecifica" data-placeholder="Seleccione" class="form-control">
 					<option value=""></option>
 					<option value="DEPORTISTA">Deportista</option>
 					<option value="ENTRENADOR">Entrenador</option>
@@ -70,19 +71,15 @@
 					<option value="TRASPORTE" ng-if="currentUser.roles[0] == 'admin'">Transporte</option>
 			</select>
 		</div>
+		-->
 	</div>
 	<br/>
-	<div class="row">	
+	<div class="row">
 		<div class="col-sm-4">
-				<a class="btn btn-primary" ui-sref="anon.imprimircedula({evento:ced.evento.evento_id
-																																,deporte:ced.evento.deporte_id
-																															  ,categoria:ced.evento.categoria_id
-																																,rama:ced.evento.rama_id
-																																,funcionEspecifica:ced.evento.funcionEspecifica
-																																,municipio:ced.evento.municipio_id})" target="_blank">
-				  Generar Cédula
-				</a>		
-				<!--<input class="btn btn-primary" type="button" ng-click="ced.download(ced.participantes)" value="Generar Cedula" />-->
+				<input class="btn btn-primary" type="button" ng-click="lis.download(lis.participantes)" value="Exportar Excel" />
+		</div>
+		<div class="col-sm-4">
+				<input class="btn btn-primary" type="button" ng-click="lis.reset()" value="Inicializar búsqueda" />
 		</div>
 	</div>
 </div>		
@@ -99,9 +96,9 @@
 		 </tr> 
 	</thead>	
 	<tbody>
-		<tr ng-repeat="participante in ced.participantes"> 
+		<tr ng-repeat="participante in lis.participantes"> 
 			<td>
-					<img src="{{ced.tieneFoto(participante.sexo, participante.foto)}}" alt="" class="img-rounded img-responsive" style="width:60px; height:60px;" />
+					<img src="{{lis.tieneFoto(participante.sexo, participante.foto)}}" alt="" class="img-rounded img-responsive" style="width:60px; height:60px;" />
 			</td>	
 			<td>{{participante.curp}}</td>
 			<td>{{participante.nombre}} {{participante.apellidoPaterno}} {{participante.apellidoMaterno}}</td>
@@ -111,7 +108,7 @@
 	</tbody>
 </table>
 
- <a id='dwnldLnk' href="#" download='cedula.docx' style="display:none;" hidden="true"></a>   
+<a id='dwnldLnk' href="#" download='cedula.docx' style="display:none;" hidden="true"></a>   
 
 
 

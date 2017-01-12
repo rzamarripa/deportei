@@ -695,8 +695,8 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 	
 	this.download = function(archivo, op) 
   {
-				console.log(archivo.indexOf("application"));
-				console.log(archivo.indexOf("image"));
+				//console.log(archivo.indexOf("application"));
+				//console.log(archivo.indexOf("image"));
 		    if (archivo.indexOf("application") > 0)
 		    {
 
@@ -730,9 +730,6 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 		    {
 			    console.log("no entro")
 		    }
-		    
-
-
 	};
 	
 	

@@ -228,11 +228,15 @@ Meteor.methods({
 				var ws_name = "SheetJS";
 
 				var wscols = [
+					{wch:5},
+					{wch:15},
+					{wch:18},
+					{wch:18},
 					{wch:20},
+					{wch:25},
+					{wch:15},
 					{wch:20},
-					{wch:30},
-					{wch:20},
-					{wch:20}
+					{wch:10}
 				];
 				
 				if(typeof require !== 'undefined') 
