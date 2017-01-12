@@ -8,7 +8,10 @@
     "bcrypt": "^1.0.2",
     "docxtemplater": "^3.0.2",
     "docxtemplater-image-module": "^3.0.0",
-    "jszip": "^2.6.1"
+    "express": "^4.14.0",
+    "jszip": "^2.6.1",
+    "meteor-node-stubs": "^0.2.4",
+    "xlsx": "^0.8.1"
   },
   "devDependencies": {},
   "scripts": {

@@ -7,9 +7,9 @@ Meteor.methods({
     var Docxtemplater = require('docxtemplater');
 		var JSZip = require('jszip');
 		var ImageModule = require('docxtemplater-image-module')
-		//var unoconv = require('unoconv');
 		
 	  var meteor_root = Npm.require('fs').realpathSync( process.cwd() + '/../' );
+		console.log(meteor_root);
 		
 		var opts = {}
 			opts.centered = false;
@@ -19,7 +19,7 @@ Meteor.methods({
 		}
 		
 		opts.getSize=function(img,tagValue, tagName) {
-		    return [90,90];
+		    return [100,100];
 		}
 		
 		var imageModule=new ImageModule(opts);
@@ -44,7 +44,7 @@ Meteor.methods({
 		
 		var content = fs
     							//.readFileSync("/Users/alfonsoduarte/Documents/Meteor/deporteb/cedula.docx", "binary");
-    							.readFileSync(meteor_root+"/web.browser/app/archivos/gafete.docx", "binary");
+    							.readFileSync(meteor_root+"/web.browser/app/archivos/Gafete.docx", "binary");
 	  
 		var zip = new JSZip(content);
 		var doc=new Docxtemplater()
@@ -204,7 +204,6 @@ Meteor.methods({
 		fs.writeFileSync(meteor_root+"/web.browser/app/descargas/cedulaSalida.docx",buf);
 
 		
-		
 		//Convertir a PDF
 		
 		//unoconv.convert(process.cwd()+"/app/server/descargas/cedulaSalida.docx", 'pdf', function (err, result) {
@@ -222,6 +221,95 @@ Meteor.methods({
 		
 		
   },
+  getExcel: function (participantes) {
+	  	
+	  		var fs = require('fs');
+				
+				var ws_name = "SheetJS";
+
+				var wscols = [
+					{wch:20},
+					{wch:20},
+					{wch:30},
+					{wch:20},
+					{wch:20}
+				];
+				
+				if(typeof require !== 'undefined') 
+						XLSX = require('xlsx');
+				
+				var JSZip = require('jszip');
+				
+				function Workbook() {
+					if(!(this instanceof Workbook)) return new Workbook();
+					this.SheetNames = [];
+					this.Sheets = {};
+				}
+				var wb = new Workbook();
+				
+				function datenum(v, date1904) {
+					if(date1904) v+=1462;
+					var epoch = Date.parse(v);
+					return (epoch - new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000);
+				}
+				
+				/* convert an array of arrays in JS to a CSF spreadsheet */
+				function sheet_from_array_of_arrays(data, opts) {
+					var ws = {};
+					var range = {s: {c:10000000, r:10000000}, e: {c:0, r:0 }};
+					for(var R = 0; R != data.length; ++R) {
+						for(var C = 0; C != data[R].length; ++C) {
+							if(range.s.r > R) range.s.r = R;
+							if(range.s.c > C) range.s.c = C;
+							if(range.e.r < R) range.e.r = R;
+							if(range.e.c < C) range.e.c = C;
+							var cell = {v: data[R][C] };
+							if(cell.v == null) continue;
+							var cell_ref = XLSX.utils.encode_cell({c:C,r:R});
+				
+							/* TEST: proper cell types and value handling */
+							if(typeof cell.v === 'number') cell.t = 'n';
+							else if(typeof cell.v === 'boolean') cell.t = 'b';
+							else if(cell.v instanceof Date) {
+								cell.t = 'n'; cell.z = XLSX.SSF._table[14];
+								cell.v = datenum(cell.v);
+							}
+							else cell.t = 's';
+							ws[cell_ref] = cell;
+						}
+					}
+				
+					/* TEST: proper range */
+					if(range.s.c < 10000000) ws['!ref'] = XLSX.utils.encode_range(range);
+					return ws;
+				}
+				
+				
+				var ws = sheet_from_array_of_arrays(participantes);
+
+				/* TEST: add worksheet to workbook */
+				wb.SheetNames.push(ws_name);
+				wb.Sheets[ws_name] = ws;
+				
+				/* TEST: column widths */
+				ws['!cols'] = wscols;
+				
+				var meteor_root = Npm.require('fs').realpathSync( process.cwd() + '/../' );
+				console.log(meteor_root);
+				
+				/* write file */
+				XLSX.writeFile(wb, meteor_root+"/web.browser/app/archivos/sheetjs.xlsx");
+				
+				
+				//Pasar a base64
+				// read binary data
+		    var bitmap = fs.readFileSync(meteor_root+"/web.browser/app/archivos/sheetjs.xlsx");
+		    
+		    // convert binary data to base64 encoded string
+		    return new Buffer(bitmap).toString('base64');
+		
+	  		
+	},
   
 });
 

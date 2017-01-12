@@ -77,6 +77,21 @@ function CategoriasCtrl($scope, $meteor, $reactive, $state, toastr) {
 	    this.nuevo = false;
 	};
 	
+	this.eliminar = function(id)
+	{
+			console.log(id);
+	    if (confirm('¿Estas Seguro que deseas eliminar el registro?')) {
+					// Save it!
+					console.log(id);
+					Categorias.remove({_id:id},
+									function(error,result){
+										if (error) toastr.error('Error al eliminar.');
+										if (result) toastr.success('Eliminado correctamente.');
+					});
+					
+			} 
+	};
+	
 	this.actualizar = function(categoria,form)
 	{
 	    if(form.$invalid){

@@ -125,7 +125,7 @@ function CedulaCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 		
 	});
 	
-	this.download = function(participantes) 
+	this.download = function(participantes, op) 
   {
 	  
 		if (participantes.length == 0)
@@ -134,22 +134,50 @@ function CedulaCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 				return;
 		}
 		
-		Meteor.call('getCedula', participantes, function(error, response) {
-		   if(error){
-		    console.log('ERROR :', error);
-		    return;
-		   }else{
+		if (op == 1)
+		{
+				Meteor.call('getCedula', participantes, function(error, response) {
+				   if(error){
+				    console.log('ERROR :', error);
+				    return;
+				   }else{
+		
+					  var pdf = 'data:application/docx;base64,';
+				    var dlnk = document.getElementById('dwnldLnk');
+				    dlnk.download = this.deporteNombre+'-'+this.categoriaNombre+'.docx'; 
+						dlnk.href = pdf+response;
+						dlnk.click();
+				    		    
+				   }
+				});
+		}
+		else
+		{
+			
+			var participantesArray = [];
+					participantesArray.push(["MUNICIPIO", "CURP", "NOMBRE", "DEPORTE", "CATEGORÍA"]);
+			 _.each(rc.participantes, function(participante){
+				 	participantesArray.push([participante.municipio, participante.curp, participante.nombreCompleto, participante.deporte, participante.categoria]);
+			})	 
+											
+			Meteor.call('getExcel', participantesArray, function(error, response) {
+				   if(error){
+				    console.log('ERROR :', error);
+				    return;
+				   }else{
+					 	
+					  var pdf = 'data:application/xlsx;base64,';
+				    var dlnk = document.getElementById('dwnldLnk');
+				    dlnk.download = this.deporteNombre+'-'+this.categoriaNombre+'.xlsx'; 
+						dlnk.href = pdf+response;
+						dlnk.click();
+				   }
+			});	
 
-			  var pdf = 'data:application/docx;base64,';
-		    var dlnk = document.getElementById('dwnldLnk');
-		    dlnk.download = this.deporteNombre+'-'+this.categoriaNombre+'.docx'; 
-				dlnk.href = pdf+response;
-				dlnk.click();
-		    		    
-		   }
-		});
+		}
 		
 	};
+	
 
 	
 	this.tieneFoto = function(sexo, foto){

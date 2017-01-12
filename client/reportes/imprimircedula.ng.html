@@ -21,11 +21,11 @@
               <strong>CURP:</strong> {{participante.curp}} 
       </td>
 			<td>
-             	<span>{{participante.funcionEspecifica}}</span>
+             	<span style="font-size: smaller;">{{participante.funcionEspecifica}}</span>
               <br />
-              <span>{{participante.categoria.nombre}}</span>
+              <span style="font-size: x-small;">{{participante.categoria.nombre}}</span>
               <br />
-              <span>{{participante.deporte.nombre}}</span>
+              <span style="font-size: x-small;">{{participante.deporte.nombre}}</span>
               <br />
 			        <ol>
 			          <li ng-repeat="prueba in participante.pruebasNombre">
@@ -37,7 +37,7 @@
 					<ul style="list-style-type: none;">
 					  <li>(&nbsp;&nbsp;&nbsp;) Acta Nac.</li>
 					  <li>(&nbsp;&nbsp;&nbsp;) CURP</li>
-					  <li>(&nbsp;&nbsp;&nbsp;) SIRED</li>
+					  <li>(&nbsp;&nbsp;&nbsp;) Ident.</li>
 					  <li>(&nbsp;&nbsp;&nbsp;) Fotos</li>
 					</ul>
         </td>

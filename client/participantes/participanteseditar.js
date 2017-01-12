@@ -695,7 +695,8 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 	
 	this.download = function(archivo, op) 
   {
-
+				console.log(archivo.indexOf("application"));
+				console.log(archivo.indexOf("image"));
 		    if (archivo.indexOf("application") > 0)
 		    {
 
@@ -710,19 +711,18 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 							 dlnk.download= "Ide.pdf";
 				    dlnk.href = pdf+d;
 				    dlnk.click();
-		    }
-		    else if(archivo.indexOf("image") > 0)
+		    }else if(archivo.indexOf("image") > 0)
 		    {
 
 			    	var jpeg = 'data:image/jpeg;base64,';
 			  		var d = archivo.replace('data:image/jpeg;base64,','');  
 						var dlnk = document.getElementById('dwnldLnk');
 				    if (op==1)
-							 dlnk.download= "curp.pdf";
+							 dlnk.download= "curp.jpeg";
 						else if (op==2)
-							 dlnk.download= "AN.pdf";
+							 dlnk.download= "AN.jpeg";
 						else if (op==3)
-							 dlnk.download= "Ide.pdf";				    
+							 dlnk.download= "Ide.jpeg";				    
 						dlnk.href = jpeg+d;
 				    dlnk.click();
 		    }

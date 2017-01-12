@@ -108,6 +108,15 @@ function PruebasCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 	    this.nuevo = false;
 	};
 	
+	this.eliminar = function(id)
+	{
+	    if (confirm('¿Estas Seguro que deseas eliminar el registro?')) {
+					// Save it!
+					Pruebas.remove(id);
+					toastr.success('Eliminado correctamente.');
+			} 
+	};
+	
 	this.actualizar = function(prueba,form)
 	{
 	    if(form.$invalid){

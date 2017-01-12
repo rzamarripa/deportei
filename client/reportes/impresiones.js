@@ -95,6 +95,8 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 					var r = Ramas.findOne(participante.rama_id);
 					participante.rama = 	r.nombre;	
 					
+					participante.imprimir = true;
+					
 					/*										
 					participante.pruebasNombre = [];
 					_.each(participante.pruebas, function(prueba){
@@ -126,14 +128,20 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
   
   this.download = function(participantes) 
   {
+	  	
+		var p = rc.participantes.filter(function(ele){
+																						return ele.imprimir === true;
+		});
+
 	  
-		if (participantes.length == 0)
+		if (p.length == 0)
  		{
-	 			toastr.error("No hay participantes para generar cédula");
+	 			toastr.error("No hay participantes seleccionados para imprmir");
 				return;
 		}
 		
-		Meteor.call('getGafetes', participantes, function(error, response) {
+
+		Meteor.call('getGafetes', p, function(error, response) {
 		   if(error){
 		    console.log('ERROR :', error);
 		    return;
@@ -147,8 +155,22 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 		    		    
 		   }
 		});
-		
 	};
+	
+	 this.cambiar = function() 
+  {
+				var chkImprimir = document.getElementById('todos');
+				console.log(chkImprimir.checked);
+				
+				if(part.ready()){
+				_.each(rc.participantes, function(participante){
+					participante.imprimir = chkImprimir.checked;
+				})
+			}
+		 			
+	};
+
+	
 
 	
 };	

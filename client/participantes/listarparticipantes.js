@@ -83,6 +83,21 @@ function ListarParticipantesCtrl($scope, $meteor, $reactive, $state, toastr, $st
 		},
 	});
 	
+	this.eliminar = function(id)
+	{
+			console.log(id);
+	    if (confirm('¿Estas Seguro que deseas eliminar el registro?')) {
+					// Save it!
+					console.log(id);
+					ParticipanteEventos.remove({_id:id},
+									function(error,result){
+										if (error) toastr.error('Error al eliminar.');
+										if (result) toastr.success('Eliminado correctamente.');
+					});
+					
+			} 
+	};
+	
 	this.tieneFoto = function(sexo, foto){
 	  if(foto === undefined){
 		  if(sexo === "Masculino")

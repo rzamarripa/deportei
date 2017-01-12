@@ -76,18 +76,19 @@
 																												 ,rama:imp.evento.rama_id})" target="_blank">
 				  Gafetes
 				</a>-->
-				<input class="btn btn-primary" type="button" ng-click="imp.download(imp.participantes)" value="Gafetes" disabled="true"/>
+				<input class="btn btn-primary" type="button" ng-click="imp.download(imp.participantes)" value="Gafetes" />
 		</div>
 	</div>
 </div>		
 <table class="table" width="600" align="center" bs-table>
 	<thead>
 		 <tr>
-			 <th>Foto</th>
-			 <th>CURP</th>
-			 <th>Nombre</th>
-			 <th>Sexo</th>
-			 <th>Fecha Nacimiento</th>	 
+			 <th width="15%">Foto</th>
+			 <th width="20%">CURP</th>
+			 <th width="20%">Nombre</th>
+			 <th width="10%">Sexo</th>
+			 <th width="20%">Fecha Nacimiento</th>	 
+			 <th width="15%"><input id="todos" type="checkbox" class="form-control" ng-click="imp.cambiar()" checked="true"/></th>
 		 </tr> 
 	</thead>	
 	<tbody>
@@ -98,7 +99,8 @@
 			<td>{{participante.curp}}</td>
 			<td>{{participante.nombre}} {{participante.apellidoPaterno}} {{participante.apellidoMaterno}}</td>
 			<td>{{participante.sexo}}</td>
-			<td>{{participante.fechaNacimiento.getUTCDate() +"/"+ (participante.fechaNacimiento.getUTCMonth()+1) +"/"+ participante.fechaNacimiento.getUTCFullYear()}}</td>		
+			<td>{{participante.fechaNacimiento.getUTCDate() +"/"+ (participante.fechaNacimiento.getUTCMonth()+1) +"/"+ participante.fechaNacimiento.getUTCFullYear()}}</td>
+			<td><input type="checkbox" class="form-control" ng-model="participante.imprimir" value="participante.imprimir"/> </td>
 		</tr>	
 	</tbody>
 </table>

@@ -160,7 +160,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 															Participantes.update({_id:idTemp},{$set:participante}, 
 																									function(error,result){
 																											if (error){
-																													$( "#registar" ).prop( "disabled", false );
+																													$( "#registrar" ).prop( "disabled", false );
 																													console.log("Error:",error);
 																													return;		
 																											}
@@ -182,7 +182,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 																														ParticipanteEventos.insert(participanteEventos,
 																																													function(error, result){
 																																															if (error){
-																																																 $( "#registar" ).prop( "disabled", false );
+																																																 $( "#registrar" ).prop( "disabled", false );
 																																																 console.log("Error:",error);
 																																																 if (error.error == 409) toastr.error('Error registro duplicado en participanteEventos.');
 																																																  	 return;		
@@ -222,7 +222,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 															Participantes.insert(participante, 
 																											function(error,result){
 																												if (error){
-																														$( "#registar" ).prop( "disabled", false );
+																														$( "#registrar" ).prop( "disabled", false );
 																													  console.log("Error:",error);
 																													  if (error.error == 409) toastr.error('Error registro duplicado participante.');
 																													  		return;		
@@ -246,7 +246,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 																														ParticipanteEventos.insert(participanteEventos,
 																																													function(error, result){
 																																															if (error){
-																																																 $( "#registar" ).prop( "disabled", false );
+																																																 $( "#registrar" ).prop( "disabled", false );
 																																																 console.log("Error:",error);
 																																																 if (error.error == 409) toastr.error('Error registro duplicado en participanteEventos.');
 																																																  	 return;		
@@ -291,7 +291,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 															Participantes.update({_id:idTemp},{$set:participante}, 
 																									function(error,result){
 																											if (error){
-																													$( "#registar" ).prop( "disabled", false );
+																													$( "#registrar" ).prop( "disabled", false );
 																													console.log("Error:",error);
 																													return;		
 																											}
@@ -313,7 +313,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 																														ParticipanteEventos.insert(participanteEventos,
 																																													function(error, result){
 																																															if (error){
-																																																 $( "#registar" ).prop( "disabled", false );
+																																																 $( "#registrar" ).prop( "disabled", false );
 																																																 console.log("Error:",error);
 																																																 if (error.error == 409) toastr.error('Error registro duplicado en participanteEventos.');
 																																																  	 return;		
@@ -355,7 +355,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 															Participantes.insert(participante, 
 																											function(error,result){
 																												if (error){
-																														$( "#registar" ).prop( "disabled", false );
+																														$( "#registrar" ).prop( "disabled", false );
 																													  console.log("Error:",error);
 																													  if (error.error == 409) toastr.error('Error registro duplicado participante.');
 																													  		return;		
@@ -379,7 +379,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 																														ParticipanteEventos.insert(participanteEventos,
 																																													function(error, result){
 																																															if (error){
-																																																 $( "#registar" ).prop( "disabled", false );
+																																																 $( "#registrar" ).prop( "disabled", false );
 																																																 //console.log("Error:",error);
 																																																 if (error.error == 409) toastr.error('Error registro duplicado en participanteEventos.');
 																																																  	 return;		
@@ -434,7 +434,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 															Participantes.update({_id:idTemp},{$set:participante}, 
 																									function(error,result){
 																											if (error){
-																													$( "#registar" ).prop( "disabled", false );
+																													$( "#registrar" ).prop( "disabled", false );
 																													console.log("Error:",error);
 																													return;		
 																											}
@@ -456,7 +456,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 																														ParticipanteEventos.insert(participanteEventos,
 																																													function(error, result){
 																																															if (error){
-																																																 $( "#registar" ).prop( "disabled", false );
+																																																 $( "#registrar" ).prop( "disabled", false );
 																																																 console.log("Error:",error);
 																																																 if (error.error == 409) toastr.error('Error registro duplicado en participanteEventos.');
 																																																  	 return;		
@@ -498,7 +498,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 															Participantes.insert(participante, 
 																											function(error,result){
 																												if (error){
-																														$( "#registar" ).prop( "disabled", false );
+																														$( "#registrar" ).prop( "disabled", false );
 																													  console.log("Error:",error);
 																													  if (error.error == 409) toastr.error('Error registro duplicado participante.');
 																													  		return;		
@@ -522,7 +522,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 																														ParticipanteEventos.insert(participanteEventos,
 																																													function(error, result){
 																																															if (error){
-																																																 $( "#registar" ).prop( "disabled", false );
+																																																 $( "#registrar" ).prop( "disabled", false );
 																																																 //console.log("Error:",error);
 																																																 if (error.error == 409) toastr.error('Error registro duplicado en participanteEventos.');
 																																																  	 return;		
