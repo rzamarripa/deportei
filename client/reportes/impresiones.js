@@ -97,14 +97,6 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 					
 					participante.imprimir = true;
 					
-					/*										
-					participante.pruebasNombre = [];
-					_.each(participante.pruebas, function(prueba){
-							//participante.pruebasNombre.push(Pruebas.findOne(prueba, { fields : { nombre : 1}}))
-							var p = Pruebas.findOne(prueba,{ fields : { nombre : 1}});
-							participante.pruebasNombre.push({"nombre": p.nombre});
-					})
-					*/
 				})
 			}
 		}

@@ -16,7 +16,7 @@ function UsuariosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 
   this.helpers({
 	  usuarios : () => {
-		  return Meteor.users.find({});
+		  return Meteor.users.find({"profile.nombre": { $ne: "Super Administrador"}});
 	  },
 	  municipios: () => {
 		 	return Municipios.find(); 
@@ -69,7 +69,6 @@ function UsuariosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 			//var idTemp = usuario._id;
 			//delete usuario._id;		
 			usuario.profile.usuarioActualizo = Meteor.userId();
-			console.log(usuario);
 			//Usuarios.update({_id:idTemp},{$set:usuario});
 			Meteor.call('updateUsuario', usuario, usuario.profile.tipo);
 			toastr.success('Actualizado correctamente.');
@@ -82,13 +81,15 @@ function UsuariosCtrl($scope, $meteor, $reactive,  $state, $stateParams, toastr)
 		
 	this.cambiarEstatus = function(id)
 	{
-			var usuario = Usuarios.findOne({_id:id});
-			if(usuario.estatus == true)
-				usuario.estatus = false;
+			var usuario = Meteor.users.findOne({_id:id});
+			if(usuario.profile.estatus == true)
+				usuario.profile.estatus = false;
 			else
-				usuario.estatus = true;
+				usuario.profile.estatus = true;
 			
-			Usuarios.update({_id:id}, {$set : {estatus : usuario.estatus}});
+			//console.log(usuario);
+			Meteor.call('updateUsuario', usuario, usuario.profile.tipo);
+			
 	};
 
 	this.tomarFoto = function(){

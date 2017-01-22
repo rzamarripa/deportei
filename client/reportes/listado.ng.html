@@ -88,7 +88,7 @@
 <table class="table" width="600" align="center" bs-table>
 	<thead>
 		 <tr>
-			 <th>Foto</th>
+			 <th>Num</th>
 			 <th>CURP</th>
 			 <th>Nombre</th>
 			 <th>Sexo</th>
@@ -97,9 +97,11 @@
 	</thead>	
 	<tbody>
 		<tr ng-repeat="participante in lis.participantes"> 
-			<td>
+			<!--<td>
 					<img src="{{lis.tieneFoto(participante.sexo, participante.foto)}}" alt="" class="img-rounded img-responsive" style="width:60px; height:60px;" />
-			</td>	
+			</td>
+			-->	
+			<td>{{$index+1}}</td>
 			<td>{{participante.curp}}</td>
 			<td>{{participante.nombre}} {{participante.apellidoPaterno}} {{participante.apellidoMaterno}}</td>
 			<td>{{participante.sexo}}</td>

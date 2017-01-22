@@ -16,6 +16,7 @@ function listadoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
   this.evento = {};
   this.buscar.nombre = '';
 	this.validation = false;
+	this.eventoNombre = "";
 	this.deporteNombre = "";
 	this.categoriaNombre = "";
 	
@@ -70,16 +71,17 @@ function listadoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 	});
 	
 	this.subscribe('categorias',()=>{
-		return [{evento_id:  this.getReactively('evento.evento_id')? this.getReactively('evento.evento_id'):""
-						,deporte_id: this.getReactively('evento.deporte_id')? this.getReactively('evento.deporte_id'):""
-						,estatus: true
+		return [{//evento_id:  this.getReactively('evento.evento_id')? this.getReactively('evento.evento_id'):""
+						//,deporte_id: this.getReactively('evento.deporte_id')? this.getReactively('evento.deporte_id'):""
+						estatus: true
 		}]
 	});
 	
 	this.subscribe('pruebas',()=>{
-		return [{evento_id:  this.getReactively('evento.evento_id')? this.getReactively('evento.evento_id'):"" 
-						,deporte_id: this.getReactively('evento.deporte_id')? this.getReactively('evento.deporte_id'):""
-						,categoria_id: this.getReactively('evento.categoria_id')!= undefined ? this.getReactively('evento.categoria_id'): ""
+		return [{//evento_id:  this.getReactively('evento.evento_id')? this.getReactively('evento.evento_id'):"" 
+						//,deporte_id: this.getReactively('evento.deporte_id')? this.getReactively('evento.deporte_id'):""
+						//categoria_id: this.getReactively('evento.categoria_id')!= undefined ? this.getReactively('evento.categoria_id'): ""
+						estatus: true
 		}]
 	});
 
@@ -118,20 +120,20 @@ function listadoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 					participante.evento = e.nombre;
 					var d = Deportes.findOne(participante.deporte_id);
 					participante.deporte = d.nombre;
-					this.deporteNombre = d.nombre;
+					//this.deporteNombre = d.nombre;
 					var c = Categorias.findOne(participante.categoria_id);
-					participante.categoria = 	c.nombre;
-					this.categoriaNombre = c.nombre;
+					participante.categoria = c.nombre;
+					//this.categoriaNombre = c.nombre;
 					var r = Ramas.findOne(participante.rama_id);
-					participante.rama = 	r.nombre;	
-															
+					participante.rama =  r.nombre;	
+								
 					participante.pruebasNombre = [];
 					_.each(participante.pruebas, function(prueba){
 							//participante.pruebasNombre.push(Pruebas.findOne(prueba, { fields : { nombre : 1}}))
 							var p = Pruebas.findOne(prueba,{ fields : { nombre : 1}});
 							participante.pruebasNombre.push({"nombre": p.nombre});
 					})
-					
+
 				})
 			}
 		}
@@ -163,7 +165,7 @@ function listadoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 					 	
 					  var pdf = 'data:application/xlsx;base64,';
 				    var dlnk = document.getElementById('dwnldLnk');
-				    dlnk.download = this.deporteNombre+'-'+this.categoriaNombre+'.xlsx'; 
+				    dlnk.download = 'Lista.xlsx'; 
 						dlnk.href = pdf+response;
 						dlnk.click();
 				   }

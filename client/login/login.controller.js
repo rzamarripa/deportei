@@ -13,8 +13,24 @@ function LoginCtrl($scope, $meteor, $reactive, $state, toastr) {
   };
 
   this.login = function () {
+	  
     $meteor.loginWithPassword(this.credentials.username, this.credentials.password).then(
       function () {
+	      //Preguntar el estatus
+	      
+	      if (Meteor.user().profile.estatus == false && Meteor.user().profile.nombre != "Super Administrador")
+	      {
+		      	return $meteor.logout().then(
+	            function () {
+	              $state.go('anon.login');
+	            },
+	            function (error) {
+	              toastr.error(error.reason);
+	            }
+          );
+		      
+	      }
+	      
 	      toastr.success("Bienvenido al Sistema");
         $state.go('root.home');        
       },

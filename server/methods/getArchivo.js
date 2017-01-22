@@ -8,8 +8,10 @@ Meteor.methods({
 		var JSZip = require('jszip');
 		var ImageModule = require('docxtemplater-image-module')
 		
-	  var meteor_root = Npm.require('fs').realpathSync( process.cwd() + '/../' );
-		console.log(meteor_root);
+	  var meteor_root = require('fs').realpathSync( process.cwd() + '/../' );
+		
+		var produccion = meteor_root+"/web.browser/app/archivos/";
+		//var produccion = "/home/insude/archivos/";
 		
 		var opts = {}
 			opts.centered = false;
@@ -35,16 +37,15 @@ Meteor.methods({
 			    // write buffer to file					
 					
 					//Usando Meteor_root
-					fs.writeFileSync(meteor_root+"/web.browser/app/fotos/"+participante.curp+".png", bitmap);
-					participante.foto = meteor_root + "/web.browser/app/fotos/"+participante.curp+".png";
+					fs.writeFileSync(produccion+participante.curp+".png", bitmap);
+					participante.foto = produccion+participante.curp+".png";
 					
 				}
 		})
 
 		
 		var content = fs
-    							//.readFileSync("/Users/alfonsoduarte/Documents/Meteor/deporteb/cedula.docx", "binary");
-    							.readFileSync(meteor_root+"/web.browser/app/archivos/Gafete.docx", "binary");
+    							.readFileSync(produccion+"Gafete.docx", "binary");
 	  
 		var zip = new JSZip(content);
 		var doc=new Docxtemplater()
@@ -69,30 +70,6 @@ Meteor.methods({
 		})
 		*/
 		
-		/*
-		participantes = [{   nombre: "Alfonso",
-								 apellidoPaterno:"Duarte",
-								 apellidoMaterno:"Jimenez",
-								 funcionEspecifica:"Deportista",
-								 categoria:"JUNIOR",
-								 municipio:"CULIACAN",
-								 rama:"VARONIL",
-								 deporte:"BIESBOL",
-								 foto:"/Users/alfonsoduarte/Documents/Meteor/isde/.meteor/local/build/programs/web.browser/app/fotos/DUJA020722HSLRMLA8.png"
-								},
-								{nombre: "Fernando",
-								 apellidoPaterno:"Duarte",
-								 apellidoMaterno:"Jimenez",
-								 funcionEspecifica:"Deportista",
-								 categoria:"JUNIOR",
-								 municipio:"CULIACAN",
-								 rama:"VARONIL",
-								 deporte:"BIESBOL",
-								 foto:"/Users/alfonsoduarte/Documents/Meteor/isde/.meteor/local/build/programs/web.browser/app/fotos/DUJA020722HSLRMLA8.png"
-								}];
-								
-    */
-		//console.log(participantes);
 		doc.setData({participantes})
 		
 		doc.render();
@@ -100,12 +77,12 @@ Meteor.methods({
 		var buf = doc.getZip()
              		 .generate({type:"nodebuffer"});
  
-		fs.writeFileSync(meteor_root+"/web.browser/app/descargas/gafeteSalida.docx",buf);
+		fs.writeFileSync(produccion+"gafeteSalida.docx",buf);
 		
 		
 		//Pasar a base64
 		// read binary data
-    var bitmap = fs.readFileSync(meteor_root+"/web.browser/app/descargas/gafeteSalida.docx");
+    var bitmap = fs.readFileSync(produccion+"gafeteSalida.docx");
     
     // convert binary data to base64 encoded string
     return new Buffer(bitmap).toString('base64');
@@ -121,7 +98,7 @@ Meteor.methods({
 		var ImageModule = require('docxtemplater-image-module');
 		//var unoconv = Npm.require('unoconv');
 		
-		var meteor_root = Npm.require('fs').realpathSync( process.cwd() + '/../' );
+		var meteor_root = require('fs').realpathSync( process.cwd() + '/../' );
 		
 		console.log("Root: ", meteor_root);
 		
@@ -222,10 +199,14 @@ Meteor.methods({
 		
   },
   getExcel: function (participantes) {
-	  	
+	  		
 	  		var fs = require('fs');
-				
 				var ws_name = "SheetJS";
+				
+				//var meteor_root = require('fs').realpathSync( process.cwd() + '/../' );
+		
+				//var produccion = meteor_root+"/web.browser/app/archivos/";
+				var produccion = "/home/isde/archivos/";
 
 				var wscols = [
 					{wch:5},
@@ -298,16 +279,16 @@ Meteor.methods({
 				/* TEST: column widths */
 				ws['!cols'] = wscols;
 				
-				var meteor_root = Npm.require('fs').realpathSync( process.cwd() + '/../' );
-				console.log(meteor_root);
+				//var meteor_root = Npm.require('fs').realpathSync( process.cwd() + '/../' );
+				//console.log(meteor_root);
 				
 				/* write file */
-				XLSX.writeFile(wb, meteor_root+"/web.browser/app/archivos/sheetjs.xlsx");
+				XLSX.writeFile(wb, produccion+"sheetjs.xlsx");
 				
 				
 				//Pasar a base64
 				// read binary data
-		    var bitmap = fs.readFileSync(meteor_root+"/web.browser/app/archivos/sheetjs.xlsx");
+		    var bitmap = fs.readFileSync(produccion+"sheetjs.xlsx");
 		    
 		    // convert binary data to base64 encoded string
 		    return new Buffer(bitmap).toString('base64');
