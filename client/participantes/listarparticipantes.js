@@ -26,16 +26,20 @@ function ListarParticipantesCtrl($scope, $meteor, $reactive, $state, toastr, $st
 			if (this.getReactively('buscar.nombre') == "")
 					return;
 			
-	    return [{
-		    options : { limit: 20 },
-		    where : { 
-			    nombreCompleto : this.getReactively('buscar.nombre'),
-			    evento_id : this.getReactively('buscar.evento_id'), 
-			    municipio_id : ((Meteor.user().roles[0] == 'admin') && (this.getReactively('buscar.municipio_id') != undefined)) 
-					  									? this.getReactively('buscar.municipio_id')  
-					  									: Meteor.user().profile.municipio_id	  
-			  }  
-	    }];
+			if (this.getReactively("buscar.nombre").length > 4)
+			{
+			
+			    return [{
+				    options : { limit: 8 },
+				    where : { 
+					    nombreCompleto : this.getReactively('buscar.nombre'),
+					    evento_id : this.getReactively('buscar.evento_id'), 
+					    municipio_id : ((Meteor.user().roles[0] == 'admin') && (this.getReactively('buscar.municipio_id') != undefined)) 
+							  									? this.getReactively('buscar.municipio_id')  
+							  									: Meteor.user().profile.municipio_id	  
+					  }  
+			    }];
+			}   
     }
   });
   

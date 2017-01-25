@@ -202,10 +202,7 @@ Meteor.methods({
 	  		
 	  		var fs = require('fs');
 				var ws_name = "SheetJS";
-				
-				//var meteor_root = require('fs').realpathSync( process.cwd() + '/../' );
-		
-				//var produccion = meteor_root+"/web.browser/app/archivos/";
+						
 				var produccion = "/home/isde/archivos/";
 
 				var wscols = [
@@ -217,7 +214,7 @@ Meteor.methods({
 					{wch:25},
 					{wch:15},
 					{wch:20},
-					{wch:10}
+					{wch:10},
 				];
 				
 				if(typeof require !== 'undefined') 

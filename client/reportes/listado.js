@@ -7,7 +7,7 @@ function listadoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 	
 	let rc = $reactive(this).attach($scope);
 	
-	Window.rc = rc;
+	window.rc = rc;
 	
   this.action = true;
   this.participante = {};
@@ -21,14 +21,14 @@ function listadoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 	this.categoriaNombre = "";
 	
 	
-	let part = this.subscribe('participanteEventos',()=>{
+	let part = this.subscribe('participanteListado',()=>{
 				
-				if (this.getReactively('evento.municipio_id') != undefined && this.getReactively('evento.evento_id') != undefined && this.getReactively('evento.deporte_id') == undefined && this.getReactively('evento.categoria_id') == undefined && this.getReactively('evento.rama_id') == undefined)
+				if (this.getReactively('evento.municipio_id') != undefined && this.getReactively('evento.evento_id') != undefined && this.getReactively('evento.deporte_id') == undefined)
 				{			
 							return [{evento_id: this.getReactively('evento.evento_id')!= undefined ? this.getReactively('evento.evento_id'): "" 
 										  ,municipio_id : this.getReactively('evento.municipio_id')
 										  }];
-				} else if (this.getReactively('evento.municipio_id') != undefined && this.getReactively('evento.evento_id') != undefined && this.getReactively('evento.deporte_id') != undefined && this.getReactively('evento.categoria_id') == undefined && this.getReactively('evento.rama_id') == undefined)
+				} else if (this.getReactively('evento.municipio_id') != undefined && this.getReactively('evento.evento_id') != undefined && this.getReactively('evento.deporte_id') != undefined)
 				{
 							return [{evento_id: this.getReactively('evento.evento_id')!= undefined ? this.getReactively('evento.evento_id'): "" 
 										  ,municipio_id : this.getReactively('evento.municipio_id')
@@ -36,24 +36,7 @@ function listadoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 										  }];
 					
 					
-				} else if (this.getReactively('evento.municipio_id') != undefined && this.getReactively('evento.evento_id') != undefined && this.getReactively('evento.deporte_id') != undefined && this.getReactively('evento.categoria_id') != undefined && this.getReactively('evento.rama_id') == undefined)
-				{
-							return [{evento_id: this.getReactively('evento.evento_id')!= undefined ? this.getReactively('evento.evento_id'): "" 
-										  ,municipio_id : this.getReactively('evento.municipio_id')
-										  ,deporte_id: this.getReactively('evento.deporte_id')!= undefined ? this.getReactively('evento.deporte_id'): ""
-										  ,categoria_id: this.getReactively('evento.categoria_id')!= undefined ? this.getReactively('evento.categoria_id'): ""
-										  }];
-				} 
-				else
-				{
-							return [{evento_id: this.getReactively('evento.evento_id')!= undefined ? this.getReactively('evento.evento_id'): "" 
-										  ,municipio_id : this.getReactively('evento.municipio_id')
-										  ,deporte_id: this.getReactively('evento.deporte_id')!= undefined ? this.getReactively('evento.deporte_id'): ""
-											,categoria_id: this.getReactively('evento.categoria_id')!= undefined ? this.getReactively('evento.categoria_id'): ""
-										  ,rama_id: this.getReactively('evento.rama_id')!= undefined ? this.getReactively('evento.rama_id'): ""
-										  }];
-					
-				}	  			  
+				}	  
 	});
 	
 	this.subscribe('municipios',()=>{
@@ -71,17 +54,12 @@ function listadoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 	});
 	
 	this.subscribe('categorias',()=>{
-		return [{//evento_id:  this.getReactively('evento.evento_id')? this.getReactively('evento.evento_id'):""
-						//,deporte_id: this.getReactively('evento.deporte_id')? this.getReactively('evento.deporte_id'):""
-						estatus: true
+		return [{estatus: true
 		}]
 	});
 	
 	this.subscribe('pruebas',()=>{
-		return [{//evento_id:  this.getReactively('evento.evento_id')? this.getReactively('evento.evento_id'):"" 
-						//,deporte_id: this.getReactively('evento.deporte_id')? this.getReactively('evento.deporte_id'):""
-						//categoria_id: this.getReactively('evento.categoria_id')!= undefined ? this.getReactively('evento.categoria_id'): ""
-						estatus: true
+		return [{estatus: true
 		}]
 	});
 
@@ -111,32 +89,6 @@ function listadoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 		pruebas : () => {
 			return Pruebas.find();
 		},
-		todosParticipantes : () => {
-			if(part.ready()){
-				_.each(rc.participantes, function(participante){
-					var m = Municipios.findOne(participante.municipio_id);
-					participante.municipio = m.nombre;
-					var e = Eventos.findOne(participante.evento_id);
-					participante.evento = e.nombre;
-					var d = Deportes.findOne(participante.deporte_id);
-					participante.deporte = d.nombre;
-					//this.deporteNombre = d.nombre;
-					var c = Categorias.findOne(participante.categoria_id);
-					participante.categoria = c.nombre;
-					//this.categoriaNombre = c.nombre;
-					var r = Ramas.findOne(participante.rama_id);
-					participante.rama =  r.nombre;	
-								
-					participante.pruebasNombre = [];
-					_.each(participante.pruebas, function(prueba){
-							//participante.pruebasNombre.push(Pruebas.findOne(prueba, { fields : { nombre : 1}}))
-							var p = Pruebas.findOne(prueba,{ fields : { nombre : 1}});
-							participante.pruebasNombre.push({"nombre": p.nombre});
-					})
-
-				})
-			}
-		}
 		
 	});
 	
@@ -148,15 +100,59 @@ function listadoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 	 			toastr.error("No hay participantes para generar cédula");
 				return;
 		}
-			
+		
+	
 			var participantesArray = [];
 					participantesArray.push(["NUM", "NOMBRE", "APELLIDO PATERNO", "APELLIDO MATERNO", "FECHA NACIMIENTO", "CURP", "DEPORTE", "CATEGORIA", "RAMA"]);
-					var c = 1;
+					var con = 1;
 			 _.each(rc.participantes, function(participante){
-				 	participantesArray.push([c, participante.nombre, participante.apellidoPaterno, participante.apellidoMaterno, (participante.fechaNacimiento.getUTCDate() +"/"+ (participante.fechaNacimiento.getUTCMonth()+1) +"/"+ participante.fechaNacimiento.getUTCFullYear()), participante.curp, participante.deporte, participante.categoria, participante.rama]);
-				 	c++;
+					
+					
+					if (participante.municipio_id != "s/a")				 
+				 	{
+						 	var m = Municipios.findOne(participante.municipio_id);
+							participante.municipio = m.nombre;
+					}
+					else
+							participante.municipio ="";
+							
+					if (participante.evento_id != "s/a")				 
+				 	{
+							var e = Eventos.findOne(participante.evento_id);
+							participante.evento = e.nombre;
+					}
+					else
+							participante.evento = "";
+							
+					if (participante.deporte_id != "s/a")				 
+				 	{
+							var d = Deportes.findOne(participante.deporte_id);
+							participante.deporte = d.nombre;
+					}
+					else
+							participante.deporte = "Sin Deporte";
+					
+					if (participante.categoria_id != "s/a")		 
+				 	{		
+							var c = Categorias.findOne(participante.categoria_id);
+							participante.categoria = c.nombre;
+					}
+					else
+							participante.categoria = "Sin Categoría";
+					
+					if (participante.rama_id != "s/a")				 
+				 	{
+							var r = Ramas.findOne(participante.rama_id);
+							participante.rama =  r.nombre;
+					}		
+					else
+							participante.rama = "Sin Rama";
+						
+				 	participantesArray.push([con, participante.nombre, participante.apellidoPaterno, participante.apellidoMaterno, (participante.fechaNacimiento.getUTCDate() +"/"+ (participante.fechaNacimiento.getUTCMonth()+1) +"/"+ participante.fechaNacimiento.getUTCFullYear()), participante.curp, participante.deporte, participante.categoria, participante.rama]);
+				 	con++;
 			})	 
-											
+			
+			
 			Meteor.call('getExcel', participantesArray, function(error, response) {
 				   if(error){
 				    console.log('ERROR :', error);

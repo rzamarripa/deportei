@@ -149,7 +149,7 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 		});
 	};
 	
-	 this.cambiar = function() 
+	this.cambiar = function() 
   {
 				var chkImprimir = document.getElementById('todos');
 				console.log(chkImprimir.checked);

@@ -4,15 +4,14 @@ Meteor.publish("participanteEventos",function(params){
   	return ParticipanteEventos.find(params);
 });
 
-/*
 
-Meteor.publish("participanteEventos",function(params){
+
+Meteor.publish("participanteListado",function(params){
   	return ParticipanteEventos.find(params, {fields: { _id:1
 	  																						, nombre:1
 	  																						,apellidoPaterno:1
 	  																						,apellidoMaterno:1
 	  																						,curp:1
-	  																						,foto:1
 	  																						,evento_id:1
 	  																						,municipio_id:1
 	  																						,deporte_id:1
@@ -24,7 +23,7 @@ Meteor.publish("participanteEventos",function(params){
 	  																						,pruebas:1
 	  																						}});
 });
-*/
+
 
 
 Meteor.publish("buscarNombreEventos",function(options){
