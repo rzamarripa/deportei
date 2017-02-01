@@ -139,7 +139,6 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 			    var today_year = d.getFullYear();
 			    var today_month = d.getMonth();
 			    var today_day = d.getDate();
-			    //var edad = today_year - participante.fechaNacimiento.getFullYear();
 					
 					var anioNacimiento = participante.fechaNacimiento.getFullYear();
 										
@@ -179,6 +178,30 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 																														
 																														participanteEventos.municipio_id = participante.municipio_id;
 																														participanteEventos.usuarioInserto = Meteor.userId();
+																														
+																														Meteor.call('insertParticipanteEventos', participanteEventos, $stateParams.id, function(error, response) {
+																															  if(error){
+																																    console.log('ERROR :', error);
+																																    return;
+																															  }
+																															  if (result)
+																																{
+																																																
+																																																 	toastr.success('Guardado correctamente.');
+																																																	participante = {};
+																																																	participanteEvento = {};
+																																																	$('.collapse').collapse('hide');
+																																																	this.nuevo = true;
+																																																	$state.go('root.listarparticipantes');
+																																																	
+																																																	form.$setPristine();
+																																															    form.$setUntouched();	
+																																}	
+																															  
+																														
+																														});
+																														
+																														/*
 																														ParticipanteEventos.insert(participanteEventos,
 																																													function(error, result){
 																																															if (error){
@@ -202,6 +225,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 																																															    form.$setUntouched();	
 																																															}	
 																														});
+																														*/
 																											}	 																											
 																									}
 															);
@@ -243,6 +267,30 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 																														
 																														participanteEventos.municipio_id = participante.municipio_id;
 																														participanteEventos.usuarioInserto = Meteor.userId();
+																														
+																														Meteor.call('insertParticipanteEventos', participanteEventos, $stateParams.id, function(error, response) {
+																															  if(error){
+																																    console.log('ERROR :', error);
+																																    return;
+																															  }
+																															  if (result)
+																																{
+																																																
+																																																 	toastr.success('Guardado correctamente.');
+																																																	participante = {};
+																																																	participanteEvento = {};
+																																																	$('.collapse').collapse('hide');
+																																																	this.nuevo = true;
+																																																	$state.go('root.listarparticipantes');
+																																																	
+																																																	form.$setPristine();
+																																															    form.$setUntouched();	
+																																}	
+																															  
+																														
+																														});
+																														
+																														/*
 																														ParticipanteEventos.insert(participanteEventos,
 																																													function(error, result){
 																																															if (error){
@@ -266,6 +314,8 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 																																															    form.$setUntouched();	
 																																															}	
 																														});
+																														
+																														*/
 																												}	 
 																											}
 															);
@@ -310,6 +360,32 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 																														
 																														participanteEventos.municipio_id = participante.municipio_id;
 																														participanteEventos.usuarioInserto = Meteor.userId();
+																														
+																														
+																														Meteor.call('insertParticipanteEventos', participanteEventos, $stateParams.id, function(error, response) {
+																															  if(error){
+																																    console.log('ERROR :', error);
+																																    return;
+																															  }
+																															  if (result)
+																																{
+																																																
+																																																 	toastr.success('Guardado correctamente.');
+																																																	participante = {};
+																																																	participanteEvento = {};
+																																																	$('.collapse').collapse('hide');
+																																																	this.nuevo = true;
+																																																	$state.go('root.listarparticipantes');
+																																																	
+																																																	form.$setPristine();
+																																															    form.$setUntouched();	
+																																}	
+																															  
+																														
+																														});
+																														
+
+																														/*
 																														ParticipanteEventos.insert(participanteEventos,
 																																													function(error, result){
 																																															if (error){
@@ -333,6 +409,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 																																															    form.$setUntouched();	
 																																															}	
 																														});
+																														*/
 																											}	 																											
 																									}
 															);			 
@@ -346,9 +423,8 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 														  {
 														  		participante.municipio_id = Meteor.user() != undefined ? Meteor.user().profile.municipio_id : "";
 														  }
-															//console.log(participante);
 															
-															
+				
 															participante.nombreCompleto = participante.nombre + " " + participante.apellidoPaterno + " " + participante.apellidoMaterno;
 															participante.estatus = true;
 															participante.usuarioInserto = Meteor.userId();
@@ -356,7 +432,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 																											function(error,result){
 																												if (error){
 																														$( "#registrar" ).prop( "disabled", false );
-																													  console.log("Error:",error);
+																													  console.log("Error Participante:",error);
 																													  if (error.error == 409) toastr.error('Error registro duplicado participante.');
 																													  		return;		
 																												}	  
@@ -376,6 +452,31 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 																														
 																														participanteEventos.municipio_id = participante.municipio_id;
 																														participanteEventos.usuarioInserto = Meteor.userId();
+																														
+																														
+																														Meteor.call('insertParticipanteEventos', participanteEventos, $stateParams.id, function(error, response) {
+																															  if(error){
+																																    console.log('ERROR :', error);
+																																    return;
+																															  }
+																															  if (result)
+																																{
+																																																
+																																																 	toastr.success('Guardado correctamente.');
+																																																	participante = {};
+																																																	participanteEvento = {};
+																																																	$('.collapse').collapse('hide');
+																																																	this.nuevo = true;
+																																																	$state.go('root.listarparticipantes');
+																																																	
+																																																	form.$setPristine();
+																																															    form.$setUntouched();	
+																																}	
+																															  
+																														
+																														});
+																														
+																														/*																														
 																														ParticipanteEventos.insert(participanteEventos,
 																																													function(error, result){
 																																															if (error){
@@ -399,6 +500,9 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 																																															    form.$setUntouched();	
 																																															}	
 																																													});
+																																													
+																																													
+																														*/															
 																												}	 
 																											}
 															);
@@ -453,6 +557,30 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 																														
 																														participanteEventos.municipio_id = participante.municipio_id;
 																														participanteEventos.usuarioInserto = Meteor.userId();
+																														
+																														Meteor.call('insertParticipanteEventos', participanteEventos, $stateParams.id, function(error, response) {
+																															  if(error){
+																																    console.log('ERROR :', error);
+																																    return;
+																															  }
+																															  if (result)
+																																{
+																																																
+																																																 	toastr.success('Guardado correctamente.');
+																																																	participante = {};
+																																																	participanteEvento = {};
+																																																	$('.collapse').collapse('hide');
+																																																	this.nuevo = true;
+																																																	$state.go('root.listarparticipantes');
+																																																	
+																																																	form.$setPristine();
+																																															    form.$setUntouched();	
+																																}	
+																															  
+																														
+																														});
+																														
+																														/*
 																														ParticipanteEventos.insert(participanteEventos,
 																																													function(error, result){
 																																															if (error){
@@ -476,6 +604,8 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 																																															    form.$setUntouched();	
 																																															}	
 																														});
+																														*/
+																														
 																											}	 																											
 																									}
 															);			 
@@ -519,6 +649,30 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 																														
 																														participanteEventos.municipio_id = participante.municipio_id;
 																														participanteEventos.usuarioInserto = Meteor.userId();
+																														
+																														Meteor.call('insertParticipanteEventos', participanteEventos, $stateParams.id, function(error, response) {
+																															  if(error){
+																																    console.log('ERROR :', error);
+																																    return;
+																															  }
+																															  if (result)
+																																{
+																																																
+																																																 	toastr.success('Guardado correctamente.');
+																																																	participante = {};
+																																																	participanteEvento = {};
+																																																	$('.collapse').collapse('hide');
+																																																	this.nuevo = true;
+																																																	$state.go('root.listarparticipantes');
+																																																	
+																																																	form.$setPristine();
+																																															    form.$setUntouched();	
+																																}	
+																															  
+																														
+																														});
+																														
+																														/*
 																														ParticipanteEventos.insert(participanteEventos,
 																																													function(error, result){
 																																															if (error){
@@ -542,6 +696,8 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 																																															    form.$setUntouched();	
 																																															}	
 																																													});
+																															*/														
+																																													
 																												}	 
 																											}
 															);
@@ -563,7 +719,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 			if (participanteEvento != "DEPORTISTA")
 			{
 							participante.fechaNacimiento= new Date();
-							participante.estado = "BAJA CALIFORNIA SUR";
+							participante.estado = "SINALOA";
 							participante.curpImagen = "s/a";
 							participante.actaNacimiento = "s/a";
 							participante.identificacion = "s/a";
@@ -615,23 +771,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 						
 	}
 	
-	/*
-	this.tieneFoto = function(sexo, foto){
-	  if(foto === undefined){
-		  if(sexo === "Hombre")
-			  return "img/badmenprofile.jpeg";
-			else if(sexo === "Mujer"){
-				return "img/badgirlprofile.jpeg";
-			}else{
-				return "img/badprofile.jpeg";
-			}
-			  
-	  }else{
-		  return foto;
-	  }
-  }  
-	*/
-	
+		
 	$(document).ready( function() {
 		
 
@@ -664,8 +804,8 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 							
 							img.id = "fotoCargada";
 							img.src = reader.result;
-							img.width =200;
-							img.height=200;
+							img.width = 200;
+							img.height= 200;
 							
 							rc.AlmacenaImagen(reader.result, 1);
 							

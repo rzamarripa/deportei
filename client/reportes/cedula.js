@@ -134,17 +134,49 @@ function CedulaCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 				return;
 		}
 		
+				$( "#cedula" ).prop( "disabled", true );
 				Meteor.call('getCedula', participantes, function(error, response) {
 				   if(error){
 				    console.log('ERROR :', error);
 				    return;
 				   }else{
-		
-					  var pdf = 'data:application/docx;base64,';
-				    var dlnk = document.getElementById('dwnldLnk');
-				    dlnk.download = this.deporteNombre+'-'+this.categoriaNombre+'.docx'; 
-						dlnk.href = pdf+response;
-						dlnk.click();
+					   
+					   function b64toBlob(b64Data, contentType, sliceSize) {
+								  contentType = contentType || '';
+								  sliceSize = sliceSize || 512;
+								
+								  var byteCharacters = atob(b64Data);
+								  var byteArrays = [];
+								
+								  for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+								    var slice = byteCharacters.slice(offset, offset + sliceSize);
+								
+								    var byteNumbers = new Array(slice.length);
+								    for (var i = 0; i < slice.length; i++) {
+								      byteNumbers[i] = slice.charCodeAt(i);
+								    }
+								
+								    var byteArray = new Uint8Array(byteNumbers);
+								
+								    byteArrays.push(byteArray);
+								  }
+								    
+								  var blob = new Blob(byteArrays, {type: contentType});
+								  return blob;
+							}
+							
+							var blob = b64toBlob(response, "application/docx");
+						  var url = window.URL.createObjectURL(blob);
+						  
+						  console.log(url);
+						  var dlnk = document.getElementById('dwnldLnk');
+					    dlnk.download = "Ced-"+this.deporteNombre+'-'+this.categoriaNombre+'.docx'; 
+							dlnk.href = url;
+							dlnk.click();		    
+						  window.URL.revokeObjectURL(url);
+						  $( "#cedula" ).prop( "disabled", false );
+					   	
+
 				    		    
 				   }
 				});		

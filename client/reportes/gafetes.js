@@ -145,27 +145,4 @@ function GafetesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
   
 	
 };
-/*
-$(document).ready( function() {
-	
-    console.log( "ready!" );
-  	
-  
-  	Meteor.call('getArchivo', function(error, response) {
-		   if(error){
-		    console.log('ERROR :', error);
-		    return;
-		   }else{
-		    console.log('response:', response);
-		    
-		    
-		    
-		    
-		   }
-		});
-  	  
-    
-  });
-  
-  */
 	

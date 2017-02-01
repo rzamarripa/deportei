@@ -37,7 +37,9 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 	});
 	
 	this.subscribe('deportes',()=>{
-		return [{evento_id: this.getReactively('evento.evento_id')? this.getReactively('evento.evento_id'):""}]
+		return [{evento_id: this.getReactively('evento.evento_id')? this.getReactively('evento.evento_id'):""
+						,estatus: true
+		}]
 	});
 	
 	this.subscribe('categorias',()=>{
@@ -97,6 +99,23 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 					
 					participante.imprimir = true;
 					
+					
+					console.log(participante.con);
+					var cons = "0000";
+					if (participante.con < 10)
+							cons = "000".concat(participante.con.toString());
+					else if (participante.con < 100)
+							cons = "00".concat(participante.con.toString());
+					else if (participante.con < 1000)
+							cons = "0" , participante.con;		
+					else
+							cons = participante.con;	
+					
+					participante.con = cons;	
+					
+					console.log(cons);
+					
+					
 				})
 			}
 		}
@@ -132,18 +151,68 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 				return;
 		}
 		
-
-		Meteor.call('getGafetes', p, function(error, response) {
-		   if(error){
+		/*
+		Meteor.call('getRedimensionaFoto', p, function(error, response) {
+		   if(error)
+		   {
 		    console.log('ERROR :', error);
 		    return;
-		   }else{
+		   }
+		   else
+		   {
 
-			  var pdf = 'data:application/docx;base64,';
-		    var dlnk = document.getElementById('dwnldLnkG');
-		    dlnk.download = this.deporteNombre+'-'+this.categoriaNombre+'.docx'; 
-				dlnk.href = pdf+response;
-				dlnk.click();
+			 }
+		});
+		
+		return;
+		*/
+		
+		
+		$( "#gafete" ).prop( "disabled", true );
+		Meteor.call('getGafetes', p, function(error, response) {
+		   if(error)
+		   {
+		    console.log('ERROR :', error);
+		    return;
+		   }
+		   else
+		   {
+			   
+			 				function b64toBlob(b64Data, contentType, sliceSize) {
+								  contentType = contentType || '';
+								  sliceSize = sliceSize || 512;
+								
+								  var byteCharacters = atob(b64Data);
+								  var byteArrays = [];
+								
+								  for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+								    var slice = byteCharacters.slice(offset, offset + sliceSize);
+								
+								    var byteNumbers = new Array(slice.length);
+								    for (var i = 0; i < slice.length; i++) {
+								      byteNumbers[i] = slice.charCodeAt(i);
+								    }
+								
+								    var byteArray = new Uint8Array(byteNumbers);
+								
+								    byteArrays.push(byteArray);
+								  }
+								    
+								  var blob = new Blob(byteArrays, {type: contentType});
+								  return blob;
+							}
+							
+							var blob = b64toBlob(response, "application/docx");
+						  var url = window.URL.createObjectURL(blob);
+						  
+						  //console.log(url);
+						  var dlnk = document.getElementById('dwnldLnkG');
+					    dlnk.download = "Gaf-"+this.deporteNombre+'-'+this.categoriaNombre+'.docx'; 
+							dlnk.href = url;
+							dlnk.click();		    
+						  window.URL.revokeObjectURL(url);
+						  $( "#gafete" ).prop( "disabled", false );
+
 		    		    
 		   }
 		});
