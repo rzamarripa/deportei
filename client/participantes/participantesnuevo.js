@@ -251,7 +251,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 																													  if (error.error == 409) toastr.error('Error registro duplicado participante.');
 																													  		return;		
 																												}	  
-																												//console.log("Insert No deportista:",result);
+
 																												if (result)
 																												{
 																														participanteEventos.participante_id = result;
@@ -715,18 +715,20 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 	this.funcionEspecifica = function(participante,participanteEvento)
 	{		
 			
-			console.log(participante);
 			if (participanteEvento != "DEPORTISTA")
 			{
-							participante.fechaNacimiento= new Date();
-							participante.estado = "SINALOA";
-							participante.curpImagen = "s/a";
-							participante.actaNacimiento = "s/a";
-							participante.identificacion = "s/a";
+							this.participante.foto = "";
+							this.participante.sexo = "Hombre";
+							this.participante.estado = "SINALOA";
+							this.participante.curpImagen = "s/a";
+							this.participante.fechaNacimiento = new Date();
+							this.participante.actaNacimiento = "s/a";
+							this.participante.identificacion = "s/a";
 							this.participanteEventos.categoria_id = "s/a";
 							this.participanteEventos.rama_id = "s/a";
-				
+							
 			}
+			console.log(participante);
 	}
 	
 	this.ValidaCurpParticipante = function(curp)

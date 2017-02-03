@@ -32,6 +32,7 @@ function EventosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	    }
 			
 			evento.estatus = true;
+			evento.con = 0;
 			evento.usuarioInserto = Meteor.userId();
 			Eventos.insert(evento);
 			toastr.success('Guardado correctamente.');

@@ -23,7 +23,8 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 						,evento_id: this.getReactively('evento.evento_id')!= undefined ? this.getReactively('evento.evento_id'): "" 
 						,deporte_id: this.getReactively('evento.deporte_id')!= undefined ? this.getReactively('evento.deporte_id'): "" 
 						,categoria_id: this.getReactively('evento.categoria_id')!= undefined ? this.getReactively('evento.categoria_id'): "" 
-						,rama_id: this.getReactively('evento.rama_id')!= undefined ? this.getReactively('evento.rama_id'): "" 			
+						,rama_id: this.getReactively('evento.rama_id')!= undefined ? this.getReactively('evento.rama_id'): "" 
+						,funcionEspecifica: this.getReactively('evento.funcionEspecifica')!= undefined ? this.getReactively('evento.funcionEspecifica'): ""			
 			}]
 	});
 		
@@ -99,8 +100,6 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 					
 					participante.imprimir = true;
 					
-					
-					console.log(participante.con);
 					var cons = "0000";
 					if (participante.con < 10)
 							cons = "000".concat(participante.con.toString());
@@ -112,9 +111,7 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 							cons = participante.con;	
 					
 					participante.con = cons;	
-					
-					console.log(cons);
-					
+
 					
 				})
 			}
@@ -151,28 +148,12 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 				return;
 		}
 		
-		/*
-		Meteor.call('getRedimensionaFoto', p, function(error, response) {
-		   if(error)
-		   {
-		    console.log('ERROR :', error);
-		    return;
-		   }
-		   else
-		   {
-
-			 }
-		});
-		
-		return;
-		*/
-		
-		
 		$( "#gafete" ).prop( "disabled", true );
-		Meteor.call('getGafetes', p, function(error, response) {
+		Meteor.call('getGafetes', p, rc.evento.funcionEspecifica, function(error, response) {
 		   if(error)
 		   {
 		    console.log('ERROR :', error);
+		    $( "#gafete" ).prop( "disabled", false );
 		    return;
 		   }
 		   else
@@ -212,8 +193,7 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 							dlnk.click();		    
 						  window.URL.revokeObjectURL(url);
 						  $( "#gafete" ).prop( "disabled", false );
-
-		    		    
+  
 		   }
 		});
 	};
@@ -230,8 +210,5 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 			}
 		 			
 	};
-
-	
-
 	
 };	

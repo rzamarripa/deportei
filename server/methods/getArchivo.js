@@ -1,7 +1,7 @@
 
 Meteor.methods({
   
-  getGafetes: function (participantes) {
+  getGafetes: function (participantes, FE) {
 		
 		var fs = require('fs');
     var Docxtemplater = require('docxtemplater');
@@ -10,8 +10,8 @@ Meteor.methods({
 		
 	  var meteor_root = require('fs').realpathSync( process.cwd() + '/../' );
 		
-		var produccion = meteor_root+"/web.browser/app/archivos/";
-		//var produccion = "/home/isde/archivos/";
+		//var produccion = meteor_root+"/web.browser/app/archivos/";
+		var produccion = "/home/isde/archivos/";
 		
 		var opts = {}
 			opts.centered = false;
@@ -21,7 +21,7 @@ Meteor.methods({
 		}
 		
 		opts.getSize=function(img,tagValue, tagName) {
-		    return [90,90];
+		    return [80,80];
 		}
 		
 		var imageModule=new ImageModule(opts);
@@ -36,17 +36,23 @@ Meteor.methods({
 			    var bitmap = new Buffer(participante.foto, 'base64');
 					
 					//Usando Meteor_root
-					fs.writeFileSync(produccion+participante.curp+".png", bitmap);
-					participante.foto = produccion+participante.curp+".png";
-					
-					
-					
+					fs.writeFileSync(produccion+participante.curp+".jpeg", bitmap);
+					participante.foto = produccion+participante.curp+".jpeg";
 				}
+				
+				if (participante.apellidoMaterno == undefined)
+					 participante.apellidoMaterno = "";
+				
 		});
-
 		
-		var content = fs
-    							.readFileSync(produccion+"Gafete.docx", "binary");
+		var content;
+		if (FE == "DEPORTISTA")	
+			content = fs.readFileSync(produccion+"Gafete.docx", "binary");
+		else if (FE == "JUEZ")
+			content = fs.readFileSync(produccion+"GafeteOtro.docx", "binary");
+		else	
+			content = fs.readFileSync(produccion+"GafeteComite.docx", "binary");
+	  
 	  
 		var zip = new JSZip(content);
 		var doc=new Docxtemplater()
@@ -143,8 +149,8 @@ Meteor.methods({
 			    var bitmap = new Buffer(participante.foto, 'base64');
 					
 					//Usando Meteor_root
-					fs.writeFileSync(produccion+participante.curp+".png", bitmap);
-					participante.foto = produccion+participante.curp+".png";
+					fs.writeFileSync(produccion+participante.curp+".jpeg", bitmap);
+					participante.foto = produccion+participante.curp+".jpeg";
 					
 					
 				}
@@ -306,95 +312,6 @@ Meteor.methods({
 		    return new Buffer(bitmap).toString('base64');
 		
 	  		
-	},
-	getRedimensionaFoto: function (participantes) {
-		
-		console.log("entro");
-		
-		var fs = require('fs');
-		var JSZip = require('jszip');
-		
-	  var meteor_root = require('fs').realpathSync( process.cwd() + '/../' );
-		
-		//var produccion = meteor_root+"/web.browser/app/archivos/";
-		//var produccion = "/home/isde/archivos/";
-		
-		var produccion =  "/Users/alfonsoduarte/Documents/Meteor/isde/public/archivos/"
-		
-		// read binary data
-    var bitmap = fs.readFileSync(produccion+"foto2.png");
-		
-		console.log(bitmap);
-		
-		
-		//console.log(bitmap.height);
-		
-		 var maxWidth = 100; // Max width for the image
-     var maxHeight = 100;    // Max height for the image
-     var ratio = 0;  // Used for aspect ratio
-     var width = bitmap.width;    // Current image width
-     var height = bitmap.height;  // Current image height
-
-        // Check if the current width is larger than the max
-        if(width > maxWidth){
-            ratio = maxWidth / width;   // get ratio for scaling image
-            bitmap.css("width", maxWidth); // Set new width
-            bitmap.css("height", height * ratio);  // Scale height based on ratio
-            height = height * ratio;    // Reset height to match scaled image
-            width = width * ratio;    // Reset width to match scaled image
-        }
-				
-        // Check if current height is larger than max
-        if(height > maxHeight){
-            ratio = maxHeight / height; // get ratio for scaling image
-            bitmap.css("height", maxHeight);   // Set new height
-            bitmap.css("width", width * ratio);    // Scale width based on ratio
-            width = width * ratio;    // Reset width to match scaled image
-        }
-		
-		var bitmap64 = new Buffer(bitmap, 'base64');
-					
-					//Usando Meteor_root
-		fs.writeFileSync(produccion+"fotoR.png", bitmap64);
-		
-		
-		/*
-		_.each(participantes, function(participante){
-				if (participante.foto != "")
-				{											
-					var f = String(participante.foto);
-					participante.foto = f.replace('data:image/jpeg;base64,', '');
-					
-					// create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
-			    var bitmap = new Buffer(participante.foto, 'base64');
-			    // write buffer to file					
-					
-					//Usando Meteor_root
-					fs.writeFileSync(produccion+participante.curp+".png", bitmap);
-					participante.foto = produccion+participante.curp+".png";
-					
-					
-					
-				}
-		});
-
-		
-		
-		
-		
-		
-		//Pasar a base64
-		// read binary data
-    var bitmap = fs.readFileSync(produccion+"gafeteSalida.docx");
-    
-    // convert binary data to base64 encoded string
-    return new Buffer(bitmap).toString('base64');
-		*/
-		
-		
-		
-		
-  },
-  
+	},  
 });
 
