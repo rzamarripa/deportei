@@ -78,25 +78,10 @@
 <div class="well">		
 	<div class="row">
 		<div class="col-sm-3">
-				<!--
-				<a class="btn btn-primary" ui-sref="anon.credenciales({evento:imp.evento.evento_id
-																															,municipio:imp.evento.municipio_id
-																															,deporte:imp.evento.deporte_id
-																															,categoria:imp.evento.categoria_id
-																															,rama:imp.evento.rama_id})" target="_blank">
-				  Credenciales
-				</a>-->
-				<input class="btn btn-primary" type="button" ng-click="imp.download(imp.participantes)" value="Credenciales" disabled="true" />
+				<input id="credencial" class="btn btn-primary" type="button" ng-click="imp.download(imp.participantes,1)" value="Credenciales" />
 		</div>
 		<div class="col-sm-3">
-				<!--<a class="btn btn-primary" ui-sref="anon.gafetes({evento:imp.evento.evento_id
-																												 ,municipio:imp.evento.municipio_id
-																												 ,deporte:imp.evento.deporte_id
-																												 ,categoria:imp.evento.categoria_id
-																												 ,rama:imp.evento.rama_id})" target="_blank">
-				  Gafetes
-				</a>-->
-				<input id="gafete" class="btn btn-primary" type="button" ng-click="imp.download(imp.participantes)" value="Gafetes" />
+				<input id="gafete" class="btn btn-primary" type="button" ng-click="imp.download(imp.participantes,2)" value="Gafetes" />
 		</div>
 	</div>
 </div>		
@@ -108,6 +93,7 @@
 			 <th width="20%">Nombre</th>
 			 <th width="10%">Sexo</th>
 			 <th width="20%">Fecha Nacimiento</th>	 
+			 <th width="5%">Con</th>
 			 <th width="15%"><input id="todos" type="checkbox" class="form-control" ng-click="imp.cambiar()" checked="true"/></th>
 		 </tr> 
 	</thead>	
@@ -120,6 +106,7 @@
 			<td>{{participante.nombre}} {{participante.apellidoPaterno}} {{participante.apellidoMaterno}}</td>
 			<td>{{participante.sexo}}</td>
 			<td>{{participante.fechaNacimiento.getUTCDate() +"/"+ (participante.fechaNacimiento.getUTCMonth()+1) +"/"+ participante.fechaNacimiento.getUTCFullYear()}}</td>
+			<td>{{participante.con}}</td>
 			<td><input type="checkbox" class="form-control" ng-model="participante.imprimir" value="participante.imprimir"/> </td>
 		</tr>	
 	</tbody>

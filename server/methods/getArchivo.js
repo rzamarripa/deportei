@@ -1,8 +1,8 @@
 
 Meteor.methods({
   
-  getGafetes: function (participantes, FE) {
-		
+  getGafetes: function (participantes, municipio, FE, deporte, categoria, rama) {
+			
 		var fs = require('fs');
     var Docxtemplater = require('docxtemplater');
 		var JSZip = require('jszip');
@@ -26,9 +26,17 @@ Meteor.methods({
 		
 		var imageModule=new ImageModule(opts);
 		
+		
+		var mun = Municipios.findOne({_id: municipio});
+		var dep = Deportes.findOne({_id: deporte});
+		var cat = Categorias.findOne({_id: categoria});
+		var ram = Ramas.findOne({_id: rama});
+		
+		
 		_.each(participantes, function(participante){
 				if (participante.foto != "")
-				{											
+				{							
+	
 					var f = String(participante.foto);
 					participante.foto = f.replace('data:image/jpeg;base64,', '');
 					
@@ -42,13 +50,42 @@ Meteor.methods({
 				
 				if (participante.apellidoMaterno == undefined)
 					 participante.apellidoMaterno = "";
+					 
+				
+				var cons = "0000";
+				if (participante.con < 10)
+				{		
+						cons = "000".concat(participante.con.toString());
+				}		
+				else if (participante.con < 100)
+				{
+						cons = "00".concat(participante.con.toString());
+				}		
+				else if (participante.con < 1000)
+				{
+						cons = "0".concat(participante.con.toString());		
+				}		
+				else
+				{
+						cons = participante.con;	
+				}
+				participante.con = cons;	
+				
+				participante.municipio = mun.nombre;
+				participante.deporte = dep.nombre; 
+				participante.categoria = cat.nombre;
+				participante.rama = ram.nombre;
+				
+				participante.nombre = participante.nombre.toUpperCase();
+				participante.apellidoPaterno = participante.apellidoPaterno.toUpperCase();
+				participante.apellidoMaterno = participante.apellidoMaterno.toUpperCase(); 
 				
 		});
 		
 		var content;
-		if (FE == "DEPORTISTA")	
+		if (FE == "DEPORTISTA" || FE == "ENTRENADOR" || FE == "ENTRENADOR AUXILIAR" || FE == "DELEGADO POR DEPORTE" || FE == "DELEGADO GENERAL" || FE == "AUXILIAR GENERAL" || FE == "ASOCIACIÓN" )	
 			content = fs.readFileSync(produccion+"Gafete.docx", "binary");
-		else if (FE == "JUEZ")
+		else if (FE == "JUEZ" || FE== "JEFE DE MISIÓN" || FE == "OFICIAL" || FE== "JEFE DE MISIÓN")
 			content = fs.readFileSync(produccion+"GafeteOtro.docx", "binary");
 		else	
 			content = fs.readFileSync(produccion+"GafeteComite.docx", "binary");
@@ -90,6 +127,120 @@ Meteor.methods({
 		//Pasar a base64
 		// read binary data
     var bitmap = fs.readFileSync(produccion+"gafeteSalida.docx");
+    
+    // convert binary data to base64 encoded string
+    return new Buffer(bitmap).toString('base64');
+
+		
+		
+  },
+  getCredenciales: function (participantes, municipio, FE, deporte, categoria, rama) {
+			
+		var fs = require('fs');
+    var Docxtemplater = require('docxtemplater');
+		var JSZip = require('jszip');
+		var ImageModule = require('docxtemplater-image-module')
+		
+	  var meteor_root = require('fs').realpathSync( process.cwd() + '/../' );
+		
+		var produccion = meteor_root+"/web.browser/app/archivos/";
+		//var produccion = "/home/isde/archivos/";
+		
+		var opts = {}
+			opts.centered = false;
+			opts.getImage=function(tagValue, tagName) {
+					var binaryData =  fs.readFileSync(tagValue,'binary');
+					return binaryData;
+		}
+		
+		opts.getSize=function(img,tagValue, tagName) {
+		    return [100,130];
+		}
+		
+		var imageModule=new ImageModule(opts);
+		
+		
+		var mun = Municipios.findOne({_id: municipio});
+		var dep = Deportes.findOne({_id: deporte});
+		var cat = Categorias.findOne({_id: categoria});
+		var ram = Ramas.findOne({_id: rama});
+		
+		
+		_.each(participantes, function(participante){
+				if (participante.foto != "")
+				{							
+	
+					var f = String(participante.foto);
+					participante.foto = f.replace('data:image/jpeg;base64,', '');
+					
+					// create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
+			    var bitmap = new Buffer(participante.foto, 'base64');
+					
+					//Usando Meteor_root
+					fs.writeFileSync(produccion+participante.curp+".jpeg", bitmap);
+					participante.foto = produccion+participante.curp+".jpeg";
+				}
+				
+				if (participante.apellidoMaterno == undefined)
+					 participante.apellidoMaterno = "";
+					 
+				participante.fechaNacimiento = participante.fechaNacimiento.getUTCDate() +"/"+ 
+																			(participante.fechaNacimiento.getUTCMonth()+1) +"/"+ 
+																			 participante.fechaNacimiento.getUTCFullYear();
+				
+				var cons = "0000";
+				if (participante.con < 10)
+				{		
+						cons = "000".concat(participante.con.toString());
+				}		
+				else if (participante.con < 100)
+				{
+						cons = "00".concat(participante.con.toString());
+				}		
+				else if (participante.con < 1000)
+				{
+						cons = "0".concat(participante.con.toString());		
+				}		
+				else
+				{
+						cons = participante.con;	
+				}
+				participante.con = cons;	
+				
+				participante.municipio = mun.nombre;
+				participante.deporte = dep.nombre; 
+				participante.categoria = cat.nombre;
+				participante.rama = ram.nombre;
+				
+				participante.nombre = participante.nombre.toUpperCase();
+				participante.apellidoPaterno = participante.apellidoPaterno.toUpperCase();
+				participante.apellidoMaterno = participante.apellidoMaterno.toUpperCase(); 
+				
+		});
+		
+		var content;
+		
+		content = fs.readFileSync(produccion+"Credencial.docx", "binary");
+		
+	  
+		var zip = new JSZip(content);
+		var doc=new Docxtemplater()
+								.attachModule(imageModule)
+								.loadZip(zip)
+				
+		doc.setData({participantes})
+		
+		doc.render();
+ 
+		var buf = doc.getZip()
+             		 .generate({type:"nodebuffer"});
+ 
+		fs.writeFileSync(produccion+"credencialSalida.docx",buf);
+		
+		
+		//Pasar a base64
+		// read binary data
+    var bitmap = fs.readFileSync(produccion+"credencialSalida.docx");
     
     // convert binary data to base64 encoded string
     return new Buffer(bitmap).toString('base64');
@@ -223,6 +374,8 @@ Meteor.methods({
 	  		var fs = require('fs');
 				var ws_name = "SheetJS";
 						
+				var meteor_root = require('fs').realpathSync( process.cwd() + '/../' );
+				//var produccion = meteor_root+"/web.browser/app/archivos/";
 				var produccion = "/home/isde/archivos/";
 				
 
@@ -236,6 +389,8 @@ Meteor.methods({
 					{wch:15},
 					{wch:20},
 					{wch:10},
+					{wch:15},
+					{wch:20}
 				];
 				
 				if(typeof require !== 'undefined') 

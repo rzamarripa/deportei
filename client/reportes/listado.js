@@ -103,7 +103,7 @@ function listadoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 		
 	
 			var participantesArray = [];
-					participantesArray.push(["NUM", "NOMBRE", "APELLIDO PATERNO", "APELLIDO MATERNO", "FECHA NACIMIENTO", "CURP", "DEPORTE", "CATEGORIA", "RAMA"]);
+					participantesArray.push(["NUM", "NOMBRE", "APELLIDO PATERNO", "APELLIDO MATERNO", "FECHA NACIMIENTO", "CURP", "DEPORTE", "CATEGORIA", "RAMA", "MUNICIPIO","FUNCION ESPECIFICA"]);
 					var con = 1;
 			 _.each(rc.participantes, function(participante){
 					
@@ -148,7 +148,7 @@ function listadoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 					else
 							participante.rama = "Sin Rama";
 						
-				 	participantesArray.push([con, participante.nombre, participante.apellidoPaterno, participante.apellidoMaterno, (participante.fechaNacimiento.getUTCDate() +"/"+ (participante.fechaNacimiento.getUTCMonth()+1) +"/"+ participante.fechaNacimiento.getUTCFullYear()), participante.curp, participante.deporte, participante.categoria, participante.rama]);
+				 	participantesArray.push([con, participante.nombre, participante.apellidoPaterno, participante.apellidoMaterno, (participante.fechaNacimiento.getUTCDate() +"/"+ (participante.fechaNacimiento.getUTCMonth()+1) +"/"+ participante.fechaNacimiento.getUTCFullYear()), participante.curp, participante.deporte, participante.categoria, participante.rama, participante.municipio, participante.funcionEspecifica]);
 				 	con++;
 			})	 
 			

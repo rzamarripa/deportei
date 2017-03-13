@@ -900,7 +900,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 			
 			//JavaScript para agregar el Identificacion Oficial
 			fileInputIdentificacion.addEventListener('change', function(e) {
-				var file = fileInputCurp.files[0];
+				var file = fileInputIdentificacion.files[0];
 				
 				var imageType;
 				
@@ -931,10 +931,8 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 					fileDisplayArea1.innerHTML = "File not supported!";
 				}
 								
-			});
+			});			
 			
-			
-
 	});
 	
 	this.GeneraCurp = function(participante)

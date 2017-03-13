@@ -82,37 +82,11 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 		ramas : () => {
 			return Ramas.find();
 		},
+		
 		todosParticipantes : () => {
 			if(part.ready()){
-				_.each(rc.participantes, function(participante){
-					var m = Municipios.findOne(participante.municipio_id);
-					participante.municipio = m.nombre;
-					var e = Eventos.findOne(participante.evento_id);
-					participante.evento = e.nombre;
-					var d = Deportes.findOne(participante.deporte_id);
-					participante.deporte = d.nombre;
-					this.deporteNombre = d.nombre;
-					var c = Categorias.findOne(participante.categoria_id);
-					participante.categoria = 	c.nombre;
-					this.categoriaNombre = c.nombre;
-					var r = Ramas.findOne(participante.rama_id);
-					participante.rama = 	r.nombre;	
-					
+				_.each(rc.participantes, function(participante){					
 					participante.imprimir = true;
-					
-					var cons = "0000";
-					if (participante.con < 10)
-							cons = "000".concat(participante.con.toString());
-					else if (participante.con < 100)
-							cons = "00".concat(participante.con.toString());
-					else if (participante.con < 1000)
-							cons = "0" , participante.con;		
-					else
-							cons = participante.con;	
-					
-					participante.con = cons;	
-
-					
 				})
 			}
 		}
@@ -134,7 +108,7 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 	  }
   }  
   
-  this.download = function(participantes) 
+  this.download = function(participantes, op) 
   {
 	  	
 		var p = rc.participantes.filter(function(ele){
@@ -148,54 +122,111 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 				return;
 		}
 		
-		$( "#gafete" ).prop( "disabled", true );
-		Meteor.call('getGafetes', p, rc.evento.funcionEspecifica, function(error, response) {
-		   if(error)
-		   {
-		    console.log('ERROR :', error);
-		    $( "#gafete" ).prop( "disabled", false );
-		    return;
-		   }
-		   else
-		   {
-			   
-			 				function b64toBlob(b64Data, contentType, sliceSize) {
-								  contentType = contentType || '';
-								  sliceSize = sliceSize || 512;
-								
-								  var byteCharacters = atob(b64Data);
-								  var byteArrays = [];
-								
-								  for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-								    var slice = byteCharacters.slice(offset, offset + sliceSize);
-								
-								    var byteNumbers = new Array(slice.length);
-								    for (var i = 0; i < slice.length; i++) {
-								      byteNumbers[i] = slice.charCodeAt(i);
-								    }
-								
-								    var byteArray = new Uint8Array(byteNumbers);
-								
-								    byteArrays.push(byteArray);
-								  }
-								    
-								  var blob = new Blob(byteArrays, {type: contentType});
-								  return blob;
-							}
-							
-							var blob = b64toBlob(response, "application/docx");
-						  var url = window.URL.createObjectURL(blob);
-						  
-						  //console.log(url);
-						  var dlnk = document.getElementById('dwnldLnkG');
-					    dlnk.download = "Gaf-"+this.deporteNombre+'-'+this.categoriaNombre+'.docx'; 
-							dlnk.href = url;
-							dlnk.click();		    
-						  window.URL.revokeObjectURL(url);
-						  $( "#gafete" ).prop( "disabled", false );
-  
-		   }
-		});
+		
+		
+		if (op == 1)
+		{
+				$( "#credencial" ).prop( "disabled", true );
+				Meteor.call('getCredenciales', p, rc.evento.municipio_id, rc.evento.funcionEspecifica, rc.evento.deporte_id, rc.evento.categoria_id, rc.evento.rama_id, function(error, response) {
+				   if(error)
+				   {
+				    console.log('ERROR :', error);
+				    $( "#credencial" ).prop( "disabled", false );
+				    return;
+				   }
+				   else
+				   {
+					   
+					 				function b64toBlob(b64Data, contentType, sliceSize) {
+										  contentType = contentType || '';
+										  sliceSize = sliceSize || 512;
+										
+										  var byteCharacters = atob(b64Data);
+										  var byteArrays = [];
+										
+										  for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+										    var slice = byteCharacters.slice(offset, offset + sliceSize);
+										
+										    var byteNumbers = new Array(slice.length);
+										    for (var i = 0; i < slice.length; i++) {
+										      byteNumbers[i] = slice.charCodeAt(i);
+										    }
+										
+										    var byteArray = new Uint8Array(byteNumbers);
+										
+										    byteArrays.push(byteArray);
+										  }
+										    
+										  var blob = new Blob(byteArrays, {type: contentType});
+										  return blob;
+									}
+									
+									var blob = b64toBlob(response, "application/docx");
+								  var url = window.URL.createObjectURL(blob);
+								  
+								  //console.log(url);
+								  var dlnk = document.getElementById('dwnldLnkG');
+							    dlnk.download = "Credenciales.docx"; 
+									dlnk.href = url;
+									dlnk.click();		    
+								  window.URL.revokeObjectURL(url);
+								  $( "#credencial" ).prop( "disabled", false );
+		  
+				   }
+				});
+		}
+		else if (op==2)
+		{
+				$( "#gafete" ).prop( "disabled", true );
+				Meteor.call('getGafetes', p, rc.evento.municipio_id, rc.evento.funcionEspecifica, rc.evento.deporte_id, rc.evento.categoria_id, rc.evento.rama_id, function(error, response) {
+				   if(error)
+				   {
+				    console.log('ERROR :', error);
+				    $( "#gafete" ).prop( "disabled", false );
+				    return;
+				   }
+				   else
+				   {
+					   
+					 				function b64toBlob(b64Data, contentType, sliceSize) {
+										  contentType = contentType || '';
+										  sliceSize = sliceSize || 512;
+										
+										  var byteCharacters = atob(b64Data);
+										  var byteArrays = [];
+										
+										  for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+										    var slice = byteCharacters.slice(offset, offset + sliceSize);
+										
+										    var byteNumbers = new Array(slice.length);
+										    for (var i = 0; i < slice.length; i++) {
+										      byteNumbers[i] = slice.charCodeAt(i);
+										    }
+										
+										    var byteArray = new Uint8Array(byteNumbers);
+										
+										    byteArrays.push(byteArray);
+										  }
+										    
+										  var blob = new Blob(byteArrays, {type: contentType});
+										  return blob;
+									}
+									
+									var blob = b64toBlob(response, "application/docx");
+								  var url = window.URL.createObjectURL(blob);
+								  
+								  //console.log(url);
+								  var dlnk = document.getElementById('dwnldLnkG');
+							    dlnk.download = "Gafetes.docx"; 
+									dlnk.href = url;
+									dlnk.click();		    
+								  window.URL.revokeObjectURL(url);
+								  $( "#gafete" ).prop( "disabled", false );
+		  
+				   }
+				});
+		}
+
 	};
 	
 	this.cambiar = function() 
