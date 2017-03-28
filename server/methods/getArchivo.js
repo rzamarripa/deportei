@@ -1,7 +1,8 @@
 
 Meteor.methods({
   
-  getGafetes: function (participantes, municipio, FE, deporte, categoria, rama) {
+  getGafetes: function (participantes, municipio, evento, FE, deporte, categoria, rama) {
+			
 			
 		var fs = require('fs');
     var Docxtemplater = require('docxtemplater');
@@ -12,6 +13,10 @@ Meteor.methods({
 		
 		//var produccion = meteor_root+"/web.browser/app/archivos/";
 		var produccion = "/home/isde/archivos/";
+		
+
+		var eve = Eventos.findOne({_id: evento});
+
 		
 		var opts = {}
 			opts.centered = false;
@@ -84,12 +89,26 @@ Meteor.methods({
 		
 		var content;
 		if (FE == "DEPORTISTA" || FE == "ENTRENADOR" || FE == "ENTRENADOR AUXILIAR" || FE == "DELEGADO POR DEPORTE" || FE == "DELEGADO GENERAL" || FE == "AUXILIAR GENERAL" || FE == "ASOCIACIÓN" )	
-			content = fs.readFileSync(produccion+"Gafete.docx", "binary");
+		{
+				if (eve.nombreGafeteDeportista == undefined || eve.nombreGafeteDeportista == "")
+						content = fs.readFileSync(produccion+"sinDefinir.docx", "binary");
+				else		
+						content = fs.readFileSync(produccion+eve.nombreGafeteDeportista+".docx", "binary");
+		}	
 		else if (FE == "JUEZ" || FE== "JEFE DE MISIÓN" || FE == "OFICIAL" || FE== "JEFE DE MISIÓN")
-			content = fs.readFileSync(produccion+"GafeteOtro.docx", "binary");
+		{
+				if (eve.nombreGafeteOtros == undefined || eve.nombreGafeteOtros == "")
+						content = fs.readFileSync(produccion+"sinDefinir.docx", "binary");
+				else
+						content = fs.readFileSync(produccion+eve.nombreGafeteOtros+".docx", "binary");
+		}	
 		else	
-			content = fs.readFileSync(produccion+"GafeteComite.docx", "binary");
-	  
+		{
+				if (eve.nombreGafeteComite == undefined || eve.nombreGafeteComite == "")
+						content = fs.readFileSync(produccion+"sinDefinir.docx", "binary");
+				else
+						content = fs.readFileSync(produccion+eve.nombreGafeteComite+".docx", "binary");
+	  }
 	  
 		var zip = new JSZip(content);
 		var doc=new Docxtemplater()
@@ -134,7 +153,7 @@ Meteor.methods({
 		
 		
   },
-  getCredenciales: function (participantes, municipio, FE, deporte, categoria, rama) {
+  getCredenciales: function (participantes, municipio, evento, FE, deporte, categoria, rama) {
 			
 		var fs = require('fs');
     var Docxtemplater = require('docxtemplater');
@@ -143,8 +162,8 @@ Meteor.methods({
 		
 	  var meteor_root = require('fs').realpathSync( process.cwd() + '/../' );
 		
-		var produccion = meteor_root+"/web.browser/app/archivos/";
-		//var produccion = "/home/isde/archivos/";
+		//var produccion = meteor_root+"/web.browser/app/archivos/";
+		var produccion = "/home/isde/archivos/";
 		
 		var opts = {}
 			opts.centered = false;
@@ -160,6 +179,7 @@ Meteor.methods({
 		var imageModule=new ImageModule(opts);
 		
 		
+		var eve = Eventos.findOne({_id: evento});
 		var mun = Municipios.findOne({_id: municipio});
 		var dep = Deportes.findOne({_id: deporte});
 		var cat = Categorias.findOne({_id: categoria});
@@ -220,7 +240,11 @@ Meteor.methods({
 		
 		var content;
 		
-		content = fs.readFileSync(produccion+"Credencial.docx", "binary");
+		
+		if (eve.nombreCredencial == undefined || eve.nombreCredencial == "")
+				content = fs.readFileSync(produccion+"sinDefinir.docx", "binary");
+		else
+				content = fs.readFileSync(produccion+eve.nombreCredencial+".docx", "binary");
 		
 	  
 		var zip = new JSZip(content);

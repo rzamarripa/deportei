@@ -31,6 +31,7 @@ function EventosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	      return;
 	    }
 			
+			
 			evento.estatus = true;
 			evento.con = 0;
 			evento.usuarioInserto = Meteor.userId();

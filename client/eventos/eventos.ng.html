@@ -24,6 +24,26 @@
 						</div>
 			    </div>	
 				</div>
+				<div class="well">	    
+			    <div class="row">
+				    <div class="col-sm-3" valida>
+				    	<label>Nombre Gafete Deportista</label>
+					    <input name="nombreGafeteDeportista" type="text" class="form-control" ng-model="eve.evento.nombreGafeteDeportista" required>
+			    	</div>
+			    	<div class="col-sm-3" valida>
+				    	<label>Nombre Gafete Comité</label>
+					    <input name="nombreGafeteComite" type="text" class="form-control" ng-model="eve.evento.nombreGafeteComite" required>
+			    	</div>
+			    	<div class="col-sm-3" valida>
+				    	<label>Nombre Gafete Otros</label>
+					    <input name="nombreGafeteOtros" type="text" class="form-control" ng-model="eve.evento.nombreGafeteOtros" required>
+			    	</div>
+			    	<div class="col-sm-3" valida>
+				    	<label>Nombre Credencial</label>
+					    <input name="nombreCredencial" type="text" class="form-control" ng-model="eve.evento.nombreCredencial" required>
+			    	</div>
+			    </div>
+				</div>    
 				<div class="row">
 					<div class="col-sm-12">
 						<input type="submit" value="Guardar" ng-click="eve.guardar(eve.evento,form)" class="btn btn-primary" ng-show="eve.action" valida-form formulario="form">

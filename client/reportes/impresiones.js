@@ -126,8 +126,14 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 		
 		if (op == 1)
 		{
+				
 				$( "#credencial" ).prop( "disabled", true );
-				Meteor.call('getCredenciales', p, rc.evento.municipio_id, rc.evento.funcionEspecifica, rc.evento.deporte_id, rc.evento.categoria_id, rc.evento.rama_id, function(error, response) {
+				Meteor.call('getCredenciales', p, rc.evento.municipio_id, 
+																					rc.evento.evento_id, 
+																					rc.evento.funcionEspecifica, 
+																					rc.evento.deporte_id, 
+																					rc.evento.categoria_id, 
+																					rc.evento.rama_id, function(error, response) {
 				   if(error)
 				   {
 				    console.log('ERROR :', error);
@@ -177,8 +183,14 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 		}
 		else if (op==2)
 		{
+			
 				$( "#gafete" ).prop( "disabled", true );
-				Meteor.call('getGafetes', p, rc.evento.municipio_id, rc.evento.funcionEspecifica, rc.evento.deporte_id, rc.evento.categoria_id, rc.evento.rama_id, function(error, response) {
+				Meteor.call('getGafetes', p,  rc.evento.municipio_id, 
+																			rc.evento.evento_id, 
+																			rc.evento.funcionEspecifica, 
+																			rc.evento.deporte_id, 
+																			rc.evento.categoria_id, 
+																			rc.evento.rama_id, function(error, response) {
 				   if(error)
 				   {
 				    console.log('ERROR :', error);
