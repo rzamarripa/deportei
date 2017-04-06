@@ -138,6 +138,7 @@ function CedulaCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 				Meteor.call('getCedula', participantes, function(error, response) {
 				   if(error){
 				    console.log('ERROR :', error);
+				    $( "#cedula" ).prop( "disabled", false );
 				    return;
 				   }else{
 					   
@@ -165,6 +166,7 @@ function CedulaCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 								  return blob;
 							}
 							
+							//var blob = b64toBlob(response, "application/pdf");
 							var blob = b64toBlob(response, "application/docx");
 						  var url = window.URL.createObjectURL(blob);
 						  

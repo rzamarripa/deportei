@@ -173,7 +173,7 @@ Meteor.methods({
 		}
 		
 		opts.getSize=function(img,tagValue, tagName) {
-		    return [100,130];
+		    return [70,90];
 		}
 		
 		var imageModule=new ImageModule(opts);
@@ -278,7 +278,7 @@ Meteor.methods({
     var Docxtemplater = require('docxtemplater');
 		var JSZip = require('jszip');
 		var ImageModule = require('docxtemplater-image-module');
-		var unoconv = require('unoconv');
+		var cmd = require('node-cmd');
 		
 		var meteor_root = require('fs').realpathSync( process.cwd() + '/../' );
 		//var produccion = meteor_root+"/web.browser/app/archivos/";
@@ -326,8 +326,7 @@ Meteor.methods({
 					//Usando Meteor_root
 					fs.writeFileSync(produccion+participante.curp+".jpeg", bitmap);
 					participante.foto = produccion+participante.curp+".jpeg";
-					
-					
+
 				}
 		})
 		
@@ -361,36 +360,27 @@ Meteor.methods({
 
 		
 		//Convertir a PDF
-		/*
-		unoconv.convert(produccion+"cedulaSalida.docx", 'pdf', function (err, result) {
-				if (error)
-				{
-						console.log("Error:", error)
-				}
-				if (result)
-				{
-						// result is returned as a Buffer
-						fs.writeFile(produccion+"cedulaSalida.pdf", result);		
-						//Pasar a base64
-						// read binary data
-						var bitmap = fs.readFileSync(produccion+"cedulaSalida.pdf");
-    
-						// convert binary data to base64 encoded string
-						return new Buffer(bitmap).toString('base64');		
-				}
+		
+/*
+		cmd.get(
+        'unoconv -f pdf '+ produccion+'cedulaSalida.docx',
+        function(data){
+            console.log('ok conversión:',data)
+        }
+    );
+*/
 
-		});
+		//cmd.run('unoconv -f pdf '+ produccion+'cedulaSalida.docx');
 		
-		return null;
-		*/
 		
+
 		//Pasar a base64
 		// read binary data
+    //var bitmap = fs.readFileSync(produccion+"cedulaSalida.pdf");
     var bitmap = fs.readFileSync(produccion+"cedulaSalida.docx");
     
     // convert binary data to base64 encoded string
     return new Buffer(bitmap).toString('base64');
-		
 		
   },
   getExcel: function (participantes) {
