@@ -27,9 +27,19 @@ function descargaDocumentosCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 	});
 
 	
-	this.subscribe('municipios',()=>{
-		return [{estatus: true}]
-	});
+	if (Meteor.user().roles[0] == 'admin')
+	{	
+		this.subscribe('municipios',()=>{
+			return [{estatus: true}]
+		});
+	}
+	else if (Meteor.user().roles[0] == 'DelegadoMunicipal')
+	{
+			this.subscribe('municipios',()=>{
+			return [{_id: Meteor.user().profile.municipio_id}]
+		});
+	}
+		
 	
 	this.subscribe('eventos',()=>{
 		return [{estatus: true}]

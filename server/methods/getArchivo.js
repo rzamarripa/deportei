@@ -2,8 +2,8 @@
 Meteor.methods({
   
   getGafetes: function (participantes, municipio, evento, FE, deporte, categoria, rama) {
-			
-			
+		
+
 		var fs = require('fs');
     var Docxtemplater = require('docxtemplater');
 		var JSZip = require('jszip');
@@ -12,7 +12,23 @@ Meteor.methods({
 	  var meteor_root = require('fs').realpathSync( process.cwd() + '/../' );
 		
 		//var produccion = meteor_root+"/web.browser/app/archivos/";
-		var produccion = "/home/isde/archivos/";
+		//var produccion = "/home/isde/archivos/";
+		
+		var meteor_root = require('fs').realpathSync( process.cwd() + '/../' );
+		
+		var produccion 					= "";
+		var produccionFotos 		= "";
+		var produccionDescargas = "";
+				
+		if(Meteor.isDevelopment){
+      produccion 					= meteor_root+"/web.browser/app/archivos/";
+      produccionFotos 		= meteor_root+"/web.browser/app/fotos/";
+      produccionDescargas = meteor_root+"/web.browser/app/descargas/";
+    }else{
+      produccion 					= "/home/isde/archivos/";
+      produccionFotos 		= "/home/isde/fotos/";
+      produccionDescargas = "/home/isde/descargas/";
+    }
 		
 
 		var eve = Eventos.findOne({_id: evento});
@@ -43,14 +59,25 @@ Meteor.methods({
 				{							
 	
 					var f = String(participante.foto);
-					participante.foto = f.replace('data:image/jpeg;base64,', '');
-					
-					// create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
-			    var bitmap = new Buffer(participante.foto, 'base64');
-					
-					//Usando Meteor_root
-					fs.writeFileSync(produccion+participante.curp+".jpeg", bitmap);
-					participante.foto = produccion+participante.curp+".jpeg";
+					var tipo = f.substr(11,4);	
+					if (tipo == 'jpeg')
+					{						
+							participante.foto = f.replace('data:image/jpeg;base64,', '');					
+							// create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
+					    var bitmap = new Buffer(participante.foto, 'base64');
+							//Usando Meteor_root
+							fs.writeFileSync(produccionFotos + participante.curp+".jpeg", bitmap);
+							participante.foto = produccionFotos + participante.curp+".jpeg";	
+					}
+					else if (tipo == 'png;')
+					{
+							participante.foto = f.replace('data:image/png;base64,', '');					
+							// create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
+					    var bitmap = new Buffer(participante.foto, 'base64');
+							//Usando Meteor_root
+							fs.writeFileSync(produccionFotos + participante.curp+".png", bitmap);
+							participante.foto = produccionFotos + participante.curp+".png";						
+					}
 				}
 				
 				if (participante.apellidoMaterno == undefined)
@@ -88,13 +115,37 @@ Meteor.methods({
 		});
 		
 		var content;
-		if (FE == "DEPORTISTA" || FE == "ENTRENADOR" || FE == "ENTRENADOR AUXILIAR" || FE == "DELEGADO POR DEPORTE" || FE == "DELEGADO GENERAL" || FE == "AUXILIAR GENERAL" || FE == "ASOCIACIÓN" )	
+		if (FE == "DEPORTISTA" || FE == "ENTRENADOR AUXILIAR" || FE == "DELEGADO POR DEPORTE" || FE == "AUXILIAR GENERAL" || FE == "ASOCIACIÓN" )	
 		{
 				if (eve.nombreGafeteDeportista == undefined || eve.nombreGafeteDeportista == "")
 						content = fs.readFileSync(produccion+"sinDefinir.docx", "binary");
 				else		
 						content = fs.readFileSync(produccion+eve.nombreGafeteDeportista+".docx", "binary");
 		}	
+		else if (FE == "ENTRENADOR")
+		{
+				if (eve.nombreGafeteEntrenador == undefined || eve.nombreGafeteEntrenador == "")
+						content = fs.readFileSync(produccion+"sinDefinir.docx", "binary");
+				else		
+						content = fs.readFileSync(produccion+eve.nombreGafeteEntrenador+".docx", "binary");	
+			
+		}
+		else if (FE == "DELEGADO GENERAL")
+		{
+				if (eve.nombreGafeteDelegadoGeneral == undefined || eve.nombreGafeteDelegadoGeneral == "")
+						content = fs.readFileSync(produccion+"sinDefinir.docx", "binary");
+				else		
+						content = fs.readFileSync(produccion+eve.nombreGafeteDelegadoGeneral+".docx", "binary");	
+			
+		}
+		else if (FE == "DELEGADO AUXILIAR")
+		{
+				if (eve.nombreGafeteDelegadoAuxiliar == undefined || eve.nombreGafeteDelegadoAuxiliar == "")
+						content = fs.readFileSync(produccion+"sinDefinir.docx", "binary");
+				else		
+						content = fs.readFileSync(produccion+eve.nombreGafeteDelegadoAuxiliar+".docx", "binary");	
+			
+		}
 		else if (FE == "JUEZ" || FE== "JEFE DE MISIÓN" || FE == "OFICIAL" || FE== "JEFE DE MISIÓN")
 		{
 				if (eve.nombreGafeteOtros == undefined || eve.nombreGafeteOtros == "")
@@ -102,12 +153,20 @@ Meteor.methods({
 				else
 						content = fs.readFileSync(produccion+eve.nombreGafeteOtros+".docx", "binary");
 		}	
-		else	
+		else if (FE == "COMITÉ ORGANIZADOR")	
 		{
 				if (eve.nombreGafeteComite == undefined || eve.nombreGafeteComite == "")
 						content = fs.readFileSync(produccion+"sinDefinir.docx", "binary");
 				else
 						content = fs.readFileSync(produccion+eve.nombreGafeteComite+".docx", "binary");
+	  }
+	  else
+	  {
+		  	if (eve.nombreGafeteOtros == undefined || eve.nombreGafeteOtros == "")
+						content = fs.readFileSync(produccion+"sinDefinir.docx", "binary");
+				else
+						content = fs.readFileSync(produccion+eve.nombreGafeteOtros+".docx", "binary");
+		  
 	  }
 	  
 		var zip = new JSZip(content);
@@ -140,12 +199,11 @@ Meteor.methods({
 		var buf = doc.getZip()
              		 .generate({type:"nodebuffer"});
  
-		fs.writeFileSync(produccion+"gafeteSalida.docx",buf);
-		
+		fs.writeFileSync(produccionDescargas+"gafeteSalida.docx",buf);
 		
 		//Pasar a base64
 		// read binary data
-    var bitmap = fs.readFileSync(produccion+"gafeteSalida.docx");
+    var bitmap = fs.readFileSync(produccionDescargas+"gafeteSalida.docx");
     
     // convert binary data to base64 encoded string
     return new Buffer(bitmap).toString('base64');
@@ -162,8 +220,19 @@ Meteor.methods({
 		
 	  var meteor_root = require('fs').realpathSync( process.cwd() + '/../' );
 		
-		//var produccion = meteor_root+"/web.browser/app/archivos/";
-		var produccion = "/home/isde/archivos/";
+		var produccion 					= "";
+		var produccionFotos 		= "";
+		var produccionDescargas = "";
+				
+		if(Meteor.isDevelopment){
+      produccion 					= meteor_root+"/web.browser/app/archivos/";
+      produccionFotos 		= meteor_root+"/web.browser/app/fotos/";
+      produccionDescargas = meteor_root+"/web.browser/app/descargas/";
+    }else{
+      produccion 					= "/home/isde/archivos/";
+      produccionFotos 		= "/home/isde/fotos/";
+      produccionDescargas = "/home/isde/descargas/";
+    }
 		
 		var opts = {}
 			opts.centered = false;
@@ -191,14 +260,25 @@ Meteor.methods({
 				{							
 	
 					var f = String(participante.foto);
-					participante.foto = f.replace('data:image/jpeg;base64,', '');
-					
-					// create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
-			    var bitmap = new Buffer(participante.foto, 'base64');
-					
-					//Usando Meteor_root
-					fs.writeFileSync(produccion+participante.curp+".jpeg", bitmap);
-					participante.foto = produccion+participante.curp+".jpeg";
+					var tipo = f.substr(11,4);	
+					if (tipo == 'jpeg')
+					{						
+							participante.foto = f.replace('data:image/jpeg;base64,', '');					
+							// create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
+					    var bitmap = new Buffer(participante.foto, 'base64');
+							//Usando Meteor_root
+							fs.writeFileSync(produccionFotos + participante.curp+".jpeg", bitmap);
+							participante.foto = produccionFotos + participante.curp+".jpeg";	
+					}
+					else if (tipo == 'png;')
+					{
+							participante.foto = f.replace('data:image/png;base64,', '');					
+							// create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
+					    var bitmap = new Buffer(participante.foto, 'base64');
+							//Usando Meteor_root
+							fs.writeFileSync(produccionFotos + participante.curp+".png", bitmap);
+							participante.foto = produccionFotos + participante.curp+".png";						
+					}
 				}
 				
 				if (participante.apellidoMaterno == undefined)
@@ -259,12 +339,12 @@ Meteor.methods({
 		var buf = doc.getZip()
              		 .generate({type:"nodebuffer"});
  
-		fs.writeFileSync(produccion+"credencialSalida.docx",buf);
+		fs.writeFileSync(produccionDescargas+"credencialSalida.docx",buf);
 		
 		
 		//Pasar a base64
 		// read binary data
-    var bitmap = fs.readFileSync(produccion+"credencialSalida.docx");
+    var bitmap = fs.readFileSync(produccionDescargas+"credencialSalida.docx");
     
     // convert binary data to base64 encoded string
     return new Buffer(bitmap).toString('base64');
@@ -272,7 +352,22 @@ Meteor.methods({
 		
 		
   },
-  getCedula: function (participantes) {
+  getCedula: function (evento_id, municipio_id, deporte_id, categoria_id, rama_id, funcionEspecifica) {
+		
+		var participantes = [];
+		
+		participantes = ParticipanteEventos.find({ evento_id				: evento_id
+																						  ,municipio_id 		: municipio_id
+																						  ,deporte_id				: deporte_id
+																							,categoria_id			: categoria_id
+																						  ,rama_id					: rama_id
+																						  ,funcionEspecifica: funcionEspecifica
+																							}).fetch();
+		var evento 		= Eventos.findOne(evento_id).nombre;
+		var municipio = Municipios.findOne(municipio_id).nombre;
+		var deporte 	= Deportes.findOne(deporte_id).nombre;
+	  var categoria = Categorias.findOne(categoria_id).nombre;
+		
 		
 		var fs = require('fs');
     var Docxtemplater = require('docxtemplater');
@@ -280,9 +375,25 @@ Meteor.methods({
 		var ImageModule = require('docxtemplater-image-module');
 		var cmd = require('node-cmd');
 		
-		var meteor_root = require('fs').realpathSync( process.cwd() + '/../' );
+		var meteor_root = Npm.require('fs').realpathSync( process.cwd() + '/../' );
+		
 		//var produccion = meteor_root+"/web.browser/app/archivos/";
-		var produccion = "/home/isde/archivos/";
+		//var produccion = "/home/isde/archivos/";
+		
+		var produccion 					= "";
+		var produccionFotos 		= "";
+		var produccionDescargas = "";
+
+		if(Meteor.isDevelopment){
+      produccion 					= meteor_root+"/web.browser/app/archivos/";
+      produccionFotos 		= meteor_root+"/web.browser/app/fotos/";
+      produccionDescargas = meteor_root+"/web.browser/app/descargas/";
+    }else{
+      produccion 					= "/home/isde/archivos/";
+      produccionFotos 		= "/home/isde/fotos/";
+      produccionDescargas = "/home/isde/descargas/";
+    }
+
 		
 		
 		var opts = {}
@@ -313,26 +424,48 @@ Meteor.methods({
 		}		 
 		
 		_.each(participantes, function(participante){
+			
+				participante.pruebasNombre = [];
+					_.each(participante.pruebas, function(prueba){
+							//participante.pruebasNombre.push(Pruebas.findOne(prueba, { fields : { nombre : 1}}))
+							var p = Pruebas.findOne(prueba,{ fields : { nombre : 1}});
+							participante.pruebasNombre.push({"nombre": p.nombre});
+				});
+			
 				if (participante.foto != "")
 				{						
 					participante.fechaNacimiento = participante.fechaNacimiento.getUTCDate() +"-"+ (participante.fechaNacimiento.getUTCMonth()+1) +"-"+ participante.fechaNacimiento.getUTCFullYear();
 					
 					var f = String(participante.foto);
-					participante.foto = f.replace('data:image/jpeg;base64,', '');
 					
-					// create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
-			    var bitmap = new Buffer(participante.foto, 'base64');
+					var tipo = f.substr(11,4);	
+					if (tipo == 'jpeg')
+					{						
+							participante.foto = f.replace('data:image/jpeg;base64,', '');					
+							// create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
+					    var bitmap = new Buffer(participante.foto, 'base64');
+							//Usando Meteor_root
+							fs.writeFileSync(produccionFotos + participante.curp+".jpeg", bitmap);
+							participante.foto = produccionFotos + participante.curp+".jpeg";	
+					}
+					else if (tipo == 'png;')
+					{
+							participante.foto = f.replace('data:image/png;base64,', '');					
+							// create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
+					    var bitmap = new Buffer(participante.foto, 'base64');
+							//Usando Meteor_root
+							fs.writeFileSync(produccionFotos + participante.curp+".png", bitmap);
+							participante.foto = produccionFotos + participante.curp+".png";						
+					}
 					
-					//Usando Meteor_root
-					fs.writeFileSync(produccion+participante.curp+".jpeg", bitmap);
-					participante.foto = produccion+participante.curp+".jpeg";
+					
 
 				}
 		})
 		
 		
 		var content = fs
-    							.readFileSync(produccion+"cedula.docx", "binary");
+    							.readFileSync(produccion + "cedula.docx", "binary");
 
 	  
 		var zip = new JSZip(content);
@@ -344,11 +477,11 @@ Meteor.methods({
 		var f = fecha;
 		f = fecha.getUTCDate()+'-'+(fecha.getUTCMonth()+1)+'-'+fecha.getUTCFullYear();//+', Hora:'+fecha.getUTCHours()+':'+fecha.getMinutes()+':'+fecha.getSeconds();
 		
-		doc.setData({	evento: participantes[0].evento, 
-									municipio: participantes[0].municipio, 
-									deporte: participantes[0].deporte, 
-									categoria: participantes[0].categoria,
-									fechaEmision: f,
+		doc.setData({	evento				:	evento, 
+									municipio			: municipio, 
+									deporte				: deporte, 
+									categoria			: categoria,
+									fechaEmision	: f,
 									participantes});
 								
 		doc.render();
@@ -356,7 +489,7 @@ Meteor.methods({
 		var buf = doc.getZip()
              		 .generate({type:"nodebuffer"});
  
-		fs.writeFileSync(produccion+"cedulaSalida.docx",buf);
+		fs.writeFileSync(produccionDescargas + "cedulaSalida.docx",buf);
 
 		
 		//Convertir a PDF
@@ -371,13 +504,11 @@ Meteor.methods({
 */
 
 		//cmd.run('unoconv -f pdf '+ produccion+'cedulaSalida.docx');
-		
-		
 
 		//Pasar a base64
 		// read binary data
     //var bitmap = fs.readFileSync(produccion+"cedulaSalida.pdf");
-    var bitmap = fs.readFileSync(produccion+"cedulaSalida.docx");
+    var bitmap = fs.readFileSync(produccionDescargas + "cedulaSalida.docx");
     
     // convert binary data to base64 encoded string
     return new Buffer(bitmap).toString('base64');

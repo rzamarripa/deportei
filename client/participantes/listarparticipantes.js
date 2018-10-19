@@ -89,10 +89,10 @@ function ListarParticipantesCtrl($scope, $meteor, $reactive, $state, toastr, $st
 	
 	this.eliminar = function(id)
 	{
-			console.log(id);
+			//console.log(id);
 	    if (confirm('¿Estas Seguro que deseas eliminar el registro?')) {
 					// Save it!
-					console.log(id);
+					//console.log(id);
 					ParticipanteEventos.remove({_id:id},
 									function(error,result){
 										if (error) toastr.error('Error al eliminar.');

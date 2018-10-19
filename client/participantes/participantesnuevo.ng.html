@@ -79,7 +79,7 @@
 													    <label for="estado">Estado *</label>
 													    <select name="estado" ng-model="pn.participante.estado" data-placeholder="Seleccione" class="form-control" required>
 															    <option value="AGUASCALIENTES">AGUASCALIENTES</option>
-																	<option value="BAJA CALIFORNIA NTE">BAJA CALIFORNIA NTE</option>
+																	<option value="BAJA CALIFORNIA NTE">BAJA CALIFORNIA NORTE</option>
 																	<option value="BAJA CALIFORNIA SUR">BAJA CALIFORNIA SUR</option>
 																	<option value="CAMPECHE">CAMPECHE</option>
 																	<option value="COAHUILA">COAHUILA</option>
@@ -138,7 +138,7 @@
 											    <div class="row">
 												    	<div class="col-sm-4">
 																<label>Foto * (máximo 512Kb)</label>
-																<input name="foto" type="file" id="fileInput1">																
+																<input name="foto" type="file" id="fileInput1" accept="image/png,image/jpeg">																
 																<div id="fileDisplayArea1"></div>
 															</div>			
 											    </div>
@@ -168,8 +168,8 @@
 															    <option value="DEPORTISTA">Deportista</option>
 															    <option value="ENTRENADOR">Entrenador</option>
 															    <option value="ENTRENADOR AUXILIAR">Entrenador Auxiliar</option>
-															    <option value="DELEGADO POR DEPORTE" ng-if="currentUser.roles[0] == 'admin'">Delegado Por Deporte</option>
 															    <option value="DELEGADO GENERAL">Delegado General</option>
+															    <option value="DELEGADO AUXILIAR">Delegado Auxiliar</option>
 															    <option value="AUXILIAR GENERAL">Auxiliar General</option>
 															    <option value="ASOCIACIÓN" ng-if="currentUser.roles[0] == 'admin'">Asociación</option>
 															    <option value="JUEZ" ng-if="currentUser.roles[0] == 'admin'">Juez</option>

@@ -1,6 +1,5 @@
 <nav>
 	<ul data-smart-menu>
-	
 
      <li data-ui-sref-active="active">
      	 <a ui-sref="root.usuarios" tilte="Isde" ng-if="currentUser.roles[0] == 'admin'">
@@ -64,7 +63,7 @@
       </a>
      </li>
      <li data-ui-sref-active="active">
-      <a ui-sref="root.descargadocumentos" tilte="Isde" ng-if="currentUser.roles[0] == 'admin'">
+      <a ui-sref="root.descargadocumentos" tilte="Isde" ng-if="currentUser.roles[0] == 'admin' ||  currentUser.roles[0] == 'DelegadoMunicipal'">
         <i class="fa fa-lg fa-fw fa-cloud-download"></i>
         <span class="menu-item-parent">Descarga Doctos</span>
       </a>

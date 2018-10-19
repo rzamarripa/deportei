@@ -61,7 +61,7 @@
 					<i class="fa fa-plus"></i> Nuevo
 				</a>
 			</div>
-			<input class="form-control" type="text" placeholder="Buscar..." ng-model="lp.buscar.nombre">
+			<input class="form-control" type="text" placeholder="Buscar..." ng-model="lp.buscar.nombre" capitalize>
 		</div>
 	</div>
 </div>
@@ -71,7 +71,7 @@
 			<div class="img-box" style="margin:20px;">
 				<img ng-src="{{lp.tieneFoto(participante.sexo, participante.foto)}}" style="width: 60px; height: 60px" data-img="img/superbox/superbox-full-1.jpg" alt="{{participante.nombreCompleto}}" title="{{participante.nombreCompleto" class="superbox-img">
 				<ul class="text-center" style="margin-left: -20px;width: 5px; height: 5px;">
-	        <a href="/participanteseditar/{{participante.participante_id}}"><li><i class="fa fa-pencil"></i></li></a>
+	        <a href="/participanteseditar/{{participante._id}}"><li><i class="fa fa-pencil"></i></li></a>
 	      </ul>
 	      <ul class="text-center" style="margin-left: 30px;width: 5px; height: 5px;">
 	        <a href="#" ng-click="lp.eliminar(participante._id)"><li><i class="fa fa-eraser"></i></li></a>

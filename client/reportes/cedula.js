@@ -133,9 +133,17 @@ function CedulaCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 	 			toastr.error("No hay participantes para generar cédula");
 				return;
 		}
-		
+				
+				var municipio_id; 
+				
+				if (this.evento.municipio_id == undefined)
+					municipio_id =  Meteor.user().profile.municipio_id;
+				else
+					municipio_id =  this.evento.municipio_id;
+				
+				
 				$( "#cedula" ).prop( "disabled", true );
-				Meteor.call('getCedula', participantes, function(error, response) {
+				Meteor.call('getCedula', this.evento.evento_id, municipio_id, this.evento.deporte_id, this.evento.categoria_id, this.evento.rama_id, this.evento.funcionEspecifica, function(error, response) {
 				   if(error){
 				    console.log('ERROR :', error);
 				    $( "#cedula" ).prop( "disabled", false );
@@ -170,7 +178,7 @@ function CedulaCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 							var blob = b64toBlob(response, "application/docx");
 						  var url = window.URL.createObjectURL(blob);
 						  
-						  console.log(url);
+						  //console.log(url);
 						  var dlnk = document.getElementById('dwnldLnk');
 					    dlnk.download = "Ced-"+this.deporteNombre+'-'+this.categoriaNombre+'.docx'; 
 							dlnk.href = url;

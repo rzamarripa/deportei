@@ -13,10 +13,11 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 	this.participante = {};
 	this.participanteEventos = {}; 
 	
-	this.participante.evento_id = $stateParams.id;
-	this.participanteEventos.evento_id = $stateParams.id;
+	//this.participante.evento_id = $stateParams.id;
+	//this.participanteEventos.evento_id = $stateParams.id;
 
 	
+/*
 	this.subscribe('participantes',()=>{
 		return [{_id : $stateParams.id}]
 	});
@@ -24,6 +25,72 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 	let pe = this.subscribe('participanteEventos',()=>{
 		return [{participante_id : $stateParams.id}]
 	});
+*/
+	
+	loading(true);
+	let pe = this.subscribe('participanteEventos',()=>{
+		return [{_id : $stateParams.id}]
+		},
+		{
+			onReady: function () {
+				
+				var pe = ParticipanteEventos.findOne({_id: $stateParams.id});
+				
+				if (pe != undefined)
+				{
+						
+						//console.log("PE:" ,pe._id);
+						//console.log("PE:" ,pe.funcionEspecifica);					
+						
+						this.participanteEventos = pe; 
+						
+						this.subscribe('participantes',()=>{
+								return [{_id : pe.participante_id}]
+							},
+							{
+								onReady: function () {
+									
+									var par = Participantes.findOne();
+									
+									if (par != undefined)
+									{
+										//console.log("Par:" ,par);		
+										
+										this.participante = par;
+										
+										var img = new Image();
+												
+										img.id = "fotoCargada";
+										img.src = pe.foto;
+										img.width =200;
+										img.height=200;
+																	
+										fileDisplayArea1.appendChild(img);
+													
+										this.participante = par;
+										loading(false);
+									}
+										
+								
+								}
+							});
+						
+						
+												
+				}
+				
+				
+				
+/*
+				this.subscribe('participantes',()=>{
+					return [{_id : pe.participante_id}]
+				});	
+*/
+				
+				
+		}
+	});
+	
 	
 	
 	this.subscribe('ramas',()=>{
@@ -61,7 +128,8 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 	
   
   this.helpers({
-	  participante : () => {	
+	  /*
+participante : () => {	
 		  
 		  var p = Participantes.findOne(); 
 		  
@@ -83,6 +151,7 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 	  participanteEventos : () => {	
 		  return ParticipanteEventos.findOne();
 	  },
+*/
 	  eventos : () => {
 		  return Eventos.find();
 	  },
@@ -166,136 +235,55 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 					//Estos son los participantes que no son deportistas
 					if (participanteEventos.funcionEspecifica != 'DEPORTISTA')
 					{
-						
-							Meteor.call('getParticipanteCurp', participante.curp, function(error, response) {
-									   if(error){
-										    console.log('ERROR :', error);
-										    return;
-									   }
-										   		//Ya Existe
-										 			if (response)
-										 			{
-											 				var idTemp = participante._id;
-															delete participante._id;		
-															Participantes.update({_id:idTemp},{$set:participante}, 
-																									function(error,result){
-																											if (error){
-																													$( "#registar" ).prop( "disabled", false );
-																													console.log("Error:",error);
-																													return;		
-																											}
-																											if (result)
-																											{
-																														participanteEventos.participante_id = idTemp;
-																														
-																														participanteEventos.foto = participante.foto;
-																														participanteEventos.nombre = participante.nombre;
-																														participanteEventos.apellidoPaterno = participante.apellidoPaterno;
-																														participanteEventos.apellidoMaterno = participante.apellidoMaterno;
-																														participanteEventos.sexo = participante.sexo;
-																														participanteEventos.curp = participante.curp;
-																														participanteEventos.fechaNacimiento = participante.fechaNacimiento;
-																														participanteEventos.nombreCompleto = participante.nombreCompleto
-																														
-																														participanteEventos.municipio_id = participante.municipio_id;
-																														participanteEventos.usuarioInserto = Meteor.userId();
-																														
-																														var idTempPE = participanteEventos._id;
-																														delete participanteEventos._id;
-																														
-																														
-																														ParticipanteEventos.update({_id:idTempPE},{$set:participanteEventos},
-																																													function(error, result){
-																																															if (error){
-																																																 $( "#registar" ).prop( "disabled", false );																																																  	 																				 return;		
-																																															}	
-																																															
-																																															if (result)
-																																															{
-																																																
-																																																 	toastr.success('Actualizado correctamente.');
-																																																	participante = {};
-																																																	participanteEvento = {};
-																																																	$('.collapse').collapse('hide');
-																																																	this.nuevo = true;
-																																																	$state.go('root.listarparticipantes');
-																																																	
-																																																	form.$setPristine();
-																																															    form.$setUntouched();	
-																																															}	
-																														});
-																											}	 																											
-																									}
-															);
-										 			}  
+							loading(true);
+							Meteor.call('updateParticipante', participante, participanteEventos, function(error, response) {
+								    if(error){
+									    console.log('ERROR :', error);
+									    $( "#registar" ).prop( "disabled", false );
+									    loading(false);
+									    return;
+								    }
+								    
+								    if (response)
+								    {
+									    		toastr.success('Actualizado correctamente.');
+									    		
+									    		loading(false);
+									    		
+													participante = {};
+													participanteEvento = {};
+													$('.collapse').collapse('hide');
+													this.nuevo = true;
+													$state.go('root.listarparticipantes');
+								    }
 							});			    
 
 					}//Estos son los deportistas
 					else if (anioNacimiento <= anioInicio && anioNacimiento >= anioFin)
 					{
-							Meteor.call('getParticipanteCurp', participante.curp, function(error, response) {
-									   if(error){
-										    console.log('ERROR :', error);
-										    return;
-									   }
-
-										   		//Ya Existe
-										 			if (response)
-										 			{
-											 				var idTemp = participante._id;
-															delete participante._id;		
-															Participantes.update({_id:idTemp},{$set:participante}, 
-																									function(error,result){
-																											if (error){
-																													$( "#registar" ).prop( "disabled", false );
-																													console.log("Error:",error);
-																													return;		
-																											}
-																											if (result)
-																											{
-																														participanteEventos.participante_id = idTemp;
-																														
-																														participanteEventos.foto = participante.foto;
-																														participanteEventos.nombre = participante.nombre;
-																														participanteEventos.apellidoPaterno = participante.apellidoPaterno;
-																														participanteEventos.apellidoMaterno = participante.apellidoMaterno;
-																														participanteEventos.sexo = participante.sexo;
-																														participanteEventos.curp = participante.curp;
-																														participanteEventos.fechaNacimiento = participante.fechaNacimiento;
-																														participanteEventos.nombreCompleto = participante.nombreCompleto
-																														
-																														participanteEventos.municipio_id = participante.municipio_id;
-																														participanteEventos.usuarioInserto = Meteor.userId();
-																														
-																														var idTempPE = participanteEventos._id;
-																														delete participanteEventos._id;
-																														
-																														
-																														ParticipanteEventos.update({_id:idTempPE},{$set:participanteEventos},
-																																													function(error, result){
-																																															if (error){
-																																																 $( "#registar" ).prop( "disabled", false );																																																  	 																				 return;		
-																																															}	
-																																															
-																																															if (result)
-																																															{
-																																																
-																																																 	toastr.success('Actualizado correctamente.');
-																																																	participante = {};
-																																																	participanteEvento = {};
-																																																	$('.collapse').collapse('hide');
-																																																	this.nuevo = true;
-																																																	$state.go('root.listarparticipantes');
-																																																	
-																																																	form.$setPristine();
-																																															    form.$setUntouched();	
-																																															}	
-																														});
-																											}	 																											
-																									}
-															);			 
-										 			}  	 			 		
-							});							
+							loading(true);
+							Meteor.call('updateParticipante', participante, participanteEventos, function(error, response) {
+								    if(error){
+									    console.log('ERROR :', error);
+									    $( "#registar" ).prop( "disabled", false );
+									    loading(false);
+									    return;
+								    }
+								    
+								    if (response)
+								    {
+									    		loading(false);
+									    		
+									    		toastr.success('Actualizado correctamente.');
+													participante = {};
+													participanteEvento = {};
+													$('.collapse').collapse('hide');
+													this.nuevo = true;
+													$state.go('root.listarparticipantes');
+									    
+									    
+								    }
+							});	
 					}	 
 					else
 					{
@@ -307,69 +295,29 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 
 			}else
 			{
-							Meteor.call('getParticipanteCurp', participante.curp, function(error, response) {
-									   if(error){
-										    console.log('ERROR :', error);
-										    return;
-									   }
-
-										   		//Ya Existe
-										 			if (response)
-										 			{
-											 				var idTemp = participante._id;
-															delete participante._id;		
-															Participantes.update({_id:idTemp},{$set:participante}, 
-																									function(error,result){
-																											if (error){
-																													$( "#registar" ).prop( "disabled", false );
-																													console.log("Error:",error);
-																													return;		
-																											}
-																											if (result)
-																											{
-																														participanteEventos.participante_id = idTemp;
-																														
-																														participanteEventos.foto = participante.foto;
-																														participanteEventos.nombre = participante.nombre;
-																														participanteEventos.apellidoPaterno = participante.apellidoPaterno;
-																														participanteEventos.apellidoMaterno = participante.apellidoMaterno;
-																														participanteEventos.sexo = participante.sexo;
-																														participanteEventos.curp = participante.curp;
-																														participanteEventos.fechaNacimiento = participante.fechaNacimiento;
-																														participanteEventos.nombreCompleto = participante.nombreCompleto
-																														
-																														participanteEventos.municipio_id = participante.municipio_id;
-																														participanteEventos.usuarioInserto = Meteor.userId();
-																														
-																														var idTempPE = participanteEventos._id;
-																														delete participanteEventos._id;
-																														
-																														
-																														ParticipanteEventos.update({_id:idTempPE},{$set:participanteEventos},
-																																													function(error, result){
-																																															if (error){
-																																																 $( "#registar" ).prop( "disabled", false );																																																  	 																				 return;		
-																																															}	
-																																															
-																																															if (result)
-																																															{
-																																																
-																																																 	toastr.success('Actualizado correctamente.');
-																																																	participante = {};
-																																																	participanteEvento = {};
-																																																	$('.collapse').collapse('hide');
-																																																	this.nuevo = true;
-																																																	$state.go('root.listarparticipantes');
-																																																	
-																																																	form.$setPristine();
-																																															    form.$setUntouched();	
-																																															}	
-																														});
-																											}	 																											
-																									}
-															);	
-										 			}  	 		
-							});
+					loading(true);
+					Meteor.call('updateParticipante', participante, participanteEventos, function(error, response) {
+						    if(error){
+							    console.log('ERROR :', error);
+							    $( "#registar" ).prop( "disabled", false );
+							    loading(false);
+							    return;
+						    }
+						    
+						    if (response)
+						    {
+							    		toastr.success('Actualizado correctamente.');
+							    		
+							    		loading(false);
+							    		
+											participante = {};
+											participanteEvento = {};
+											$('.collapse').collapse('hide');
+											this.nuevo = true;
+											$state.go('root.listarparticipantes');
+							    
+						    }
+					});
 				
 			}
 			
@@ -411,16 +359,32 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 	this.funcionEspecifica = function(participante,participanteEvento)
 	{		
 			
-			console.log(participante);
-			if (participanteEvento != "DEPORTISTA")
+			//console.log(participante);
+			if (participanteEvento != "DEPORTISTA" || participanteEvento != "ENTRENADOR" || participanteEvento != "DELEGADO GENERAL" || participanteEvento != "DELEGADO AUXILIAR")
 			{
-							participante.fechaNacimiento= new Date();
-							participante.estado = "BAJA CALIFORNIA SUR";
-							participante.curpImagen = "s/a";
-							participante.actaNacimiento = "s/a";
-							participante.identificacion = "s/a";
+					if (this.participante.sexo == undefined)
+						  this.participante.sexo = "Hombre";
+
+					if (this.participante.estado == undefined)
+							this.participante.estado = "SINALOA";
+					//this.participante.curpImagen = "s/a";
+					
+					if (this.participanteEventos.deporte_id == undefined)
+							this.participanteEventos.deporte_id = "s/a";
+					
+					//this.participante.fechaNacimiento = new Date();
+					
+					if (this.participante.actaNacimiento == undefined)
+	 					  this.participante.actaNacimiento = "s/a";
+	 				
+	 				if (this.participante.identificacion == undefined)	 
+							this.participante.identificacion = "s/a";
+					
+					if (this.participante.categoria_id == undefined)
 							this.participanteEventos.categoria_id = "s/a";
-							this.participanteEventos.rama_id = "s/a";
+							
+					if (this.participante.rama_id == undefined)		
+	 					  this.participanteEventos.rama_id = "s/a";
 				
 			}
 	}
@@ -565,7 +529,7 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 			
 			//JavaScript para agregar el Identificacion Oficial
 			fileInputIdentificacion.addEventListener('change', function(e) {
-				var file = fileInputCurp.files[0];
+				var file = fileInputIdentificacion.files[0];
 				
 				var imageType;
 				
