@@ -405,7 +405,6 @@ participante : () => {
 	
 	$(document).ready( function() {
 		
-
 			$(".Mselect2").select2();
 					
 			var fileInput1 = document.getElementById('fileInput1');
@@ -414,7 +413,6 @@ participante : () => {
 			var fileInputIdentificacion = document.getElementById('fileInputIdentificacion');
 			
 			var fileDisplayArea1 = document.getElementById('fileDisplayArea1');
-			
 			
 			//JavaScript para agregar la Foto
 			fileInput1.addEventListener('change', function(e) {
