@@ -21,7 +21,7 @@
 								</option>
 							</select>
 					  </div>
-						<div class="col-sm-2" valida>
+						<div class="col-sm-4" valida>
 							<label >Deporte *</label>
 							<select name="deporte" class="form-control select2" placeholder="Seleccione" ng-model="pru.prueba.deporte_id" required>
 								<option  value="{{deporte._id}}" ng-repeat="deporte in pru.deportes">
@@ -77,7 +77,7 @@
 				</option>
 			</select>
 	  </div>
-		<div class="col-sm-2">
+		<div class="col-sm-4">
 			<label >Deporte</label>
 			<select name="buscardeporte" class="form-control select2" placeholder="Seleccione" ng-model="pru.buscar.buscarDeporte_id">
 				<option  value="{{deporte._id}}" ng-repeat="deporte in pru.deportesBuscar">
@@ -141,7 +141,7 @@
 			    <td>
 				    <div class="text-center">
 					    <div class="btn-group">
-							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							  <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							    <span class="caret"></span>
 							    <span class="sr-only">Toggle Dropdown</span>
 							  </button>

@@ -12,8 +12,8 @@
 			<tbody>
 		    <tr ng-repeat="evento in em.eventos">
 			    <td><a href="/participantesnuevo/{{evento._id}}">{{evento.nombre}} </a></td>
-			    <td>{{evento.fechainicio.getUTCDate() +"/"+ (evento.fechainicio.getUTCMonth()+1) +"/"+ evento.fechainicio.getUTCFullYear()}} </td>
-			    <td>{{evento.fechafin.getUTCDate() +"/"+ (evento.fechafin.getUTCMonth()+1) +"/"+ evento.fechafin.getUTCFullYear()}} </td>
+			    <td>{{evento.fechainicio | date : "dd-MM-yyyy"}} </td>
+			    <td>{{evento.fechafin | date : "dd-MM-yyyy"}} </td>
 		    </tr>
 			</tbody>
 		</table>

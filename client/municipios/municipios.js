@@ -12,7 +12,7 @@ function MunicipiosCtrl($scope, $meteor, $reactive, $state, toastr) {
   
   this.helpers({
 		municipios : () => {
-		  return Municipios.find();
+		  return Municipios.find({}, {sort: {nombre:1}});
 	  }
   });
   	  

@@ -68,19 +68,19 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 			return Municipios.find();
 		},
 		eventos : () => {
-			return Eventos.find();
+			return Eventos.find({},{sort: {fechainicio:-1}});
 		},
 		deportes : () => {
-			return Deportes.find();
+			return Deportes.find({},{sort: {nombre:1}});
 		},
 		categorias : () => {
-			return Categorias.find();
+			return Categorias.find({},{sort: {nombre:1}});
 		},
 		pruebas : () => {
-			return Pruebas.find();
+			return Pruebas.find({},{sort: {nombre:1}});
 		},
 		ramas : () => {
-			return Ramas.find();
+			return Ramas.find({},{sort: {nombre:1}});
 		},
 		
 		todosParticipantes : () => {

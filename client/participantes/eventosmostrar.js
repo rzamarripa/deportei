@@ -11,7 +11,7 @@ function EventosMostarCtrl($scope, $meteor, $reactive, $state, toastr) {
   
   this.helpers({
 		eventos : () => {
-		  return Eventos.find();
+		  return Eventos.find({}, {sort: {fechainicio:-1}});
 	  }
   });
   	    

@@ -16,8 +16,7 @@ function ParticipantesEditarCtrl($scope, $meteor, $reactive, $state, toastr, $st
 	//this.participante.evento_id = $stateParams.id;
 	//this.participanteEventos.evento_id = $stateParams.id;
 
-	
-/*
+	/*
 	this.subscribe('participantes',()=>{
 		return [{_id : $stateParams.id}]
 	});
@@ -692,6 +691,13 @@ participante : () => {
 		    {
 			    console.log("no entro")
 		    }
+	};
+  
+  this.modalDoc= function(img)
+	{
+		var imagen = '<img class="img-responsive" src="'+img+'" style="margin:auto;">';
+		$('#imagenDiv').empty().append(imagen);
+		$("#modaldoc").modal('show');
 	};
 	
 	

@@ -66,7 +66,7 @@
 			<td>{{participante.curp}}</td>
 			<td>{{participante.nombre}} {{participante.apellidoPaterno}} {{participante.apellidoMaterno}}</td>
 			<td>{{participante.sexo}}</td>
-			<td>{{participante.fechaNacimiento.getUTCDate() +"/"+ (participante.fechaNacimiento.getUTCMonth()+1) +"/"+ participante.fechaNacimiento.getUTCFullYear()}}</td>					
+			<td>{{participante.fechaNacimiento | date: "dd-MM-yyyy"}}</td>					
 		</tr>	
 	</tbody>
 </table>

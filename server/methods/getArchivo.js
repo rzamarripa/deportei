@@ -3,7 +3,6 @@ Meteor.methods({
   
   getGafetes: function (participantes, municipio, evento, FE, deporte, categoria, rama) {
 		
-
 		var fs = require('fs');
     var Docxtemplater = require('docxtemplater');
 		var JSZip = require('jszip');
@@ -115,14 +114,14 @@ Meteor.methods({
 		});
 		
 		var content;
-		if (FE == "DEPORTISTA" || FE == "ENTRENADOR AUXILIAR" || FE == "DELEGADO POR DEPORTE" || FE == "AUXILIAR GENERAL" || FE == "ASOCIACIÓN" )	
+		if (FE == "DEPORTISTA")	
 		{
 				if (eve.nombreGafeteDeportista == undefined || eve.nombreGafeteDeportista == "")
 						content = fs.readFileSync(produccion+"sinDefinir.docx", "binary");
 				else		
 						content = fs.readFileSync(produccion+eve.nombreGafeteDeportista+".docx", "binary");
 		}	
-		else if (FE == "ENTRENADOR")
+		else if (FE == "ENTRENADOR" || FE == "ENTRENADOR AUXILIAR" || FE == "DELEGADO POR DEPORTE" || FE == "AUXILIAR GENERAL" || FE == "ASOCIACIÓN")
 		{
 				if (eve.nombreGafeteEntrenador == undefined || eve.nombreGafeteEntrenador == "")
 						content = fs.readFileSync(produccion+"sinDefinir.docx", "binary");
@@ -130,7 +129,7 @@ Meteor.methods({
 						content = fs.readFileSync(produccion+eve.nombreGafeteEntrenador+".docx", "binary");	
 			
 		}
-		else if (FE == "DELEGADO GENERAL")
+		else if (FE == "DELEGADO GENERAL" || FE == "JUEZ")
 		{
 				if (eve.nombreGafeteDelegadoGeneral == undefined || eve.nombreGafeteDelegadoGeneral == "")
 						content = fs.readFileSync(produccion+"sinDefinir.docx", "binary");
@@ -146,7 +145,7 @@ Meteor.methods({
 						content = fs.readFileSync(produccion+eve.nombreGafeteDelegadoAuxiliar+".docx", "binary");	
 			
 		}
-		else if (FE == "JUEZ" || FE== "JEFE DE MISIÓN" || FE == "OFICIAL" || FE== "JEFE DE MISIÓN")
+		else if (FE== "JEFE DE MISIÓN" || FE == "OFICIAL")
 		{
 				if (eve.nombreGafeteOtros == undefined || eve.nombreGafeteOtros == "")
 						content = fs.readFileSync(produccion+"sinDefinir.docx", "binary");
@@ -521,6 +520,7 @@ Meteor.methods({
 						
 				var meteor_root = require('fs').realpathSync( process.cwd() + '/../' );
 				//var produccion = meteor_root+"/web.browser/app/archivos/";
+				//
 				var produccion = "/home/isde/archivos/";
 				
 

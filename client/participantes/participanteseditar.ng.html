@@ -230,21 +230,45 @@
 															<label>CURP * (máximo 1MB)</label>
 															<div>
 																<input type="file" id="fileInputCurp" accept="application/pdf, image/jpeg">
-																<input type="button" class="btn btn-primary" ng-click="pe.download(pe.participante.curpImagen,1)" ng-if="pe.participante.curpImagen" value="descargar" />	
+<!-- 																<input type="button" class="btn btn-primary" ng-click="pe.download(pe.participante.curpImagen,1)" ng-if="pe.participante.curpImagen" value="descargar" /> -->	
+<!--
+																<a class="btn btn-primary" href="javascript:void(0);"  ng-if="pe.participante.curpImagen != 's/a'" ng-click="pe.modalDoc(pe.participante.curpImagen)">
+																	<i class="fa fa-eye"></i> Ver
+																</a>
+-->
+																<a class="btn btn-primary" href="javascript:void(0);" ng-if="pe.participante.curpImagen != 's/a'" ng-click="pe.download(pe.participante.curpImagen,1)">
+																	<i class="fa fa-download"></i> Descargar
+																</a>	
 															</div>
 														</div>
 														<div class="col-sm-4">
 															<label>Acta de Nacimiento * (máximo 1MB)</label>
 															<div>
 																<input type="file" id="fileInputActa" accept="application/pdf, image/jpeg">
-																<input type="button" class="btn btn-primary" ng-click="pe.download(pe.participante.actaNacimiento,2)" ng-if="pe.participante.actaNacimiento" value="descargar" />
+<!-- 																<input type="button" class="btn btn-primary" ng-click="pe.download(pe.participante.actaNacimiento,2)" ng-if="pe.participante.actaNacimiento" value="descargar" /> -->
+<!--
+																<a class="btn btn-primary" href="javascript:void(0);"  ng-if="pe.participante.actaNacimiento != 's/a'"  ng-click="pe.modalDoc(pe.participante.actaNacimiento)">
+																	<i class="fa fa-eye"></i> Ver
+																</a>
+-->
+																<a class="btn btn-primary" href="javascript:void(0);" ng-if="pe.participante.actaNacimiento != 's/a'" ng-click="pe.download(pe.participante.actaNacimiento,2)">
+																	<i class="fa fa-download"></i> Descargar
+																</a>
 															</div>
 														</div>
 														<div class="col-sm-4">
 															<label>Identificación Oficial * (máximo 1MB)</label>
 															<div>
 																<input type="file" id="fileInputIdentificacion" accept="application/pdf, image/jpeg">
-																<input type="button" class="btn btn-primary" ng-click="pe.download(pe.participante.identificacion,3)" ng-if="pe.participante.identificacion" value="descargar" />
+<!-- 																<input type="button" class="btn btn-primary" ng-click="pe.download(pe.participante.identificacion,3)" ng-if="pe.participante.identificacion" value="descargar" /> -->				
+<!--
+																<a class="btn btn-primary" href="javascript:void(0);"  ng-if="pe.participante.identificacion != 's/a'"  ng-click="pe.modalDoc(pe.participante.identificacion)">
+																	<i class="fa fa-eye"></i> Ver
+																</a>
+-->
+																<a class="btn btn-primary" href="javascript:void(0);" ng-if="pe.participante.identificacion != 's/a'" ng-click="pe.download(pe.participante.identificacion,3)">
+																	<i class="fa fa-download"></i> Descargar
+																</a>
 															</div>
 														</div>								
 											    </div>
@@ -290,6 +314,14 @@
 			</div>
 		</div>
 	</div>
+</div>
+
+<div id="modaldoc" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div id="imagenDiv" class="modal-content">
+
+	    </div>
+	  </div>
 </div>
 
 <script>

@@ -22,7 +22,18 @@ Meteor.publish("participantesCred",function(params){
 	  																						}});
 });
 
-
+Meteor.publish("buscarPorNombre",function(options){
+	if (options != undefined)
+			if(options.where.nombreCompleto.length > 0){
+					let selector = {
+						municipio_id: options.where.municipio_id,
+				  	nombreCompleto: { '$regex' : '.*' + options.where.nombreCompleto || '' + '.*', '$options' : 'i' }
+				  }
+				  				
+					return Participantes.find(selector, { fields: {nombreCompleto: 1, curp: 1 }}, options.options);
+			}
+			
+});
 
 Meteor.publish("buscarNombre",function(options){
 

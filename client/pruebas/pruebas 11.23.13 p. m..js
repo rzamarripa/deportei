@@ -47,29 +47,29 @@ function PruebasCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
   
   this.helpers({
 	  eventos : () => {
-		  return Eventos.find();
+		  return Eventos.find({}, {sort: {fechainicio:-1}});
 	  },
 	  deportesBuscar : () => {
-		  return Deportes.find({evento_id: this.getReactively('buscar.buscarEvento_id')? this.getReactively('buscar.buscarEvento_id'):""});
+		  return Deportes.find({evento_id: this.getReactively('buscar.buscarEvento_id')? this.getReactively('buscar.buscarEvento_id'):""},{sort: {nombre:1}});
 	  },
 	  deportes : () => {
-		  return Deportes.find({evento_id: this.getReactively('prueba.evento_id')? this.getReactively('prueba.evento_id'):""});
+		  return Deportes.find({evento_id: this.getReactively('prueba.evento_id')? this.getReactively('prueba.evento_id'):""},{sort: {nombre:1}});
 	  },
 	  categoriasBuscar : () => {
 		  return Categorias.find({evento_id:  this.getReactively('buscar.buscarEvento_id')? this.getReactively('buscar.buscarEvento_id'):"" 
 						 									,deporte_id: this.getReactively('buscar.buscarDeporte_id')? this.getReactively('buscar.buscarDeporte_id'):""
-		  });
+		  },{sort: {nombre:1}});
 	  },
 	  categorias : () => {
 		  return Categorias.find({evento_id:  this.getReactively('prueba.evento_id')? this.getReactively('prueba.evento_id'):"" 
 						 									,deporte_id: this.getReactively('prueba.deporte_id')? this.getReactively('prueba.deporte_id'):""
-		  });
+		  },{sort: {nombre:1}});
 	  },
 	  pruebas : () => {
-		  return Pruebas.find();
+		  return Pruebas.find({},{sort: {nombre:1}});
 	  },
 	  ramas : () => {
-		  return Ramas.find();
+		  return Ramas.find({},{sort: {nombre:1}});
 	  },
   });
   	  

@@ -12,7 +12,7 @@ function RamasCtrl($scope, $meteor, $reactive, $state, toastr) {
   
   this.helpers({
 		ramas : () => {
-		  return Ramas.find();
+		  return Ramas.find({}, {sort: {nombre:1}});
 	  }
   });
   	  

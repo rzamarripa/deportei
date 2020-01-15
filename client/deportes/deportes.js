@@ -17,10 +17,10 @@ function DeportesCtrl($scope, $meteor, $reactive, $state, toastr) {
   
   this.helpers({
 		deportes : () => {
-		  return Deportes.find();
+		  return Deportes.find({}, {sort: {nombre:1}});
 	  },
 	  eventos : () => {
-		  return Eventos.find();
+		  return Eventos.find({}, {sort: {fechainicio:-1}});
 	  },
   });
   	  

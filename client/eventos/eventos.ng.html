@@ -94,8 +94,8 @@
 			<tbody>
 		    <tr ng-repeat="evento in eve.eventos">
 			    <td>{{evento.nombre}} </td>
-			    <td>{{evento.fechainicio.getUTCDate() +"/"+ (evento.fechainicio.getUTCMonth()+1) +"/"+ evento.fechainicio.getUTCFullYear()}} </td>
-			    <td>{{evento.fechafin.getUTCDate() +"/"+ (evento.fechafin.getUTCMonth()+1) +"/"+ evento.fechafin.getUTCFullYear()}} </td>
+			    <td>{{evento.fechainicio | date: "dd-MM-yyyy"}} </td>
+			    <td>{{evento.fechafin | date: "dd-MM-yyyy"}} </td>
 			    <td>
 				    <div class="text-center">
 				    	<span ng-if="evento.estatus" class="label label-success">
@@ -109,7 +109,7 @@
 			    <td>
 				    <div class="text-center">
 					    <div class="btn-group">
-							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							  <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							    <span class="caret"></span>
 							    <span class="sr-only">Toggle Dropdown</span>
 							  </button>
