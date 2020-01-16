@@ -2,27 +2,28 @@
 	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
 		<h1 class="alge-title txt-color-blueDark">
 			<i class="fa fa-list fa-fw "></i>
-				Participantes &gt; Buscar
+			Participantes &gt; Buscar
 		</h1>
 	</div>
 </div>
 <br>
-<div class="well">	    
+<div class="well">
 	<div class="row">
 		<div class="col-sm-3" ng-if="currentUser.roles[0] == 'admin'">
-			<label >Municipio</label>
-			<select name="municipio" class="form-control select2" placeholder="Seleccione" ng-model="lp.buscar.municipio_id">
-					<option  value="{{municipio._id}}" ng-repeat="municipio in lp.municipios">
-						{{municipio.nombre}}
-					</option>
+			<label>Municipio</label>
+			<select name="municipio" class="form-control select2" placeholder="Seleccione"
+				ng-model="lp.buscar.municipio_id">
+				<option value="{{municipio._id}}" ng-repeat="municipio in lp.municipios">
+					{{municipio.nombre}}
+				</option>
 			</select>
 		</div>
 		<div class="col-sm-3">
-			<label >Evento</label>
+			<label>Evento</label>
 			<select name="evento" class="form-control select2" placeholder="Seleccione" ng-model="lp.buscar.evento_id">
-					<option  value="{{evento._id}}" ng-repeat="evento in lp.eventos">
-						{{evento.nombre}}
-					</option>
+				<option value="{{evento._id}}" ng-repeat="evento in lp.eventos">
+					{{evento.nombre}}
+				</option>
 			</select>
 		</div>
 		<!--
@@ -52,7 +53,7 @@
 		</div>
 		-->
 	</div>
-</div>	
+</div>
 <div class="row">
 	<div class="col-sm-12">
 		<div class="input-group">
@@ -69,18 +70,22 @@
 	<div class="superbox col-sm-12">
 		<div class="superbox-list" ng-repeat="participante in lp.participantes">
 			<div class="img-box" style="margin:20px;">
-				<img ng-src="{{lp.tieneFoto(participante.sexo, participante.foto)}}" style="width: 60px; height: 60px" data-img="img/superbox/superbox-full-1.jpg" alt="{{participante.nombreCompleto}}" title="{{participante.nombreCompleto" class="superbox-img">
+				<img ng-src="{{lp.tieneFoto(participante.sexo, participante.foto)}}" style="width: 60px; height: 60px"
+					data-img="img/superbox/superbox-full-1.jpg" alt="{{participante.nombreCompleto}}" title="{{participante.nombreCompleto" class="superbox-img">
 				<ul class="text-center" style="margin-left: -20px;width: 5px; height: 5px;">
-	        <a href="/participanteseditar/{{participante._id}}"><li><i class="fa fa-pencil"></i></li></a>
-	      </ul>
-	      <ul class="text-center" style="margin-left: 30px;width: 5px; height: 5px;">
-	        <a href="#" ng-click="lp.eliminar(participante._id)"><li><i class="fa fa-eraser"></i></li></a>
-	      </ul>
+	        <a href="/participanteseditar/{{participante._id}}">
+				<li><i class="fa fa-pencil"></i></li></a>
+				</ul>
+				<ul class="text-center" style="margin-left: 30px;width: 5px; height: 5px;">
+					<a href="#" ng-click="lp.eliminar(participante._id)">
+						<li><i class="fa fa-eraser"></i></li>
+					</a>
+				</ul>
 			</div>
 			<p class="lead font-xs text-center">{{participante.nombre}}</p>
 			<p class="lead font-xs text-center">{{participante.apellidoPaterno}} {{participante.apellidoMaterno}}</p>
 		</div>
-		
-	</div>	
+
+	</div>
 	<div class="superbox-show" style="height:300px; display: none"></div>
 </div>

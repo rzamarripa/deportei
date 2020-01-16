@@ -741,13 +741,16 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 	}
 
 	this.ValidaCurpParticipante = function (curp) {
-
+		//console.log(curp);
+		loading(true);
 		Meteor.call('getParticipanteCurp', curp, function (error, response) {
 			if (error) {
 				console.log('ERROR :', error);
+				loading(false);
 				return;
 			} else {
 				if (response) {
+
 					toastr.info('El Participante ya se encuentra en la base de datos se cargara sus datos de Curp, Acta de Nacimiento e Identificación');
 					rc.participante = response;
 
@@ -761,7 +764,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 					img.height = 200;
 
 					fileDisplayArea1.appendChild(img);
-
+					loading(false);
 				}
 			}
 		});
@@ -1022,5 +1025,51 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 		return e;
 	}
 
+	this.modalDoc = function (img) {
+		var imagen = '<img class="img-responsive" src="' + img + '" style="margin:auto;">';
+		$('#imagenDiv').empty().append(imagen);
+		$("#modaldoc").modal('show');
+	};
+
+	this.validaimagen = function (archivo) {
+
+		return false;
+
+	};
+
+	this.download = function (archivo, op) {
+		//console.log(archivo);
+		//console.log(archivo.indexOf("image"));
+		if (archivo.indexOf("application") > 0) {
+
+			var pdf = 'data:application/octet-stream;base64,';
+			var d = archivo.replace('data:application/pdf;base64,', '');
+			var dlnk = document.getElementById('dwnldLnk');
+			if (op == 1)
+				dlnk.download = "curp.pdf";
+			else if (op == 2)
+				dlnk.download = "AN.pdf";
+			else if (op == 3)
+				dlnk.download = "Ide.pdf";
+			dlnk.href = pdf + d;
+			dlnk.click();
+		} else if (archivo.indexOf("image") > 0) {
+
+			var jpeg = 'data:image/jpeg;base64,';
+			var d = archivo.replace('data:image/jpeg;base64,', '');
+			var dlnk = document.getElementById('dwnldLnk');
+			if (op == 1)
+				dlnk.download = "curp.jpeg";
+			else if (op == 2)
+				dlnk.download = "AN.jpeg";
+			else if (op == 3)
+				dlnk.download = "Ide.jpeg";
+			dlnk.href = jpeg + d;
+			dlnk.click();
+		}
+		else {
+			console.log("no entro")
+		}
+	};
 
 };

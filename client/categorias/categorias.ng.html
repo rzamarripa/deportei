@@ -1,0 +1,167 @@
+<h2>Categorias</h2>
+<form name="form" class="form-horizontal" role="form" novalidate>
+	<div class="row">
+		<div class="col-sm-12">
+			<a class="btn btn-{{cat.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse"
+				href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="nuevocategoria"
+				ng-click="cat.nuevoCategoria()">
+				{{cat.nuevo == true ? 'Nuevo' : 'Cancelar'}}
+			</a>
+			<div class="collapse" id="collapseExample">
+				<div class="well">
+					<div class="row">
+						<div class="col-sm-4" valida>
+							<label>Nombre *</label>
+							<input name="nombre" type="text" class="form-control" ng-model="cat.categoria.nombre"
+								required>
+						</div>
+						<div class="col-sm-2" valida>
+							<label>Año Inicio *</label>
+							<input name="anioinicio" type="number" max="9999" min="1000" class="form-control"
+								ng-model="cat.categoria.anioinicio" required>
+						</div>
+						<div class="col-sm-2" valida>
+							<label>Año Fin *</label>
+							<input name="aniofin" type="number" max="9999" min="1000" class="form-control"
+								ng-model="cat.categoria.aniofin" required>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-4" valida>
+							<label>Evento</label>
+							<select name="evento" class="form-control select2" placeholder="Seleccione"
+								ng-model="cat.categoria.evento_id" ng-change="cat.obtenerDeportes()" required>
+								<option value="{{evento._id}}" ng-repeat="evento in cat.eventos">
+									{{evento.nombre}}
+								</option>
+							</select>
+						</div>
+						<div class="col-sm-4" valida>
+							<label>Deporte</label>
+							<select name="deporte" class="form-control select2" placeholder="Seleccione"
+								ng-model="cat.categoria.deporte_id" required>
+								<option value="{{deporte._id}}" ng-repeat="deporte in cat.deportes">
+									{{deporte.nombre}}
+								</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<h3>Registros</h3>
+						<div class="col-sm-2" valida>
+							<label>Permitidos *</label>
+							<input name="registospermitidos" type="number" max="999" min="0" class="form-control"
+								ng-model="cat.categoria.registrospermitidos" required>
+						</div>
+						<div class="col-sm-2" valida>
+							<label>Sustituciones *</label>
+							<input name="registrossustituciones" type="number" max="999" min="0" class="form-control"
+								ng-model="cat.categoria.registrossustituciones" required>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" value="Guardar" ng-click="cat.guardar(cat.categoria,form)"
+							class="btn btn-primary" ng-show="cat.action" valida-form formulario="form">
+						<input type="submit" ng-click="cat.actualizar(cat.categoria,form)" value="Actualizar"
+							class="btn btn-primary" ng-show="!cat.action" valida-form formulario="form">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<div class="well">
+	<div class="row">
+		<div class="col-md-4">
+			<label>Buscar</label>
+			<div class="icon-addon addon-md">
+				<input type="text" class="form-control" placeholder="Categoria" ng-model="query">
+				<label for="buscar" class="glyphicon glyphicon-search" rel="tooltip" title=""
+					data-original-title="Buscar"></label>
+			</div>
+		</div>
+		<div class="col-sm-4">
+			<label>Evento</label>
+			<select name="buscarevento" class="form-control select2" placeholder="Seleccione"
+				ng-model="cat.buscar.buscarEvento_id">
+				<option value="{{evento._id}}" ng-repeat="evento in cat.eventos">
+					{{evento.nombre}}
+				</option>
+			</select>
+		</div>
+		<div class="col-sm-4">
+			<label>Deporte</label>
+			<select name="buscardeporte" class="form-control select2" placeholder="Seleccione"
+				ng-model="cat.buscar.buscarDeporte_id">
+				<option value="{{deporte._id}}" ng-repeat="deporte in cat.deportesBuscar">
+					{{deporte.nombre}}
+				</option>
+			</select>
+		</div>
+	</div>
+</div>
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th width="20%">
+						<div class="text-center">Nombre</div>
+					</th>
+					<th width="10%">
+						<div class="text-center">
+							Estatus
+						</div>
+					</th>
+					<th width="10%">
+						<div class="text-center">
+							Acciones
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="categoria in cat.categorias | filter:query">
+					<td><a
+							href="/pruebas/{{categoria._id}}/{{categoria.evento_id}}/{{categoria.deporte_id}}/{{categoria.categoria_id}}/{{categoria.rama_id}}">{{categoria.nombre}}
+						</a></td>
+					<td>
+						<div class="text-center">
+							<span ng-if="categoria.estatus" class="label label-success">
+								Activo
+							</span>
+							<span ng-if="!categoria.estatus" class="label label-danger">
+								Inactivo
+							</span>
+						</div>
+					</td>
+					<td>
+						<div class="text-center">
+							<div class="btn-group">
+								<button type="button" class="btn btn-xs btn-primary dropdown-toggle"
+									data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<span class="caret"></span>
+									<span class="sr-only">Toggle Dropdown</span>
+								</button>
+								<ul class="dropdown-menu text-left dropdown-menu-right">
+									<li><a href="#" ng-click="cat.editar(categoria._id)"><i class="fa fa-pencil"></i>
+											Editar</a></li>
+									<li><a href="#" ng-click="cat.cambiarEstatus(categoria._id)">
+											<i class="fa fa-{{categoria.estatus ? 'trash' : 'check' }}"></i>
+											{{categoria.estatus ? "Desactivar" : "Activar" }}
+										</a>
+									</li>
+									<!--<li><a href="#" ng-click="cat.eliminar(categoria._id)"><i class="fa fa-eraser"></i> Eliminar</a></li>-->
+								</ul>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

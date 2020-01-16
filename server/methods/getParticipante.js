@@ -5,6 +5,7 @@ Meteor.methods({
 	},
 	getParticipanteCurp: function (curp) {
 		var p = Participantes.findOne({ curp: curp });
+		//console.log(p);
 		return p;
 	},
 	updateParticipante: function (participante, participanteEventos) {
