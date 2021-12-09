@@ -1,0 +1,95 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+		<h1 class="alge-title txt-color-blueDark">
+			<i class="fa fa-list fa-fw "></i>
+				Participantes
+		</h1>
+	</div>
+</div>
+<br>
+<div class="well">	    
+	<div class="row">
+			<div class="col-sm-6">					
+					<input class="form-control" type="text" placeholder="Buscar... " ng-model="obj.buscar.nombre" capitalize>
+			</div>
+	</div>
+</div>	
+
+<div class="well">	    
+	<div class="row">
+		<div class="col-sm-12">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th width="20%"><div class="text-center">Nombre</div></th>
+						<th width="10%">
+							<div class="text-center">
+								Municipio
+							</div>
+						</th>
+						<th width="10%">
+							<div class="text-center">
+								Acción
+							</div>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+			    <tr ng-repeat="participante in obj.participantes">
+				    <td>{{participante.nombreCompleto}}</td>
+				    <td>{{participante.municipio}}</td>
+				    <td>
+					    <div class="text-center">
+						    <div class="btn-group">
+								  <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								    <span class="caret"></span>
+								    <span class="sr-only">Toggle Dropdown</span>
+								  </button>
+								  <ul class="dropdown-menu text-left dropdown-menu-right">
+								    <li><a href="#" ng-click="obj.mostrarModal(participante)"><i class="fa fa-refresh"></i> Cambiar Municipio</a></li>
+								  </ul>
+								</div>
+					    </div>				    
+				    </td>
+			    </tr>
+				</tbody>
+			</table>
+		</div>
+	</div> 
+</div>	
+
+<div id="modalMunicipio" class="modal fade bs-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+	    	<div class="modal-header">
+						<h4 class="modal-title">Cambiar Municipio</h4>			        
+		    </div>
+				<div class="modal-body">
+							<form name="form2" novalidate>
+									<div class="well">	    
+								    <div class="row">
+												<div class="col-sm-4">
+													<label >Municipio</label>
+													<select name="municipio" class="form-control select2" placeholder="Seleccione" ng-model="obj.objeto.municipio_id">
+														<option  value="{{objeto._id}}" ng-repeat="objeto in obj.municipios">
+															{{objeto.nombre}}
+														</option>
+													</select>
+											  </div>
+								    </div>
+									</div>
+							</form>
+	      </div>	
+	      <div class="modal-footer">
+		        <button type="button" ng-click = "obj.actualizar(obj.objeto)" class="btn btn-success" > Actualizar</button>
+		        <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+		     </div>
+     </div>
+     
+  </div>
+</div>
+
+
+
+
+

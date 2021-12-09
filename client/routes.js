@@ -82,7 +82,7 @@ angular.module('insude').config(['$injector', function ($injector) {
       templateUrl: 'client/home/home.ng.html',
       controller: 'HomeCtrl as ho',
       ncyBreadcrumb: {
-        label: "Hola"
+        label: "Home"
       },
       resolve: {
         "currentUser": ["$meteor", function ($meteor) {
@@ -191,9 +191,29 @@ angular.module('insude').config(['$injector', function ($injector) {
       }
     })
     .state('root.listarparticipantes', {
-      url: '/participantes',
+      url: '/listarparticipantes',
       templateUrl: 'client/participantes/listarparticipantes.ng.html',
       controller: 'ListarParticipantesCtrl as lp',
+      resolve: {
+        "currentUser": ["$meteor", function ($meteor) {
+          return $meteor.requireUser();
+        }]
+      }
+    })
+    .state('root.participantePerfil', {
+      url: '/participantesPerfil/:id',
+      templateUrl: 'client/participantes/participantePerfil.html',
+      controller: 'ParticipantePerfilCtrl as obj',
+      resolve: {
+        "currentUser": ["$meteor", function ($meteor) {
+          return $meteor.requireUser();
+        }]
+      }
+    })
+    .state('root.participantes', {
+      url: '/participantes',
+      templateUrl: 'client/participantes/participantes.html',
+      controller: 'ParticipantesCtrl as obj',
       resolve: {
         "currentUser": ["$meteor", function ($meteor) {
           return $meteor.requireUser();
@@ -274,6 +294,16 @@ angular.module('insude').config(['$injector', function ($injector) {
       url: '/listado',
       templateUrl: 'client/reportes/listado.ng.html',
       controller: 'listadoCtrl as lis',
+      resolve: {
+        "currentUser": ["$meteor", function ($meteor) {
+          return $meteor.requireUser();
+        }]
+      }
+    })
+    .state('root.participantesMunicipio', {
+      url: '/participantesMunicipio',
+      templateUrl: 'client/participantes/participantesMun.html',
+      controller: 'ParticipantesMunCtrl as obj',
       resolve: {
         "currentUser": ["$meteor", function ($meteor) {
           return $meteor.requireUser();

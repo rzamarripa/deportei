@@ -1,0 +1,266 @@
+<div class="col-sm-12 col-md-12 col-lg-12">
+	<div class="well well-light well-sm no-margin no-padding">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="row">
+					<div class="col-sm-2">
+						<img src="{{obj.objeto.foto}}" style="max-width:200px;" alt="demo user">
+					</div>
+					<div class="col-sm-9">
+						<div class="row">
+							<div class="btn-group" style="margin: 5px;; margin-right: 18px">
+								<a class="btn txt-color-white bg-color-teal btn-sm" href="javascript:void(0);"> Curp
+								</a>
+								<a class="btn txt-color-white bg-color-teal btn-sm dropdown-toggle"
+									data-toggle="dropdown" href="javascript:void(0);" aria-expanded="true"><span
+										class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li>
+										<a href="javascript:void(0);" ng-click="obj.download(1)"> Descargar </a>
+									</li>
+									<li>
+										<a href="javascript:void(0);" ng-click="obj.abrirModal(1)">Actualizar</a>
+									</li>
+								</ul>
+							</div>
+							<div class="btn-group" style="margin: 5px;; margin-right: 18px">
+								<a class="btn txt-color-white bg-color-teal btn-sm" href="javascript:void(0);"> Acta
+									Nacimiento
+								</a>
+								<a class="btn txt-color-white bg-color-teal btn-sm dropdown-toggle"
+									data-toggle="dropdown" href="javascript:void(0);" aria-expanded="true"><span
+										class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li>
+										<a href="javascript:void(0);" ng-click="obj.download(2)"> Descargar </a>
+									</li>
+									<li>
+										<a href="javascript:void(0);" ng-click="obj.abrirModal(2)">Actualizar</a>
+									</li>
+								</ul>
+							</div>
+							<div class="btn-group" style="margin: 5px;; margin-right: 18px">
+								<a class="btn txt-color-white bg-color-teal btn-sm" href="javascript:void(0);">
+									Credencial
+								</a>
+								<a class="btn txt-color-white bg-color-teal btn-sm dropdown-toggle"
+									data-toggle="dropdown" href="javascript:void(0);" aria-expanded="true"><span
+										class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li>
+										<a href="javascript:void(0);" ng-click="obj.download(3)"> Descargar </a>
+									</li>
+									<li>
+										<a href="javascript:void(0);" ng-click="obj.abrirModal(3)">Actualizar</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+
+					</div>
+					<div class="col-sm-6">
+						<h1>{{obj.objeto.nombre}} <span class="semi-bold">{{obj.objeto.apellidoPaterno}}
+								{{obj.objeto.apellidoMaterno}} </span>
+							<br>
+							<small> CURP - {{obj.objeto.curp}}</small></h1>
+						<ul class="list-unstyled">
+							<li>
+								<p class="text-muted">
+									<i class="fa fa-calendar"></i>&nbsp;&nbsp;<span
+										class="txt-color-darken">{{obj.objeto.fechaNacimiento | date: "dd-MM-yyyy"}}</span>
+								</p>
+							</li>
+							<li>
+								<p class="text-muted">
+									<i class="fa fa-graduation-cap"></i>
+									<span class="txt-color-darken">{{obj.objeto.formacionacademica}}</span>
+								</p>
+							</li>
+							<li>
+								<p class="text-muted">
+									<i class="fa fa-child"></i>&nbsp;&nbsp;
+									{{obj.objeto.sexo}}
+								</p>
+							</li>
+						</ul>
+						<br>
+						<p class="font-md">
+							<i>Municipio</i>
+						</p>
+						<p>
+							{{obj.objeto.municipio}}, {{obj.objeto.estado}}
+						</p>
+						<br>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-12">
+				<hr>
+				<div class="padding-10">
+					<ul class="nav nav-tabs tabs-pull-left">
+						<li class="active">
+							<a href="#a1" data-toggle="tab">Eventos</a>
+						</li>
+						<li class="pull-right">
+							<span class="margin-top-10 display-inline"><i class="fa fa-rss text-success"></i>
+								Actividad</span>
+						</li>
+					</ul>
+					<div class="tab-content padding-top-10">
+						<div class="tab-pane fade in active" id="a1">
+							<div class="row">
+								<div class="col-md-12">
+									<table class="table table-bordered">
+										<thead>
+											<tr>
+												<th>Num</th>
+												<th>Evento</th>
+												<th>Función</th>
+												<th>Deporte</th>
+												<th>Categoria</th>
+												<th>Pruebas</th>
+												<th>Rama</th>
+												<!-- <th width="5%">
+													<div class="text-center">Acción</div>
+												</th> -->
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="objeto in obj.eventos">
+												<td>{{$index + 1}}</td>
+												<td>{{objeto.evento}}</td>
+												<td>{{objeto.funcionEspecifica}}</td>
+												<td>{{objeto.deporte}}</td>
+												<td>{{objeto.categoria}}</td>
+												<td>{{objeto.pruebasArreglo}}</td>
+												<td>{{objeto.rama}}</td>
+												<!-- <td>
+													<div class="text-center">
+														<div class="btn-group">
+															<button type="button"
+																class="btn btn-xs btn-primary dropdown-toggle"
+																data-toggle="dropdown" aria-haspopup="true"
+																aria-expanded="false">
+																<span class="caret"></span>
+																<span class="sr-only">Toggle Dropdown</span>
+															</button>
+															<ul class="dropdown-menu dropdown-menu-right text-left">
+																<li><a href="#"
+																		ng-click="obj.asistencias(objeto._id)"><i
+																			class="fa fa-eye"></i> Asistencias</a></li>
+																<li><a href="#" ng-click="obj.crearInforme(objeto)"><i
+																			class="fa fa-file-text-o"></i> Crear
+																		Informe</a></li>
+																<li><a href="#" ng-click="obj.verInforme(objeto)"><i
+																			class="fa fa-list-alt"></i> Listado
+																		Informes</a></li>
+															</ul>
+														</div>
+													</div>
+												</td> -->
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<!-- end row -->
+	</div>
+</div>
+
+<a id='dwnldLnk' style="display:none;" hidden="true"></a>
+
+<!-- Modal Subir Curp -->
+<div id="modalSubirCurp" class="modal fade bs-modal-lg" role="dialog" aria-labelledby="myLargeModalLabel">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Actualizar Curp</h4>
+			</div>
+			<div class="modal-body">
+				<form name="form" novalidate>
+					<div class="row">
+						<div class="col-sm-4">
+							<label>CURP * (máximo 1MB)</label>
+							<div>
+								<input type="file" id="fileInputCurp" accept="application/pdf, image/jpeg">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<input type="submit" ng-click="obj.actualizar(1)" value="Guardar" class="btn btn-primary" valida-form formulario="form">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal Subir Acta -->
+<div id="modalSubirActa" class="modal fade bs-modal-lg" role="dialog" aria-labelledby="myLargeModalLabel">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Actualizar Acta Nacimiento</h4>
+			</div>
+			<div class="modal-body">
+				<form name="form" novalidate>
+					<div class="row">
+						<div class="col-sm-4">
+							<label>Acta Nacimiento * (máximo 1MB)</label>
+							<div>
+								<input type="file" id="fileInputActa" accept="application/pdf, image/jpeg">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<input type="submit" ng-click="obj.actualizar(2)" value="Guardar" class="btn btn-primary" valida-form formulario="form">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal Subir Credencial -->
+<div id="modalSubirCredencial" class="modal fade bs-modal-lg" role="dialog" aria-labelledby="myLargeModalLabel">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Actualizar Credendial</h4>
+			</div>
+			<div class="modal-body">
+				<form name="form" novalidate>
+					<div class="row">
+						<div class="col-sm-4">
+							<label>Credencial * (máximo 1MB)</label>
+							<div>
+								<input type="file" id="fileInputIdentificacion" accept="application/pdf, image/jpeg">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<input type="submit" ng-click="obj.actualizar(3)" value="Guardar" class="btn btn-primary" valida-form formulario="form">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>

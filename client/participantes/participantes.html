@@ -1,0 +1,88 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+		<h1 class="alge-title txt-color-blueDark">
+			<i class="fa fa-list fa-fw "></i>
+			Participantes &gt; Buscar
+		</h1>
+	</div>
+</div>
+<br>
+<div class="well" ng-if="currentUser.roles[0] == 'admin'">
+	<div class="row">
+		<div class="col-sm-3">
+			<label>Municipio</label>
+			<select name="municipio" class="form-control select2" placeholder="Seleccione"
+				ng-model="obj.buscar.municipio_id">
+				<option value="{{municipio._id}}" ng-repeat="municipio in obj.municipios">
+					{{municipio.nombre}}
+				</option>
+			</select>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="input-group">
+			<div class="input-group-btn">
+				<a href="./eventosmostrar" class="btn btn-default btn-primary">
+					<i class="fa fa-plus"></i> Nuevo
+				</a>
+			</div>
+			<input class="form-control" type="text" placeholder="Buscar..." ng-model="obj.buscar.nombre" capitalize>
+		</div>
+	</div>
+</div>
+<!-- <div class="row">
+	<div class="superbox col-sm-12">
+		<div class="superbox-list" ng-repeat="participante in obj.participantes">
+			<div class="img-box" style="margin:20px;">
+				<img ng-src="{{obj.tieneFoto(participante.sexo, participante.foto)}}" style="width: 60px; height: 60px"
+					data-img="img/superbox/superbox-full-1.jpg" alt="{{participante.nombreCompleto}}" title="{{participante.nombreCompleto" class="superbox-img">
+				<ul class="text-center" style="margin-left: -20px;width: 5px; height: 5px;">
+	        <a href="/participanteseditar/{{participante._id}}">
+				<li><i class="fa fa-pencil"></i></li></a>
+				</ul>
+				<ul class="text-center" style="margin-left: 30px;width: 5px; height: 5px;">
+					<a href="#" ng-click="obj.eliminar(participante._id)">
+						<li><i class="fa fa-eraser"></i></li>
+					</a>
+				</ul>
+			</div>
+			<p class="lead font-xs text-center">{{participante.nombre}}</p>
+			<p class="lead font-xs text-center">{{participante.apellidoPaterno}} {{participante.apellidoMaterno}}</p>
+		</div>
+
+	</div>
+	<div class="superbox-show" style="height:300px; display: none"></div>
+</div> -->
+<br>
+<div class="well">
+	<div class="row">
+		<div class="col-sm-12">
+			<table class="table">
+				<thead>
+					<tr>
+						<th width="10%">Foto</th>
+						<th width="20%">Nombre</th>
+						<th width="15%">CURP</th>
+						<th width="10%">Sexo</th>
+						<th width="15%">Fecha Nacimiento</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="participante in obj.participantes">
+						<td>
+							<img src="{{obj.tieneFoto(participante.sexo, participante.foto)}}" alt=""
+								class="img-rounded img-responsive" style="width:60px; height:60px;" />
+						</td>
+						<td><a href="./participantesPerfil/{{participante._id}}">{{participante.nombreCompleto}}</a>
+						<td>{{participante.curp}}</td>
+						</td>
+						<td>{{participante.sexo}}</td>
+						<td>{{participante.fechaNacimiento | date: "dd-MM-yyyy"}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

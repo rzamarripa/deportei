@@ -52,24 +52,25 @@ function listadoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 	});
 
 	this.subscribe('deportes', () => {
+
 		return [{
 			evento_id: this.getReactively('evento.evento_id') ? this.getReactively('evento.evento_id') : ""
-			, estatus: true
 		}]
 	});
 
 	this.subscribe('categorias', () => {
-		return [{
-			evento_id: this.getReactively('evento.evento_id') ? this.getReactively('evento.evento_id') : "",
-			deporte_id: this.getReactively('evento.deporte_id') != undefined ? this.getReactively('evento.deporte_id') : "",
-			estatus: true
-		}]
+
+		if (this.getReactively('evento.evento_id') != undefined) {
+			return [{
+				evento_id: this.getReactively('evento.evento_id') ? this.getReactively('evento.evento_id') : ""
+				//deporte_id: this.getReactively('evento.deporte_id') ? this.getReactively('evento.deporte_id') : ""
+			}]
+		}
 	});
 
 	this.subscribe('pruebas', () => {
 		return [{
-			evento_id: this.getReactively('evento.evento_id') ? this.getReactively('evento.evento_id') : "",
-			estatus: true
+			evento_id: this.getReactively('evento.evento_id') ? this.getReactively('evento.evento_id') : ""
 		}]
 	});
 
@@ -109,12 +110,10 @@ function listadoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 			return;
 		}
 
-
 		var participantesArray = [];
 		participantesArray.push(["NUM", "NOMBRE", "APELLIDO PATERNO", "APELLIDO MATERNO", "FECHA NACIMIENTO", "CURP", "DEPORTE", "CATEGORIA", "RAMA", "MUNICIPIO", "FUNCION ESPECIFICA"]);
 		var con = 1;
 		_.each(rc.participantes, function (participante) {
-
 
 			if (participante.municipio_id != "s/a") {
 				var m = Municipios.findOne(participante.municipio_id);
@@ -137,12 +136,14 @@ function listadoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 			else
 				participante.deporte = "Sin Deporte";
 
+			//console.log(participante._id + " " + participante.nombre);
 			if (participante.categoria_id != "s/a") {
 				var c = Categorias.findOne(participante.categoria_id);
 				participante.categoria = c.nombre;
 			}
 			else
 				participante.categoria = "Sin Categoría";
+
 
 			if (participante.rama_id != "s/a") {
 				var r = Ramas.findOne(participante.rama_id);

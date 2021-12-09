@@ -46,17 +46,30 @@ Meteor.methods({
 		var p = Participantes.findOne({ _id: id });
 		var objeto = {};
 		objeto.curp = p.curp;
-		if (opcion == 1){
+		if (opcion == 1) {
 			objeto.data = p.curpImagen;
 			return objeto;
 		}
-		else if (opcion == 2){
+		else if (opcion == 2) {
 			objeto.data = p.actaNacimiento;
 			return objeto;
 		}
-		else if (opcion == 3){
+		else if (opcion == 3) {
 			objeto.data = p.identificacion;
 			return objeto;
 		}
+	},
+	getActualizaDocumento: function (id, imagen, opcion) {
+
+		if (opcion == 1) {
+			Participantes.update({ _id: id }, { $set: { curpImagen: imagen } });
+		}
+		else if (opcion == 2) {
+			Participantes.update({ _id: id }, { $set: { actaNacimiento: imagen } });
+		}
+		else if (opcion == 3) {
+			Participantes.update({ _id: id }, { $set: { identificacion: imagen } });
+		}
+		return true;
 	},
 });
