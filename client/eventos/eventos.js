@@ -60,7 +60,7 @@ function EventosCtrl($scope, $meteor, $reactive, $state, toastr) {
 	        return;
 	    }
 		 	var idTemp = evento._id;
-			delete evento._id;		
+			delete evento._id;
 			evento.usuarioActualizo = Meteor.userId(); 
 			Eventos.update({_id:idTemp},{$set:evento});
 			toastr.success('Actualizado correctamente.');

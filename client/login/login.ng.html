@@ -1,40 +1,100 @@
-<header id="header" style="height: 80px;">
+<!-- <div id="content" class="container">
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-7 col-lg-8 hidden-xs hidden-sm">
+			<h1 class="txt-color-red login-header-big">Isde</h1>
+			<div class="hero">
+				<span id="logo"> <img src="/img/logoIsde.JPG" alt="Isde" style="width:210px"> </span>
+			</div>
+			<div class="hero">
+				<span id="logo"> <img src="/img/logoSinaloa.svg" alt="Sinaloa" style="width:210px"> </span>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
+			<div class="well no-padding">
+				<form action="index.html" id="login-form" class="smart-form client-form">
+					<header>
+						Inicio de Sesión
+					</header>
+
+					<fieldset>
+
+						<section>
+							<label class="label">Usuario</label>
+							<label class="input"> <i class="icon-append fa fa-user"></i>
+								<input type="text" name="username" ng-model="lc.credentials.username">
+								<b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i> Please enter email
+									address/username</b></label>
+						</section>
+
+						<section>
+							<label class="label">Password</label>
+							<label class="input"> <i class="icon-append fa fa-lock"></i>
+								<input type="password" name="password" ng-model="lc.credentials.password">
+								<b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> Enter your password</b>
+							</label>
+						</section>
+
+					</fieldset>
+					<footer>
+						<button type="submit" ng-click="lc.login()" class="btn btn-primary">
+							Iniciar Sesión
+						</button>
+					</footer>
+				</form>
+
+			</div>
+
+
+
+		</div>
+	</div>
+</div> -->
+
+
+<!-- <header id="header" style="height: 80px;">
 	<div id="logo-group" style="float: right !important">
 		<span id="logo"> <img src="/img/logoSinaloa.svg" alt="Sinaloa"> </span>
 	</div>
 	<div id="logo-group">
 		<span id="logo"> <img src="/img/logoIsde.JPG" alt="Isde" style="height: 48px;"> </span>
 	</div>
-</header>
-<div id="content" class="container">				
+</header> -->
+<div id="content" class="container">
 	<div class="row">
-		<div class="col-lg-4 col-lg-offset-4 col-sm-12">
+		<div class="col-lg-4 col-lg-6 col-sm-6">
+			<div class="hero">
+				<span id="logo"> <img src="/img/logoIsde.JPG" alt="Isde" style="width:210px"> </span>
+			</div>
+			<hr>
+			<div class="hero">
+				<span id="logo"> <img src="/img/logoSinaloa.svg" alt="Sinaloa" style="width:210px"> </span>
+			</div>
+		</div>
+		<div class="col-lg-4 col-lg-4 col-sm-6">
 			<div class="well no-padding">
 				<form id="login-form" class="smart-form client-form" novalidate>
-	        <header>Iniciar Sesión</header>
-	        <fieldset>
-	          <section>
-	            <label for="" class="label">Nombre de Usuario</label>
-	            <label for="" class="input">
-	              <i class="icon-append fa fa-user"></i>
-	              <input type="text" name="username" ng-model="lc.credentials.username">
-	            </label>
-	          </section>	
-	          <section>
-	            <label for="" class="label">Contraseña</label>
-	            <label class="input">
-	              <i class="icon-append fa fa-lock"></i>
-	              <input type="password" name="password" ng-model="lc.credentials.password">
-	            </label>
-	          </section>
-	        </fieldset>	
-	        <footer>
-	          <button class="btn btn-primary" type="submit" ng-click="lc.login()">Iniciar Sesión</button>
-	        </footer>
-	      </form>
-			</div>												
+					<header>Iniciar Sesión</header>
+					<fieldset>
+						<section>
+							<label for="" class="label">Nombre de Usuario</label>
+							<label for="" class="input">
+								<i class="icon-append fa fa-user"></i>
+								<input type="text" name="username" ng-model="lc.credentials.username">
+							</label>
+						</section>
+						<section>
+							<label for="" class="label">Contraseña</label>
+							<label class="input">
+								<i class="icon-append fa fa-lock"></i>
+								<input type="password" name="password" ng-model="lc.credentials.password">
+							</label>
+						</section>
+					</fieldset>
+					<footer>
+						<button class="btn btn-primary" type="submit" ng-click="lc.login()">Iniciar Sesión</button>
+					</footer>
+				</form>
+			</div>
 		</div>
-	</div>		
+	</div>
 </div>
-
-

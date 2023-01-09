@@ -1,0 +1,65 @@
+<nav>
+	<ul data-smart-menu>
+
+		<li data-ui-sref-active="active">
+			<a ui-sref="root.home" tilte="Isde">
+				<i class="fa fa-lg fa-fw fa-home"></i>
+				<span class="menu-item-parent">Inicio</span>
+			</a>
+		</li>
+
+		<!-- <li data-ui-sref-active="active">
+			<a ui-sref="root.eventosmostrar" tilte="Isde">
+				<i class="fa fa-lg fa-fw fa-calendar-o"></i>
+				<span class="menu-item-parent">Eventos</span>
+			</a>
+		</li> -->
+
+		<!-- <li data-ui-sref-active="active">
+			<a ui-sref="root.descargadocumentos" tilte="Isde">
+				<i class="fa fa-lg fa-fw fa-cloud-download"></i>
+				<span class="menu-item-parent">Descarga Doctos</span>
+			</a>
+		</li> -->
+		<!-- <li data-ui-sref-active="active">
+			<a ui-sref="root.listarparticipantes" tilte="Isde">
+				<i class="fa fa-lg fa-fw fa-list"></i>
+				<span class="menu-item-parent">Participantes Evento</span>
+			</a>
+		</li> -->
+		<li data-ui-sref-active="active">
+			<a ui-sref="root.participantes" tilte="Isde">
+				<i class="fa fa-lg fa-fw fa-list"></i>
+				<span class="menu-item-parent">Participantes</span>
+			</a>
+		</li>
+
+		<!-- <li data-ui-sref-active="active">
+			<a ui-sref="root.participantesMunicipio" tilte="Insude" ng-if="currentUser.roles[0] == 'admin'">
+				<i class="fa fa-lg fa-fw fa-users"></i>
+				<span class="menu-item-parent">Cambio Municipio</span>
+			</a>
+		</li> -->
+
+		<li data-ui-sref-active="active">
+			<a ui-sref="root.cedula" tilte="Isde" ng-if="currentUser.roles[0] == 'DelegadoMunicipal'">
+				<i class="fa fa-lg fa-fw fa-book"></i>
+				<span class="menu-item-parent">Cédula</span>
+			</a>
+		</li>
+		<li data-ui-sref-active="active">
+			<a ui-sref="root.listado" tilte="Isde">
+				<i class="fa fa-lg fa-fw fa-table"></i>
+				<span class="menu-item-parent">Listado</span>
+			</a>
+		</li>
+
+		<li data-ui-sref-active="active" ng-if="!currentUser">
+			<a ui-sref="anon.login" tilte="Credito Mio">
+				<i class="fa fa-lg fa-fw fa-sign-in"></i>
+				<span class="menu-item-parent">Iniciar Sesión</span>
+			</a>
+		</li>
+
+	</ul>
+</nav>

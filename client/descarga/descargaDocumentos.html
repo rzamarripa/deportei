@@ -1,0 +1,100 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+		<h1 class="alge-title txt-color-blueDark">
+			<i class="fa fa-list fa-fw "></i>
+			Descarga de Documentos
+		</h1>
+	</div>
+</div>
+<br>
+<div class="well">
+	<div class="row">
+		<div class="col-sm-3">
+			<label>Municipio</label>
+			<select name="municipio" class="form-control select2" placeholder="Seleccione" ng-model="dc.evento.municipio_id">
+				<option value="{{municipio._id}}" ng-repeat="municipio in dc.municipios">
+					{{municipio.nombre}}
+				</option>
+			</select>
+		</div>
+		<div class="col-sm-3" valida>
+			<label>Evento</label>
+			<select name="evento" class="form-control select2" placeholder="Seleccione" ng-model="dc.evento.evento_id"
+				ng-change="dc.seleccionaEvento(dc.evento.evento_id)" required>
+				<option value="{{evento._id}}" ng-repeat="evento in dc.eventos">
+					{{evento.nombre}}
+				</option>
+			</select>
+		</div>
+		<div class="col-sm-3">
+			<label>Deportes</label>
+			<select name="municipio" class="form-control select2" placeholder="Seleccione" ng-model="dc.evento.deporte_id"
+				ng-change="dc.seleccionaDeporte(dc.evento.evento_id, dc.evento.deporte_id)">
+				<option value="{{deporte._id}}" ng-repeat="deporte in dc.deportes">
+					{{deporte.nombre}}
+				</option>
+			</select>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-3">
+			<label>Categoria</label>
+			<select name="municipio" class="form-control select2" placeholder="Seleccione" ng-model="dc.evento.categoria_id">
+				<option value="{{categoria._id}}" ng-repeat="categoria in dc.categorias">
+					{{categoria.nombre}}
+				</option>
+			</select>
+		</div>
+
+		<div class="col-sm-3">
+			<label>Rama</label>
+			<select name="rama" class="form-control select2" placeholder="Seleccione" ng-model="dc.evento.rama_id">
+				<option value="{{rama._id}}" ng-repeat="rama in dc.ramas">
+					{{rama.nombre}}
+				</option>
+			</select>
+		</div>
+
+	</div>
+	<br />
+	<div class="row">
+		<div class="col-sm-4">
+			<input id="buscar" class="btn btn-primary" type="button" ng-click="dc.buscar()" value="Buscar" />
+		</div>
+	</div>
+</div>
+
+<table class="table" width="600" align="center" bs-table>
+	<thead>
+		<tr>
+			<th>Foto</th>
+			<th>CURP</th>
+			<th>Nombre</th>
+			<th>Sexo</th>
+			<th>Fecha Nacimiento</th>
+			<th>Documentos</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="participante in dc.arreglo">
+			<td>
+				<img src="{{dc.tieneFoto(participante.sexo, participante.foto)}}" alt="" class="img-rounded img-responsive"
+					style="width:60px; height:60px;" />
+			</td>
+			<td>{{participante.curp}}</td>
+			<td>{{participante.nombre}} {{participante.apellidoPaterno}} {{participante.apellidoMaterno}}</td>
+			<td>{{participante.sexo}}</td>
+			<td>{{participante.fechaNacimiento | date: "dd/MM/yyyy"}}</td>
+			<td>
+				<input type="button" class="btn btn-primary" ng-click="dc.descargar(participante.curpImagen,1)" value="Curp" />
+				<input type="button" class="btn btn-primary" ng-click="dc.descargar(participante.actaNacimiento,2)"
+					value="Acta Nac." />
+				<input type="button" class="btn btn-primary" ng-click="dc.descargar(participante.identificacion,3)"
+					value="Identificación" />
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<a id='dwnldLnk' style="display:none;" hidden="true"></a>
+<!-- <a href="#" ng-click="dc.download('')" title='o ficheirinho de tostas.pdf'>clica aqui</a>-->

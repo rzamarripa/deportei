@@ -60,6 +60,11 @@ angular.module('insude').config(['$injector', function ($injector) {
           );
         }]
       }
+    })
+    .state('anon.noUser', {
+      url: '/noUser',
+      templateUrl: 'client/noLogin/_noUser.html',
+      controllerAs: 'lc'
     });
 
   /***************************
@@ -69,7 +74,7 @@ angular.module('insude').config(['$injector', function ($injector) {
     .state('root', {
       url: '',
       abstract: true,
-      templateUrl: 'client/layouts/root.ng.html',
+      templateUrl: 'client/layouts/root.html',
       controller: 'RootCtrl as ro',
       resolve: {
         "currentUser": ["$meteor", function ($meteor) {
@@ -79,7 +84,7 @@ angular.module('insude').config(['$injector', function ($injector) {
     })
     .state('root.home', {
       url: '/',
-      templateUrl: 'client/home/home.ng.html',
+      templateUrl: 'client/home/home.html',
       controller: 'HomeCtrl as ho',
       ncyBreadcrumb: {
         label: "Home"
@@ -92,7 +97,7 @@ angular.module('insude').config(['$injector', function ($injector) {
     })
     .state('root.usuarios', {
       url: '/usuarios',
-      templateUrl: 'client/usuarios/usuarios.ng.html',
+      templateUrl: 'client/usuarios/usuarios.html',
       controller: 'UsuariosCtrl as us',
       resolve: {
         "currentUser": ["$meteor", function ($meteor) {
@@ -102,7 +107,7 @@ angular.module('insude').config(['$injector', function ($injector) {
     })
     .state('root.municipios', {
       url: '/municipios',
-      templateUrl: 'client/municipios/municipios.ng.html',
+      templateUrl: 'client/municipios/municipios.html',
       controller: 'MunicipiosCtrl as mun',
       resolve: {
         "currentUser": ["$meteor", function ($meteor) {
@@ -112,7 +117,7 @@ angular.module('insude').config(['$injector', function ($injector) {
     })
     .state('root.eventos', {
       url: '/eventos',
-      templateUrl: 'client/eventos/eventos.ng.html',
+      templateUrl: 'client/eventos/eventos.html',
       controller: 'EventosCtrl as eve',
       resolve: {
         "currentUser": ["$meteor", function ($meteor) {
@@ -122,7 +127,7 @@ angular.module('insude').config(['$injector', function ($injector) {
     })
     .state('root.deportes', {
       url: '/deportes',
-      templateUrl: 'client/deportes/deportes.ng.html',
+      templateUrl: 'client/deportes/deportes.html',
       controller: 'DeportesCtrl as dep',
       resolve: {
         "currentUser": ["$meteor", function ($meteor) {
@@ -132,7 +137,7 @@ angular.module('insude').config(['$injector', function ($injector) {
     })
     .state('root.categorias', {
       url: '/categorias',
-      templateUrl: 'client/categorias/categorias.ng.html',
+      templateUrl: 'client/categorias/categorias.html',
       controller: 'CategoriasCtrl as cat',
       resolve: {
         "currentUser": ["$meteor", function ($meteor) {
@@ -142,7 +147,7 @@ angular.module('insude').config(['$injector', function ($injector) {
     })
     .state('root.pruebas', {
       url: '/pruebas/:id/:evento_id/:deporte_id/:categoria_id/:rama_id',
-      templateUrl: 'client/pruebas/pruebas.ng.html',
+      templateUrl: 'client/pruebas/pruebas.html',
       controller: 'PruebasCtrl as pru',
       resolve: {
         "currentUser": ["$meteor", function ($meteor) {
@@ -152,7 +157,7 @@ angular.module('insude').config(['$injector', function ($injector) {
     })
     .state('root.ramas', {
       url: '/ramas',
-      templateUrl: 'client/ramas/ramas.ng.html',
+      templateUrl: 'client/ramas/ramas.html',
       controller: 'RamasCtrl as ram',
       resolve: {
         "currentUser": ["$meteor", function ($meteor) {
@@ -203,7 +208,7 @@ angular.module('insude').config(['$injector', function ($injector) {
     .state('root.participantePerfil', {
       url: '/participantesPerfil/:id',
       templateUrl: 'client/participantes/participantePerfil.html',
-      controller: 'ParticipantePerfilCtrl as obj',
+      controller: 'ParticipantePerfilCtrl as c',
       resolve: {
         "currentUser": ["$meteor", function ($meteor) {
           return $meteor.requireUser();
@@ -232,7 +237,7 @@ angular.module('insude').config(['$injector', function ($injector) {
     })
     .state('root.cedula', {
       url: '/cedula',
-      templateUrl: 'client/reportes/cedula.ng.html',
+      templateUrl: 'client/reportes/cedula.html',
       controller: 'CedulaCtrl as ced',
       resolve: {
         "currentUser": ["$meteor", function ($meteor) {
@@ -282,7 +287,7 @@ angular.module('insude').config(['$injector', function ($injector) {
     })
     .state('root.descargadocumentos', {
       url: '/descargadocumentos',
-      templateUrl: 'client/descarga/descargaDocumentos.ng.html',
+      templateUrl: 'client/descarga/descargaDocumentos.html',
       controller: 'descargaDocumentosCtrl as dc',
       resolve: {
         "currentUser": ["$meteor", function ($meteor) {
@@ -292,7 +297,7 @@ angular.module('insude').config(['$injector', function ($injector) {
     })
     .state('root.listado', {
       url: '/listado',
-      templateUrl: 'client/reportes/listado.ng.html',
+      templateUrl: 'client/reportes/listado.html',
       controller: 'listadoCtrl as lis',
       resolve: {
         "currentUser": ["$meteor", function ($meteor) {

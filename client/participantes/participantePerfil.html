@@ -1,180 +1,193 @@
-<div class="col-sm-12 col-md-12 col-lg-12">
-	<div class="well well-light well-sm no-margin no-padding">
+<div class="well well-light well-sm no-margin no-padding">
+	<div class="col-sm-12 col-md-12 col-lg-12">
 		<div class="row">
-			<div class="col-sm-12">
-				<div class="row">
-					<div class="col-sm-2">
-						<img src="{{obj.objeto.foto}}" style="max-width:200px;" alt="demo user">
-					</div>
-					<div class="col-sm-9">
-						<div class="row">
-							<div class="btn-group" style="margin: 5px;; margin-right: 18px">
-								<a class="btn txt-color-white bg-color-teal btn-sm" href="javascript:void(0);"> Curp
-								</a>
-								<a class="btn txt-color-white bg-color-teal btn-sm dropdown-toggle"
-									data-toggle="dropdown" href="javascript:void(0);" aria-expanded="true"><span
-										class="caret"></span></a>
-								<ul class="dropdown-menu">
-									<li>
-										<a href="javascript:void(0);" ng-click="obj.download(1)"> Descargar </a>
-									</li>
-									<li>
-										<a href="javascript:void(0);" ng-click="obj.abrirModal(1)">Actualizar</a>
-									</li>
-								</ul>
-							</div>
-							<div class="btn-group" style="margin: 5px;; margin-right: 18px">
-								<a class="btn txt-color-white bg-color-teal btn-sm" href="javascript:void(0);"> Acta
-									Nacimiento
-								</a>
-								<a class="btn txt-color-white bg-color-teal btn-sm dropdown-toggle"
-									data-toggle="dropdown" href="javascript:void(0);" aria-expanded="true"><span
-										class="caret"></span></a>
-								<ul class="dropdown-menu">
-									<li>
-										<a href="javascript:void(0);" ng-click="obj.download(2)"> Descargar </a>
-									</li>
-									<li>
-										<a href="javascript:void(0);" ng-click="obj.abrirModal(2)">Actualizar</a>
-									</li>
-								</ul>
-							</div>
-							<div class="btn-group" style="margin: 5px;; margin-right: 18px">
-								<a class="btn txt-color-white bg-color-teal btn-sm" href="javascript:void(0);">
-									Credencial
-								</a>
-								<a class="btn txt-color-white bg-color-teal btn-sm dropdown-toggle"
-									data-toggle="dropdown" href="javascript:void(0);" aria-expanded="true"><span
-										class="caret"></span></a>
-								<ul class="dropdown-menu">
-									<li>
-										<a href="javascript:void(0);" ng-click="obj.download(3)"> Descargar </a>
-									</li>
-									<li>
-										<a href="javascript:void(0);" ng-click="obj.abrirModal(3)">Actualizar</a>
-									</li>
-								</ul>
-							</div>
-						</div>
 
-					</div>
-					<div class="col-sm-6">
-						<h1>{{obj.objeto.nombre}} <span class="semi-bold">{{obj.objeto.apellidoPaterno}}
-								{{obj.objeto.apellidoMaterno}} </span>
-							<br>
-							<small> CURP - {{obj.objeto.curp}}</small></h1>
-						<ul class="list-unstyled">
-							<li>
-								<p class="text-muted">
-									<i class="fa fa-calendar"></i>&nbsp;&nbsp;<span
-										class="txt-color-darken">{{obj.objeto.fechaNacimiento | date: "dd-MM-yyyy"}}</span>
-								</p>
-							</li>
-							<li>
-								<p class="text-muted">
-									<i class="fa fa-graduation-cap"></i>
-									<span class="txt-color-darken">{{obj.objeto.formacionacademica}}</span>
-								</p>
-							</li>
-							<li>
-								<p class="text-muted">
-									<i class="fa fa-child"></i>&nbsp;&nbsp;
-									{{obj.objeto.sexo}}
-								</p>
-							</li>
-						</ul>
-						<br>
-						<p class="font-md">
-							<i>Municipio</i>
-						</p>
-						<p>
-							{{obj.objeto.municipio}}, {{obj.objeto.estado}}
-						</p>
-						<br>
-					</div>
-				</div>
+			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+				<img style="max-width:200px; margin-left: 20px; margin-top: 10px;" src="{{c.objeto.foto}}">
 			</div>
-		</div>
 
-		<div class="row">
-			<div class="col-sm-12">
-				<hr>
-				<div class="padding-10">
-					<ul class="nav nav-tabs tabs-pull-left">
-						<li class="active">
-							<a href="#a1" data-toggle="tab">Eventos</a>
+			<div class="col-sm-6">
+				<h1>{{c.objeto.nombre}} <span class="semi-bold">{{c.objeto.apellidoPaterno}}
+						{{c.objeto.apellidoMaterno}}</span>
+					<br>
+					<small> {{c.objeto.formacionacademica}}</small>
+				</h1>
+				<ul class="list-unstyled">
+					<li>
+						<p class="text-muted">
+							<i class="fa fa-circle-o"></i>&nbsp;&nbsp;{{c.objeto.curp}}
+						</p>
+					</li>
+					<li>
+						<p class="text-muted">
+							<i class="fa fa-globe"></i>&nbsp;&nbsp;<span class="txt-color-darken">
+								{{c.objeto.estado}}</span>
+						</p>
+					</li>
+					<li>
+						<p class="text-muted">
+							<i class="fa fa-calendar"></i>&nbsp;&nbsp;<span class="txt-color-darken">FN:
+								{{c.objeto.fechaNacimiento | date : "dd/MM/yyyy"}}</span>
+						</p>
+					</li>
+					<li>
+						<p class="text-muted">
+							<i class="fa fa-file"></i>&nbsp;&nbsp;<span class="txt-color-darken"> CURP:
+							</span>
+							<span ng-if="c.objeto.curpImagen == ''" class="label label-warning">
+								Sin Cargar Archivo
+							</span>
+							<span ng-if="c.objeto.curpImagen != ''">
+								<a href="#" ng-click="c.descargar(c.objeto.curpImagen)">Descargar</a>
+							</span>
+						</p>
+					</li>
+					<li>
+						<p class="text-muted">
+							<i class="fa fa-file-text"></i>&nbsp;&nbsp;<span class="txt-color-darken"> A. Nacimiento:
+							</span>
+							<span ng-if="c.objeto.actaNacimiento == ''" class="label label-warning">
+								Sin Cargar Archivo
+							</span>
+							<span ng-if="c.objeto.actaNacimiento != ''">
+								<a href="#" ng-click="c.descargar(c.objeto.actaNacimiento)">Descargar</a>
+							</span>
+						</p>
+					</li>
+					<li>
+						<p class="text-muted">
+							<i class="fa fa-credit-card"></i>&nbsp;&nbsp;<span class="txt-color-darken"> Identificación:
+							</span>
+							<span ng-if="c.objeto.identificacion == ''" class="label label-warning">
+								Sin Cargar Archivo
+							</span>
+							<span ng-if="c.objeto.identificacion != ''">
+								<a href="#" ng-click="c.descargar(c.objeto.identificacion)">Descargar</a>
+								Vence {{c.objeto.identificacion.fechaVencimiento | date : "dd/MM/yyyy"}}
+							</span>
+						</p>
+					</li>
+				</ul>
+
+				<br>
+
+			</div>
+			<div class="col-sm-3">
+				<div class="btn-group" style="margin-top: 5px;">
+					<button class="btn btn-primary">
+						Acciones
+					</button>
+					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li>
+							<a href="javascript:void(0);" ng-click="c.modalEditarParticipante()">Editar Participante</a>
 						</li>
-						<li class="pull-right">
-							<span class="margin-top-10 display-inline"><i class="fa fa-rss text-success"></i>
-								Actividad</span>
+						<li>
+							<a href="javascript:void(0);" ng-click="c.modalAgregarEvento()">Agregar a Evento</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a href="javascript:void(0);" ng-click="c.modalSubirCurp()">Agregar Curp</a>
+						</li>
+						<li>
+							<a href="javascript:void(0);" ng-click="c.modalSubirActa()">Agregar Acta Nacimiento</a>
+						</li>
+						<li>
+							<a href="javascript:void(0);" ng-click="c.modalSubirCredencial()">Agregar Identificación</a>
 						</li>
 					</ul>
-					<div class="tab-content padding-top-10">
-						<div class="tab-pane fade in active" id="a1">
-							<div class="row">
-								<div class="col-md-12">
-									<table class="table table-bordered">
-										<thead>
-											<tr>
-												<th>Num</th>
-												<th>Evento</th>
-												<th>Función</th>
-												<th>Deporte</th>
-												<th>Categoria</th>
-												<th>Pruebas</th>
-												<th>Rama</th>
-												<!-- <th width="5%">
-													<div class="text-center">Acción</div>
-												</th> -->
-											</tr>
-										</thead>
-										<tbody>
-											<tr ng-repeat="objeto in obj.eventos">
-												<td>{{$index + 1}}</td>
-												<td>{{objeto.evento}}</td>
-												<td>{{objeto.funcionEspecifica}}</td>
-												<td>{{objeto.deporte}}</td>
-												<td>{{objeto.categoria}}</td>
-												<td>{{objeto.pruebasArreglo}}</td>
-												<td>{{objeto.rama}}</td>
-												<!-- <td>
-													<div class="text-center">
-														<div class="btn-group">
-															<button type="button"
-																class="btn btn-xs btn-primary dropdown-toggle"
-																data-toggle="dropdown" aria-haspopup="true"
-																aria-expanded="false">
-																<span class="caret"></span>
-																<span class="sr-only">Toggle Dropdown</span>
-															</button>
-															<ul class="dropdown-menu dropdown-menu-right text-left">
-																<li><a href="#"
-																		ng-click="obj.asistencias(objeto._id)"><i
-																			class="fa fa-eye"></i> Asistencias</a></li>
-																<li><a href="#" ng-click="obj.crearInforme(objeto)"><i
-																			class="fa fa-file-text-o"></i> Crear
-																		Informe</a></li>
-																<li><a href="#" ng-click="obj.verInforme(objeto)"><i
-																			class="fa fa-list-alt"></i> Listado
-																		Informes</a></li>
-															</ul>
-														</div>
-													</div>
-												</td> -->
-											</tr>
-										</tbody>
-									</table>
-								</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- <div class="row">
+			<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2"></div>
+			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+				<div class="col-sm-12">
+					<div class="btn-group">
+						<button class="btn btn-primary">
+							Acciones
+						</button>
+						<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="javascript:void(0);" ng-click="c.modalEditarParticipante()">Editar Participante</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);" ng-click="c.modalAgregarEvento()">Agregar a Evento</a>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<a href="javascript:void(0);" ng-click="c.modalSubirCurp()">Agregar Curp</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);" ng-click="c.modalSubirActa()">Agregar Acta Nacimiento</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);" ng-click="c.modalSubirCredencial()">Agregar Identificación</a>
+							</li>
+						</ul>
+					</div>
+
+				</div>
+			</div>
+		</div> -->
+	</div>
+
+	<div class="row">
+		<div class="col-sm-12">
+			<hr>
+			<div class="padding-10">
+				<ul class="nav nav-tabs tabs-pull-left">
+					<li class="active">
+						<a href="#a1" data-toggle="tab">Eventos</a>
+					</li>
+				</ul>
+				<div class="tab-content padding-top-10">
+					<div class="tab-pane fade in active" id="a1">
+						<div class="row">
+							<div class="col-md-12">
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+											<th style="text-align: center;" width="3%">Num</th>
+											<th style="text-align: center;" width="20%">Evento</th>
+											<th style="text-align: center;" width="5%">Función</th>
+											<th style="text-align: center;" width="10%">Deporte</th>
+											<th style="text-align: center;" width="15%">Categoria</th>
+											<th style="text-align: center;" width="10%">Pruebas</th>
+											<th style="text-align: center;" width="5%">Rama</th>
+											<th style="text-align: center;" width="5%">Municipio</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="objeto in c.arreglo">
+											<td style="text-align: center;">{{$index + 1}}</td>
+											<td style="text-align: left;">{{objeto.evento}}</td>
+											<td style="text-align: left;">{{objeto.funcionEspecifica}}</td>
+											<td style="text-align: left;">{{objeto.deporte}}</td>
+											<td style="text-align: left;">{{objeto.categoria}}</td>
+											<td style="text-align: left;">{{objeto.pruebas}}</td>
+											<td style="text-align: left;">{{objeto.rama}}</td>
+											<td style="text-align: left;">{{objeto.municipio}}</td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>
 				</div>
-
 			</div>
+
 		</div>
-		<!-- end row -->
 	</div>
+	<!-- end row -->
 </div>
+
 
 <a id='dwnldLnk' style="display:none;" hidden="true"></a>
 
@@ -200,7 +213,8 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<input type="submit" ng-click="obj.actualizar(1)" value="Guardar" class="btn btn-primary" valida-form formulario="form">
+				<input type="submit" ng-click="c.grabarArchivo(1)" value="Guardar" class="btn btn-primary" valida-form
+					formulario="form">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 			</div>
 		</div>
@@ -229,7 +243,8 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<input type="submit" ng-click="obj.actualizar(2)" value="Guardar" class="btn btn-primary" valida-form formulario="form">
+				<input type="submit" ng-click="c.grabarArchivo(2)" value="Guardar" class="btn btn-primary" valida-form
+					formulario="form">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 			</div>
 		</div>
@@ -243,24 +258,296 @@
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
 						aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel">Actualizar Credendial</h4>
+				<h4 class="modal-title" id="myModalLabel">Actualizar Credencial</h4>
 			</div>
 			<div class="modal-body">
 				<form name="form" novalidate>
 					<div class="row">
-						<div class="col-sm-4">
+						<div class="col-sm-6">
 							<label>Credencial * (máximo 1MB)</label>
 							<div>
 								<input type="file" id="fileInputIdentificacion" accept="application/pdf, image/jpeg">
 							</div>
 						</div>
+						<div class="col-sm-4">
+							<label>Fecha Vencimiento *</label>
+							<input name="fechaVencimiento" type="date" format="dd/MM/yyyy" class="form-control"
+								ng-model="c.fechaVencimiento" required>
+						</div>
 					</div>
 				</form>
 			</div>
 			<div class="modal-footer">
-				<input type="submit" ng-click="obj.actualizar(3)" value="Guardar" class="btn btn-primary" valida-form formulario="form">
+				<input type="submit" ng-click="c.grabarArchivo(3)" value="Guardar" class="btn btn-primary" valida-form
+					formulario="form">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 			</div>
 		</div>
 	</div>
+</div>
+
+
+
+<div id="modalAgregarEvento" class="modal fade bd-example-modal-lg" data-backdrop="static" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<!-- Modal content-->
+		<form name="formAgregarEvento" novalidate>
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class="row">
+						<div class="col-sm-6">
+							Agregar a Evento
+						</div>
+					</div>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-sm-4" valida>
+							<label for="funcionespecifica">Función Especifica *</label>
+							<select name="funcionespecifica" ng-model="c.evento.funcionEspecifica" data-placeholder="Seleccione"
+								ng-change="c.funcionEspecifica(c.participante,c.evento.funcionEspecifica)" class="form-control"
+								required>
+								<option value=""></option>
+								<option value="DEPORTISTA">Deportista</option>
+								<option value="ENTRENADOR">Entrenador</option>
+								<option value="ENTRENADOR AUXILIAR">Entrenador Auxiliar
+								</option>
+								<option value="DELEGADO GENERAL">Delegado General
+								</option>
+								<option value="DELEGADO AUXILIAR">Delegado Auxiliar
+								</option>
+								<option value="AUXILIAR GENERAL">Auxiliar General
+								</option>
+								<option value="ASOCIACIÓN" ng-if="currentUser.roles[0] == 'admin'">Asociación
+								</option>
+								<option value="JUEZ" ng-if="currentUser.roles[0] == 'admin'">Juez
+								</option>
+								<option value="JEFE DE MISIÓN" ng-if="currentUser.roles[0] == 'admin'">Jefe de
+									Misión</option>
+								<option value="OFICIAL">Oficial</option>
+								<option value="SERVICIO MÉDICO" ng-if="currentUser.roles[0] == 'admin'">Servicio
+									Médico</option>
+								<option value="PRENSA" ng-if="currentUser.roles[0] == 'admin'">Prensa
+								</option>
+								<option value="INVITADO ESPECIAL" ng-if="currentUser.roles[0] == 'admin'">Invitado
+									Especial</option>
+								<option value="COMITÉ ORGANIZADOR" ng-if="currentUser.roles[0] == 'admin'">Comité
+									Organizador</option>
+								<option value="TRASPORTE" ng-if="currentUser.roles[0] == 'admin'">Transporte
+								</option>
+							</select>
+						</div>
+						<div class="col-sm-4" valida>
+							<label>Rama *</label>
+							<select name="rama" class="form-control select2" placeholder="Seleccione" ng-model="c.evento.rama_id"
+								required>
+								<option value="{{rama._id}}" ng-repeat="rama in c.ramas">
+									{{rama.nombre}}
+								</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-4" valida>
+							<label>Evento *</label>
+							<select name="evento" class="form-control select2" placeholder="Seleccione"
+								ng-change="c.seleccionaEvento(c.evento.evento_id)" ng-model="c.evento.evento_id" required>
+								<option value="{{item._id}}" ng-repeat="item in c.eventos">
+									{{item.nombre}}
+								</option>
+							</select>
+						</div>
+						<div class="col-sm-4" valida>
+							<label>Deporte *</label>
+							<select name="deporte" class="form-control select2" placeholder="Seleccione"
+								ng-change="c.seleccionaDeporte(c.evento.evento_id, c.evento.deporte_id)" ng-model="c.evento.deporte_id"
+								required>
+								<option value="{{deporte._id}}" ng-repeat="deporte in c.deportes">
+									{{deporte.nombre}}
+								</option>
+							</select>
+						</div>
+						<div class="col-sm-4" valida>
+							<label>Categoria *</label>
+							<select name="categoria" class="form-control select2" placeholder="Seleccione"
+								ng-change="c.seleccionaCategoria(c.evento.evento_id, c.evento.deporte_id,c.evento.categoria_id,c.evento.rama_id)"
+								ng-model="c.evento.categoria_id" required>
+								<option value="{{categoria._id}}" ng-repeat="categoria in c.categorias">
+									{{categoria.nombre}}
+								</option>
+							</select>
+						</div>
+
+						<div class="col-sm-12" ng-show="c.pruebas.length > 0">
+							<label>Pruebas</label>
+							<select multiple name="prueba" class="js-example-basic-single Mselect2"
+								style="width: 100%; border: white 0px;" placeholder="Seleccione" ng-model="c.evento.pruebas">
+								<option value="{{prueba._id}}" ng-repeat="prueba in c.pruebas">
+									{{prueba.nombre}}
+								</option>
+							</select>
+						</div>
+
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="row">
+						<div class="col-sm-12 "><br />
+							<input id="grabarEvento" type="submit" ng-click="c.guardarEventoParticipante(c.evento,formAgregarEvento)"
+								value="Guardar" class="btn btn-success pull-left" valida-form formulario="formAgregarEvento">
+							<button type="button" id="cerrarAgregarEvento" class="btn btn-primary"
+								data-dismiss="modal">Cerrar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+</div>
+
+<div id="modalEditarParticipante" class="modal fade bd-example-modal-lg" data-backdrop="static" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<!-- Modal content-->
+		<form name="formCierreBusqueda" novalidate>
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class="row">
+						<div class="col-sm-6">
+							Nuevo Participante
+						</div>
+					</div>
+				</div>
+				<div class="modal-body">
+					<div class="row" ng-if="currentUser.roles[0] == 'admin'">
+						<div class="col-sm-3">
+							<label>Municipio</label>
+							<select name="municipio" class="form-control select2" placeholder="Seleccione"
+								ng-model="c.buscar.municipio_id">
+								<option value="{{municipio._id}}" ng-repeat="municipio in c.municipios">
+									{{municipio.nombre}}
+								</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-4" valida>
+							<label>Nombre *</label>
+							<input name="nombre" type="text" class="form-control" ng-model="c.participante.nombre" required
+								capitalize>
+						</div>
+						<div class="col-sm-4" valida>
+							<label>Apellido Paterno *</label>
+							<input name="apellidomaterno" type="text" class="form-control" ng-model="c.participante.apellidoPaterno"
+								required capitalize>
+						</div>
+						<div class="col-sm-4" valida>
+							<label>Apellido Materno</label>
+							<input name="apellidopaterno" type="text" class="form-control" ng-model="c.participante.apellidoMaterno"
+								capitalize>
+						</div>
+						<div class="col-sm-4" valida>
+							<label>Fecha Nacimiento *</label>
+							<input name="fechanacimiento" type="date" format="dd/MM/yyyy" class="form-control" placeholder="Fecha"
+								ng-model="c.participante.fechaNacimiento" required>
+						</div>
+						<div class="col-sm-4" valida>
+							<label for="sexo">Sexo *</label>
+							<select name="sexo" ng-model="c.participante.sexo" data-placeholder="Seleccione" class="form-control"
+								required>
+								<option value=""></option>
+								<option value="Hombre">Hombre</option>
+								<option value="Mujer">Mujer</option>
+							</select>
+						</div>
+						<div class="col-sm-4" valida>
+							<label for="estado">Estado *</label>
+							<select name="estado" ng-model="c.participante.estado" data-placeholder="Seleccione" class="form-control"
+								required>
+								<option value="AGUASCALIENTES">AGUASCALIENTES</option>
+								<option value="BAJA CALIFORNIA NTE">BAJA CALIFORNIA
+									NORTE</option>
+								<option value="BAJA CALIFORNIA SUR">BAJA CALIFORNIA SUR
+								</option>
+								<option value="CAMPECHE">CAMPECHE</option>
+								<option value="COAHUILA">COAHUILA</option>
+								<option value="COLIMA">COLIMA</option>
+								<option value="CHIAPAS">CHIAPAS</option>
+								<option value="CHIHUAHUA">CHIHUAHUA</option>
+								<option value="DISTRITO FEDERAL">DISTRITO FEDERAL
+								</option>
+								<option value="DURANGO">DURANGO</option>
+								<option value="GUANAJUATO">GUANAJUATO</option>
+								<option value="GUERRERO">GUERRERO</option>
+								<option value="HIDALGO">HIDALGO</option>
+								<option value="JALISCO">JALISCO</option>
+								<option value="MEXICO">MEXICO</option>
+								<option value="MICHOACAN">MICHOACAN</option>
+								<option value="MORELOS">MORELOS</option>
+								<option value="NAYARIT">NAYARIT</option>
+								<option value="NUEVO LEON">NUEVO LEON</option>
+								<option value="OAXACA">OAXACA</option>
+								<option value="PUEBLA">PUEBLA</option>
+								<option value="QUERETARO">QUERETARO</option>
+								<option value="QUINTANA ROO">QUINTANA ROO</option>
+								<option value="SAN LUIS POTOSI">SAN LUIS POTOSI</option>
+								<option value="SINALOA">SINALOA</option>
+								<option value="SONORA">SONORA</option>
+								<option value="TABASCO">TABASCO</option>
+								<option value="TAMAULIPAS">TAMAULIPAS</option>
+								<option value="TLAXCALA">TLAXCALA</option>
+								<option value="VERACRUZ">VERACRUZ</option>
+								<option value="YUCATAN">YUCATAN</option>
+								<option value="ZACATECAS">ZACATECAS</option>
+								<option value="SERV. EXTERIOR MEXICANO">SERV. EXTERIOR
+									MEXICANO</option>
+								<option value="NACIDO EN EL EXTRANJERO">NACIDO EN EL
+									EXTRANJERO</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-4" valida>
+							<label>CURP *</label>
+							<input name="curp" type="text" class="form-control" ng-model="c.participante.curp"
+								ng-change="c.ValidaCurpParticipante(c.participante.curp)" required>
+							<input type="button" ng-click="c.GeneraCurp(c.participante)" value="Generar CURP">
+						</div>
+						<div class="col-sm-4" valida>
+							<label for="formacionacademica">Formación Académica</label>
+							<select name="formacionacademica" ng-model="c.participante.formacionacademica"
+								data-placeholder="Seleccione" class="form-control">
+								<option value=""></option>
+								<option value="Doctorado">Doctorado</option>
+								<option value="Maestria">Maestria</option>
+								<option value="MediaSuperior">Media Superior</option>
+								<option value="Posgrado">Posgrado</option>
+								<option value="Primaria">Primaria</option>
+								<option value="Secundaria">Secundaria</option>
+								<option value="Superior">Superior</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-4">
+							<label>Foto * (máximo 512Kb)</label>
+							<input name="foto" type="file" id="fileInput1" accept="image/png,image/jpeg">
+							<div id="fileDisplayArea1"></div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="row">
+						<div class="col-sm-12 "><br />
+							<input type="submit" ng-click="c.guardarParticipante(c.participante,formCierreBusqueda)" value="Guardar"
+								class="btn btn-success pull-left" valida-form formulario="formCierreBusqueda">
+							<button type="button" id="cerrarCierreBusqueda" class="btn btn-primary"
+								data-dismiss="modal">Cerrar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
 </div>

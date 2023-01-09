@@ -1,0 +1,77 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+		<h1 class="alge-title txt-color-blueDark">
+			<i class="fa fa-list fa-fw "></i>
+			Listado
+		</h1>
+	</div>
+</div>
+<br>
+<div class="well">
+	<div class="row">
+		<div class="col-sm-3" ng-if="currentUser.roles[0] == 'admin'">
+			<label>Municipio</label>
+			<select name="municipio" class="form-control select2" placeholder="Seleccione" ng-model="lis.evento.municipio_id">
+				<option value="{{municipio._id}}" ng-repeat="municipio in lis.municipios">
+					{{municipio.nombre}}
+				</option>
+			</select>
+		</div>
+		<div class="col-sm-3">
+			<label>Evento</label>
+			<select name="evento" class="form-control select2" placeholder="Seleccione" ng-model="lis.evento.evento_id"
+				ng-change="lis.seleccionaEvento(lis.evento.evento_id)">
+				<option value="{{evento._id}}" ng-repeat="evento in lis.eventos">
+					{{evento.nombre}}
+				</option>
+			</select>
+		</div>
+		<div class="col-sm-3">
+			<label>Deporte</label>
+			<select name="deporte" class="form-control select2" placeholder="Seleccione" ng-model="lis.evento.deporte_id">
+				<option value="{{deporte._id}}" ng-repeat="deporte in lis.deportes">
+					{{deporte.nombre}}
+				</option>
+			</select>
+		</div>
+	</div>
+	<br />
+	<div class="row">
+		<div class="col-sm-6">
+			<input class="btn btn-primary" type="button" ng-click="lis.buscar()" value="Buscar" />
+			<input class="btn btn-primary" type="button" ng-click="lis.exportarExcel(lis.arreglo)" value="Exportar Excel" />
+			<input class="btn btn-primary" type="button" ng-click="lis.reset()" value="Inicializar búsqueda" />
+		</div>
+		<!-- <div class="col-sm-2">
+			<input class="btn btn-primary" type="button" ng-click="lis.reset()" value="Inicializar búsqueda" />
+		</div> -->
+	</div>
+</div>
+
+<div class="well">
+	<div class="row">
+		<div class="col-sm-12">
+			<table class="table" width="600" align="center">
+				<thead>
+					<tr>
+						<th>Num</th>
+						<th>CURP</th>
+						<th>Nombre</th>
+						<th>Sexo</th>
+						<th>Fecha Nacimiento</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="participante in lis.arreglo">
+						<td>{{$index+1}}</td>
+						<td>{{participante.curp}}</td>
+						<td>{{participante.nombre}} {{participante.apellidoPaterno}} {{participante.apellidoMaterno}}</td>
+						<td>{{participante.sexo}}</td>
+						<td>{{participante.fechaNacimiento | date: "dd-MM-yyyy"}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>

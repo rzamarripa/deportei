@@ -1,0 +1,126 @@
+<!-- Menú de Administrador -->
+<section id="administrador" data-widget-grid="data-widget-grid" ng-if="currentUser.roles[0] == 'admin'">
+	<h1>Super Administrador</h1>
+	<div class="row">
+		<div class="col-sm-12">
+			<div data-widget-color="blue" data-widget-colorbutton="false" data-widget-editbutton="false"
+				data-widget-deletebutton="false" data-jarvis-widget="data-jarvis-widget">
+				<header>
+					<h2>Opciones</h2>
+				</header>
+				<div>
+					<div class="widget-body">
+						<div class="row">
+							<div class="col-sm-3">
+								<a ui-sref="root.usuarios" href="javascript:void(0);" class="btn btn-labeled bg-color-red txt-color-white btn-block"
+									style="text-align: left"> <span class="btn-label"><i
+											class="fa fa-lg fa-fw fa-user"></i></span>Usuarios</a>
+							</div>
+							<div class="col-sm-3">
+								<a ui-sref="root.municipios" href="javascript:void(0);" class="btn btn-labeled bg-color-red txt-color-white btn-block"
+									style="text-align: left"> <span class="btn-label"><i
+											class="fa fa-lg fa-fw fa-institution"></i></span>Municipios</a>
+							</div>
+							<div class="col-sm-3">
+								<a ui-sref="root.ramas" href="javascript:void(0);" class="btn btn-labeled bg-color-red txt-color-white btn-block"
+									style="text-align: left"> <span class="btn-label"><i
+											class="fa fa-lg fa-fw fa-group"></i></span>Ramas</a>
+							</div>
+							<div class="col-sm-3">
+								<a ui-sref="root.eventos" href="javascript:void(0);" class="btn btn-labeled bg-color-red txt-color-white btn-block"
+									style="text-align: left"> <span class="btn-label"><i
+											class="fa fa-lg fa-fw fa-calendar-o"></i></span>Eventos</a>
+							</div>
+						</div>
+					</div>
+					<div class="widget-body">
+						<div class="row">
+							<div class="col-sm-3">
+								<a ui-sref="root.deportes" href="javascript:void(0);" class="btn btn-labeled bg-color-red txt-color-white btn-block"
+									style="text-align: left"> <span class="btn-label"><i
+											class="fa fa-lg fa-fw fa-trophy"></i></span>Deportes</a>
+							</div>
+							<div class="col-sm-3">
+								<a ui-sref="root.categorias" href="javascript:void(0);" class="btn btn-labeled bg-color-red txt-color-white btn-block"
+									style="text-align: left"> <span class="btn-label"><i
+											class="fa fa-lg fa-fw fa-sitemap"></i></span>Categorias</a>
+							</div>
+							<div class="col-sm-3">
+								<a ui-sref="root.pruebas" href="javascript:void(0);" class="btn btn-labeled bg-color-red txt-color-white btn-block"
+									style="text-align: left"> <span class="btn-label"><i
+											class="fa fa-lg fa-fw fa-share-alt"></i></span>Pruebas</a>
+							</div>
+							<div class="col-sm-3">
+								<a ui-sref="root.impresiones" href="javascript:void(0);" class="btn btn-labeled bg-color-red txt-color-white btn-block"
+									style="text-align: left"> <span class="btn-label"><i
+											class="fa fa-lg fa-fw fa-print"></i></span>Impresiones</a>
+							</div>
+						</div>
+					</div>
+					<div class="widget-body">
+						<div class="row">
+							<div class="col-sm-3">
+								<a ui-sref="root.descargadocumentos" href="javascript:void(0);"
+									class="btn btn-labeled bg-color-red txt-color-white btn-block" style="text-align: left"> <span class="btn-label"><i
+											class="fa fa-lg fa-fw fa-cloud-download"></i></span>Descarga Doctos</a>
+							</div>
+							<div class="col-sm-3">
+								<a ui-sref="root.cedula" href="javascript:void(0);" class="btn btn-labeled bg-color-red txt-color-white btn-block"
+									style="text-align: left"> <span class="btn-label"><i
+											class="fa fa-lg fa-fw fa-book"></i></span>Cédula</a>
+							</div>
+							<div class="col-sm-3">
+								<a ui-sref="root.participantesMunicipio" href="javascript:void(0);"
+									class="btn btn-labeled bg-color-red txt-color-white btn-block" style="text-align: left"> <span class="btn-label"><i
+											class="fa fa-lg fa-fw fa-refresh"></i></span>Cambio Municipio</a>
+							</div>
+							<div class="col-sm-3">
+								<a ui-sref="root.listado" href="javascript:void(0);" class="btn btn-labeled bg-color-red txt-color-white btn-block"
+									style="text-align: left"> <span class="btn-label"><i
+											class="fa fa-lg fa-fw fa-table"></i></span>Listado</a>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Menú de Delegado Municipal -->
+<section id="Coordinador" data-widget-grid="data-widget-grid" ng-if="currentUser.roles[0] == 'DelegadoMunicipal'">
+	<div class="row">
+		<div class="col-sm-12">
+			<div data-widget-color="blue" data-widget-colorbutton="false" data-widget-editbutton="false"
+				data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-jarvis-widget="data-jarvis-widget">
+				<header>
+					<h2>Opciones del sistema</h2>
+				</header>
+				<div>
+					<div class="widget-body">
+						<div class="row">
+							<div class="col-sm-3">
+								<a ui-sref="root.participantes" href="javascript:void(0);" class="btn btn-labeled bg-color-red txt-color-white btn-block"
+									style="text-align: left"> <span class="btn-label"><i
+											class="fa fa-lg fa-fw fa-calendar-o"></i></span>Registrar Participantes</a>
+							</div>
+
+							<div class="col-sm-3">
+								<a ui-sref="root.cedula" href="javascript:void(0);" class="btn btn-labeled bg-color-red txt-color-white btn-block"
+									style="text-align: left"> <span class="btn-label"><i
+											class="fa fa-lg fa-fw fa-book"></i></span>Cédula</a>
+							</div>
+
+							<div class="col-sm-3">
+								<a ui-sref="root.listado" href="javascript:void(0);" class="btn btn-labeled bg-color-red txt-color-white btn-block"
+									style="text-align: left"> <span class="btn-label"><i
+											class="fa fa-lg fa-fw fa-fw fa-list"></i></span>Listado</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

@@ -9,6 +9,7 @@
     "docxtemplater": "^3.0.2",
     "docxtemplater-image-module": "^3.0.0",
     "express": "^4.14.0",
+    "fibers": "^2.0.0",
     "jszip": "^2.6.1",
     "meteor-node-stubs": "^0.2.4",
     "node-cmd": "^2.0.0",
@@ -17,7 +18,8 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "MONGO_URL=mongodb://localhost:27017/isde meteor --port 3003"
+    "dev": "MONGO_URL=mongodb://localhost:27017/isde meteor --port 3003",
+    "devInsude": "MONGO_URL=mongodb://localhost:27017/insude meteor --port 3003"
   },
   "repository": {
     "type": "git",

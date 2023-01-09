@@ -52,7 +52,7 @@ function ParticipantesMunCtrl($scope, $meteor, $reactive, $state, toastr, $state
 			return arreglo;
 		},
 		municipios: () => {
-			return Municipios.find();
+			return Municipios.find({}, { sort: { nombre: 1 } });
 		},
 	});
 
@@ -64,7 +64,6 @@ function ParticipantesMunCtrl($scope, $meteor, $reactive, $state, toastr, $state
 
 	this.actualizar = function (objeto) {
 		Meteor.call("setMunicipio", objeto._id, objeto.municipio_id, function (error, result) {
-
 			if (error) {
 				console.log(error);
 				toastr.error('Error al guardar los datos.: ', error.details);

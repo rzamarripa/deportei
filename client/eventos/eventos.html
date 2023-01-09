@@ -1,0 +1,140 @@
+<h2>Eventos</h2>
+<div class="row">
+	<div class="col-sm-12">
+		<a class="btn btn-{{eve.nuevo == true ? 'primary' : 'danger'}}" role="button" data-toggle="collapse" 
+			href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="nuevoevento" ng-click="eve.nuevoEvento()">
+		  {{eve.nuevo == true ? 'Nuevo' : 'Cancelar'}}
+		</a>
+		
+		<div class="collapse" id="collapseExample">
+			<form name="form" class="form-horizontal" role="form" novalidate>
+		  	<div class="well">	    
+			    <div class="row">
+			    	<div class="col-sm-4" valida>
+				    	<label>Nombre *</label>
+					    <input name="nombre" type="text" class="form-control" ng-model="eve.evento.nombre" required>
+			    	</div>
+			    	<div class="col-sm-4" ng-class="form.fechainicio.$invalid == true && eve.validation == true ? 'has-error':''" valida>
+							<label for="fechainicio">Fecha Inicio *</label>
+							<input name="fechainicio" date-time format="dd/MM/yyyy" class="form-control" view="year" max-view="year" min-view="date" ng-model="eve.evento.fechainicio" required="" />
+						</div>
+						<div class="col-sm-4" ng-class="form.fechafin.$invalid == true && eve.validation == true ? 'has-error':''" valida>
+							<label for="fechafin">Fecha Fin *</label>
+							<input name="fechafin" date-time format="dd/MM/yyyy" class="form-control" view="year" max-view="year" min-view="date" ng-model="eve.evento.fechafin" required="" />
+						</div>
+			    </div>	
+					<div class="row">
+						<div class="col-sm-3">
+							<label class="checkbox-inline">
+								<input type="checkbox" class="checkbox style-0" ng-model="eve.evento.puedeInscribir">
+								<span>Puede Inscribir </span>
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="well">	    
+			    <div class="row">
+				    <div class="col-sm-3" valida>
+				    	<label>Nombre Gafete Deportista</label>
+					    <input name="nombreGafeteDeportista" type="text" class="form-control" ng-model="eve.evento.nombreGafeteDeportista" required>
+			    	</div>
+			    	<div class="col-sm-3" valida>
+				    	<label>Nombre Gafete Comité</label>
+					    <input name="nombreGafeteComite" type="text" class="form-control" ng-model="eve.evento.nombreGafeteComite" required>
+			    	</div>
+			    	<div class="col-sm-3" valida>
+				    	<label>Nombre Gafete Otros</label>
+					    <input name="nombreGafeteOtros" type="text" class="form-control" ng-model="eve.evento.nombreGafeteOtros" required>
+			    	</div>
+			    	<div class="col-sm-3" valida>
+				    	<label>Nombre Credencial</label>
+					    <input name="nombreCredencial" type="text" class="form-control" ng-model="eve.evento.nombreCredencial" required>
+			    	</div>
+			    </div>
+			    <div class="row">
+				    <div class="col-sm-3" valida>
+				    	<label>Nombre Gafete Entrenador</label>
+					    <input name="nombreGafeteEntrenador" type="text" class="form-control" ng-model="eve.evento.nombreGafeteEntrenador" required>
+			    	</div>
+			    	<div class="col-sm-3" valida>
+				    	<label>Nombre Gafete Delegado Auxiliar</label>
+					    <input name="nombreGafeteDelegadoAuxiliar" type="text" class="form-control" ng-model="eve.evento.nombreGafeteDelegadoAuxiliar" required>
+			    	</div>
+			    	<div class="col-sm-3" valida>
+				    	<label>Nombre Gafete Delegado General</label>
+					    <input name="nombreGafeteDelegadoGeneral" type="text" class="form-control" ng-model="eve.evento.nombreGafeteDelegadoGeneral" required>
+			    	</div>
+				  
+			    </div> 
+			    
+				</div>    
+				<div class="row">
+					<div class="col-sm-12">
+						<input type="submit" value="Guardar" ng-click="eve.guardar(eve.evento,form)" class="btn btn-primary" ng-show="eve.action" valida-form formulario="form">
+						<input type="submit" ng-click="eve.actualizar(eve.evento,form)" value="Actualizar" class="btn btn-primary" ng-show="!eve.action" valida-form formulario="form">				
+					</div>
+				</div>	  
+		  </form>
+		</div>
+	</div>
+</div>
+<br/>
+<div class="row">
+	<div class="col-sm-12">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th width="20%"><div class="text-center">Nombre</div></th>
+					<th width="10%"><div class="text-center">Fecha Inicio</div></th>
+					<th width="10%"><div class="text-center">Fecha Fin</div></th>							
+					<th width="10%">
+						<div class="text-center">
+							Estatus
+						</div>
+					</th>
+					<th width="10%">
+						<div class="text-center">
+							Acciones
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+		    <tr ng-repeat="evento in eve.eventos">
+			    <td>{{evento.nombre}} </td>
+			    <td>{{evento.fechainicio | date: "dd-MM-yyyy"}} </td>
+			    <td>{{evento.fechafin | date: "dd-MM-yyyy"}} </td>
+			    <td>
+				    <div class="text-center">
+				    	<span ng-if="evento.estatus" class="label label-success">
+							  Activo
+							</span>
+							<span ng-if="!evento.estatus" class="label label-danger">
+							  Inactivo
+							</span>
+				    </div>
+			    </td>
+			    <td>
+				    <div class="text-center">
+					    <div class="btn-group">
+							  <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    <span class="caret"></span>
+							    <span class="sr-only">Toggle Dropdown</span>
+							  </button>
+							  <ul class="dropdown-menu text-left dropdown-menu-right">
+							    <li><a href="#" ng-click="eve.editar(evento._id)"><i class="fa fa-pencil"></i> Editar</a></li>
+							    <li><a href="#" ng-click="eve.cambiarEstatus(evento._id)">
+							    				<i class="fa fa-{{evento.estatus ? 'trash' : 'check' }}"></i> {{evento.estatus ? "Desactivar" : "Activar" }}
+							    		</a>
+							    </li>
+							  </ul>
+							</div>
+				    </div>				    
+			    </td>
+		    </tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+

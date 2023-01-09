@@ -11,8 +11,7 @@
 	<div class="row">
 		<div class="col-sm-3">
 			<label>Municipio</label>
-			<select name="municipio" class="form-control select2" placeholder="Seleccione"
-				ng-model="obj.buscar.municipio_id">
+			<select name="municipio" class="form-control select2" placeholder="Seleccione" ng-model="obj.buscar.municipio_id">
 				<option value="{{municipio._id}}" ng-repeat="municipio in obj.municipios">
 					{{municipio.nombre}}
 				</option>
@@ -21,40 +20,19 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-sm-12">
+	<div class="col-sm-6">
 		<div class="input-group">
 			<div class="input-group-btn">
-				<a href="./eventosmostrar" class="btn btn-default btn-primary">
-					<i class="fa fa-plus"></i> Nuevo
+				<a href="#" ng-click="obj.modalNuevoParticipante()" class="btn btn-default btn-primary">
+					<i class="fa fa-plus"></i> Nuevo Participante
 				</a>
 			</div>
-			<input class="form-control" type="text" placeholder="Buscar..." ng-model="obj.buscar.nombre" capitalize>
+			<input id="buscar" class="form-control" type="text" placeholder="Buscar un participante..."
+				ng-model="obj.buscar.nombre" capitalize>
 		</div>
 	</div>
 </div>
-<!-- <div class="row">
-	<div class="superbox col-sm-12">
-		<div class="superbox-list" ng-repeat="participante in obj.participantes">
-			<div class="img-box" style="margin:20px;">
-				<img ng-src="{{obj.tieneFoto(participante.sexo, participante.foto)}}" style="width: 60px; height: 60px"
-					data-img="img/superbox/superbox-full-1.jpg" alt="{{participante.nombreCompleto}}" title="{{participante.nombreCompleto" class="superbox-img">
-				<ul class="text-center" style="margin-left: -20px;width: 5px; height: 5px;">
-	        <a href="/participanteseditar/{{participante._id}}">
-				<li><i class="fa fa-pencil"></i></li></a>
-				</ul>
-				<ul class="text-center" style="margin-left: 30px;width: 5px; height: 5px;">
-					<a href="#" ng-click="obj.eliminar(participante._id)">
-						<li><i class="fa fa-eraser"></i></li>
-					</a>
-				</ul>
-			</div>
-			<p class="lead font-xs text-center">{{participante.nombre}}</p>
-			<p class="lead font-xs text-center">{{participante.apellidoPaterno}} {{participante.apellidoMaterno}}</p>
-		</div>
 
-	</div>
-	<div class="superbox-show" style="height:300px; display: none"></div>
-</div> -->
 <br>
 <div class="well">
 	<div class="row">
@@ -64,25 +42,174 @@
 					<tr>
 						<th width="10%">Foto</th>
 						<th width="20%">Nombre</th>
-						<th width="15%">CURP</th>
+						<th width="10%">CURP</th>
 						<th width="10%">Sexo</th>
-						<th width="15%">Fecha Nacimiento</th>
+						<th width="10%">Fecha Nacimiento</th>
+						<!-- <th width="10%">Municipio</th> -->
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="participante in obj.participantes">
+					<tr ng-repeat="participante in obj.arreglo">
 						<td>
-							<img src="{{obj.tieneFoto(participante.sexo, participante.foto)}}" alt=""
-								class="img-rounded img-responsive" style="width:60px; height:60px;" />
+							<img src="{{participante.foto}}" alt="" class="img-rounded img-responsive"
+								style="width:60px; height:60px;" />
 						</td>
 						<td><a href="./participantesPerfil/{{participante._id}}">{{participante.nombreCompleto}}</a>
 						<td>{{participante.curp}}</td>
 						</td>
 						<td>{{participante.sexo}}</td>
 						<td>{{participante.fechaNacimiento | date: "dd-MM-yyyy"}}</td>
+						<!-- <td>{{participante.municipio}}</td> -->
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
+</div>
+
+
+
+<div id="modalNuevoParticipante" class="modal fade bd-example-modal-lg" data-backdrop="static" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<!-- Modal content-->
+		<form name="formCierreBusqueda" novalidate>
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class="row">
+						<div class="col-sm-6">
+							Nuevo Participante
+						</div>
+					</div>
+				</div>
+				<div class="modal-body">
+					<div class="row" ng-if="currentUser.roles[0] == 'admin'">
+						<div class="col-sm-3">
+							<label>Municipio</label>
+							<select name="municipio" class="form-control select2" placeholder="Seleccione"
+								ng-model="obj.buscar.municipio_id">
+								<option value="{{municipio._id}}" ng-repeat="municipio in obj.municipios">
+									{{municipio.nombre}}
+								</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-4" valida>
+							<label>Nombre *</label>
+							<input name="nombre" type="text" class="form-control" ng-model="obj.objeto.nombre" required capitalize>
+						</div>
+						<div class="col-sm-4" valida>
+							<label>Apellido Paterno *</label>
+							<input name="apellidomaterno" type="text" class="form-control" ng-model="obj.objeto.apellidoPaterno"
+								required capitalize>
+						</div>
+						<div class="col-sm-4" valida>
+							<label>Apellido Materno</label>
+							<input name="apellidopaterno" type="text" class="form-control" ng-model="obj.objeto.apellidoMaterno"
+								capitalize>
+						</div>
+						<div class="col-sm-4" valida>
+							<label>Fecha Nacimiento *</label>
+							<input name="fechanacimiento" type="date" format="dd/MM/yyyy" class="form-control" placeholder="Fecha"
+								ng-model="obj.objeto.fechaNacimiento" required>
+						</div>
+						<div class="col-sm-4" valida>
+							<label for="sexo">Sexo *</label>
+							<select name="sexo" ng-model="obj.objeto.sexo" data-placeholder="Seleccione" class="form-control"
+								required>
+								<option value=""></option>
+								<option value="Hombre">Hombre</option>
+								<option value="Mujer">Mujer</option>
+							</select>
+						</div>
+						<div class="col-sm-4" valida>
+							<label for="estado">Estado *</label>
+							<select name="estado" ng-model="obj.objeto.estado" data-placeholder="Seleccione" class="form-control"
+								required>
+								<option value="AGUASCALIENTES">AGUASCALIENTES</option>
+								<option value="BAJA CALIFORNIA NTE">BAJA CALIFORNIA
+									NORTE</option>
+								<option value="BAJA CALIFORNIA SUR">BAJA CALIFORNIA SUR
+								</option>
+								<option value="CAMPECHE">CAMPECHE</option>
+								<option value="COAHUILA">COAHUILA</option>
+								<option value="COLIMA">COLIMA</option>
+								<option value="CHIAPAS">CHIAPAS</option>
+								<option value="CHIHUAHUA">CHIHUAHUA</option>
+								<option value="DISTRITO FEDERAL">DISTRITO FEDERAL
+								</option>
+								<option value="DURANGO">DURANGO</option>
+								<option value="GUANAJUATO">GUANAJUATO</option>
+								<option value="GUERRERO">GUERRERO</option>
+								<option value="HIDALGO">HIDALGO</option>
+								<option value="JALISCO">JALISCO</option>
+								<option value="MEXICO">MEXICO</option>
+								<option value="MICHOACAN">MICHOACAN</option>
+								<option value="MORELOS">MORELOS</option>
+								<option value="NAYARIT">NAYARIT</option>
+								<option value="NUEVO LEON">NUEVO LEON</option>
+								<option value="OAXACA">OAXACA</option>
+								<option value="PUEBLA">PUEBLA</option>
+								<option value="QUERETARO">QUERETARO</option>
+								<option value="QUINTANA ROO">QUINTANA ROO</option>
+								<option value="SAN LUIS POTOSI">SAN LUIS POTOSI</option>
+								<option value="SINALOA">SINALOA</option>
+								<option value="SONORA">SONORA</option>
+								<option value="TABASCO">TABASCO</option>
+								<option value="TAMAULIPAS">TAMAULIPAS</option>
+								<option value="TLAXCALA">TLAXCALA</option>
+								<option value="VERACRUZ">VERACRUZ</option>
+								<option value="YUCATAN">YUCATAN</option>
+								<option value="ZACATECAS">ZACATECAS</option>
+								<option value="SERV. EXTERIOR MEXICANO">SERV. EXTERIOR
+									MEXICANO</option>
+								<option value="NACIDO EN EL EXTRANJERO">NACIDO EN EL
+									EXTRANJERO</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-4" valida>
+							<label>CURP *</label>
+							<input name="curp" type="text" class="form-control" ng-model="obj.objeto.curp"
+								ng-change="obj.ValidaCurpParticipante(obj.objeto.curp)" required>
+							<input type="button" ng-click="obj.GeneraCurp(obj.objeto)" value="Generar CURP">
+						</div>
+						<div class="col-sm-4" valida>
+							<label for="formacionacademica">Formación Académica</label>
+							<select name="formacionacademica" ng-model="obj.objeto.formacionacademica" data-placeholder="Seleccione"
+								class="form-control">
+								<option value=""></option>
+								<option value="Doctorado">Doctorado</option>
+								<option value="Maestria">Maestria</option>
+								<option value="MediaSuperior">Media Superior</option>
+								<option value="Posgrado">Posgrado</option>
+								<option value="Primaria">Primaria</option>
+								<option value="Secundaria">Secundaria</option>
+								<option value="Superior">Superior</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-4">
+							<label>Foto * (máximo 512Kb)</label>
+							<input name="foto" type="file" id="fileInput1" accept="image/png,image/jpeg">
+							<div id="fileDisplayArea1"></div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="row">
+						<div class="col-sm-12 "><br />
+							<input type="submit" ng-click="obj.guardarParticipante(obj.objeto,formCierreBusqueda)" value="Guardar"
+								class="btn btn-success pull-left" valida-form formulario="formCierreBusqueda">
+							<button type="button" id="cerrarCierreBusqueda" class="btn btn-primary"
+								data-dismiss="modal">Cerrar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
 </div>
