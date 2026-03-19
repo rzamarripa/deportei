@@ -2,25 +2,27 @@
 Meteor.methods({
 
 	getGafetes: function (dato) {
-
 		var fs = require('fs');
 		var future = require('fibers/future');
 		var res = new future();
 		var Docxtemplater = require('docxtemplater');
 		var JSZip = require('jszip');
 		var ImageModule = require('docxtemplater-image-module')
-
-		var meteor_root = require('fs').realpathSync(process.cwd() + '/../');
+		var qr = require('qr-image');
 
 		var produccion = "";
 		var produccionFotos = "";
 		var produccionDescargas = "";
 
 		if (Meteor.isDevelopment) {
+			var meteor_root = require('fs').realpathSync(process.cwd() + '/../');
 			produccion = meteor_root + "/web.browser/app/archivos/";
-			produccionFotos = meteor_root + "/web.browser/app/fotos/";
-			produccionDescargas = meteor_root + "/web.browser/app/descargas/";
+			var path = require('path');
+			var publicPath = path.resolve('.').split('.meteor')[0];
+			produccionFotos = publicPath + ".outputs/";
+			produccionDescargas = publicPath + ".outputs/";
 		} else {
+			var publicPath = '/var/www/isde/';
 			produccion = "/var/www/isde/archivos/";
 			produccionFotos = "/var/www/isde/fotos/";
 			produccionDescargas = "/var/www/isde/descargas/";
@@ -34,118 +36,244 @@ Meteor.methods({
 		}
 
 		opts.getSize = function (img, tagValue, tagName) {
-			return [80, 80];
+			if (tagName == "foto")
+				return [100, 90];
+			else
+				return [90, 90];
 		}
 
 		var imageModule = new ImageModule(opts);
 
-		const evento = eventos.findOne({ _id: dato.evento_id });
-		const munincipio = Municipios.findOne({ _id: dato.municipio_id });
-		const depoirte = Deportes.findOne({ _id: dato.deporte_id });
+		const evento = Eventos.findOne({ _id: dato.evento_id });
+		const municipio = Municipios.findOne({ _id: dato.municipio_id });
+		const deporte = Deportes.findOne({ _id: dato.deporte_id });
 		const categoria = Categorias.findOne({ _id: dato.categoria_id });
 		const rama = Ramas.findOne({ _id: dato.rama_id });
 
+		const participantes = [];
+		dato.participantes.map(p => {
+			let participante = p;
+			p.nombre = participante.nombre;
+			p.apellidoPaterno = participante.apellidoPaterno;
+			p.apellidoMaterno = participante.apellidoMaterno;
+			p.fechaNacimiento = `${participante.fechaNacimiento.getDate()}/${participante.fechaNacimiento.getMonth() + 1}/${participante.fechaNacimiento.getFullYear()}`;
+			p.sexo = participante.sexo;
+			p.curp = participante.curp;
+			p.prueba = "";
 
-		_.each(participantes, function (participante) {
+			if (p.pruebas != undefined && p.pruebas.length > 0) {
+				const prueba_id = p.pruebas[0]; 
+				const prueba = Pruebas.findOne(prueba_id);
+				p.prueba = prueba.nombre;
+			}
+
+			p.municipio = municipio.nombre;
+			p.deporte = deporte.nombre;
+			p.categoria = categoria.nombre;
+			p.rama = rama.nombre;
+			var cons = "0000";
+			if (p.con < 10) {
+				cons = "000".concat(p.con.toString());
+			}
+			else if (p.con < 100) {
+				cons = "00".concat(p.con.toString());
+			}
+			else if (p.con < 1000) {
+				cons = "0".concat(p.con.toString());
+			}
+			else {
+				cons = p.con;
+			}
+			p.con = cons;
+
 			if (participante.foto != "") {
-
 				var f = String(participante.foto);
 				var tipo = f.substr(11, 4);
 				if (tipo == 'jpeg') {
 					participante.foto = f.replace('data:image/jpeg;base64,', '');
-					// create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
 					var bitmap = new Buffer(participante.foto, 'base64');
-					//Usando Meteor_root
 					fs.writeFileSync(produccionFotos + participante.curp + ".jpeg", bitmap);
-					participante.foto = produccionFotos + participante.curp + ".jpeg";
+					p.foto = produccionFotos + participante.curp + ".jpeg";
 				}
 				else if (tipo == 'png;') {
 					participante.foto = f.replace('data:image/png;base64,', '');
-					// create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
 					var bitmap = new Buffer(participante.foto, 'base64');
-					//Usando Meteor_root
 					fs.writeFileSync(produccionFotos + participante.curp + ".png", bitmap);
-					participante.foto = produccionFotos + participante.curp + ".png";
+					p.foto = produccionFotos + participante.curp + ".png";
 				}
 			}
 
-			if (participante.apellidoMaterno == undefined)
-				participante.apellidoMaterno = "";
+			//QR
+			let string_qr = `${p.con}-${p.nombre} ${p.apellidoPaterno} ${p.apellidoMaterno}-${municipio.nombre}-${p.deporte}-${p.categoria}`;
+			let svg_string = qr.imageSync(string_qr, { type: 'png' });
+			const bitmapTemp = new Buffer.from(svg_string, 'base64');
+			fs.writeFileSync(publicPath + (Meteor.isDevelopment ? ".outputs/" : "descargas/") + "qr_" + p.curp + ".png", bitmapTemp);
+			p.qr = publicPath + (Meteor.isDevelopment ? ".outputs/" : "descargas/") + "qr_" + p.curp + ".png";
 
 
-			var cons = "0000";
-			if (participante.con < 10) {
-				cons = "000".concat(participante.con.toString());
-			}
-			else if (participante.con < 100) {
-				cons = "00".concat(participante.con.toString());
-			}
-			else if (participante.con < 1000) {
-				cons = "0".concat(participante.con.toString());
-			}
-			else {
-				cons = participante.con;
-			}
-			participante.con = cons;
-
-			participante.municipio = mun.nombre;
-			participante.deporte = dep.nombre;
-			participante.categoria = cat.nombre;
-			participante.rama = ram.nombre;
-
-			participante.nombre = participante.nombre.toUpperCase();
-			participante.apellidoPaterno = participante.apellidoPaterno.toUpperCase();
-			participante.apellidoMaterno = participante.apellidoMaterno.toUpperCase();
-
+			participantes.push(p);
+			return p;
 		});
 
+		// const participantes = ParticipanteEventos.find({
+		// 	evento_id: dato.evento_id
+		// 	, municipio_id: dato.municipio_id
+		// 	, deporte_id: dato.deporte_id
+		// 	, categoria_id: dato.categoria_id
+		// 	, rama_id: dato.rama_id
+		// 	, funcionEspecifica: dato.funcionEspecifica
+		// }).map(p => {
+		// 	let participante = Participantes.findOne({ _id: p.participante_id })
+		// 	p.nombre = participante.nombre;
+		// 	p.apellidoPaterno = participante.apellidoPaterno;
+		// 	p.apellidoMaterno = participante.apellidoMaterno;
+		// 	p.fechaNacimiento = `${participante.fechaNacimiento.getDate()}/${participante.fechaNacimiento.getMonth() + 1}/${participante.fechaNacimiento.getFullYear()}`;
+		// 	p.sexo = participante.sexo;
+		// 	p.curp = participante.curp;
+
+		// 	p.municipio = municipio.nombre;
+		// 	p.deporte = deporte.nombre;
+		// 	p.categoria = categoria.nombre;
+		// 	p.rama = rama.nombre;
+		// 	var cons = "0000";
+		// 	if (p.con < 10) {
+		// 		cons = "000".concat(p.con.toString());
+		// 	}
+		// 	else if (p.con < 100) {
+		// 		cons = "00".concat(p.con.toString());
+		// 	}
+		// 	else if (p.con < 1000) {
+		// 		cons = "0".concat(p.con.toString());
+		// 	}
+		// 	else {
+		// 		cons = p.con;
+		// 	}
+		// 	p.con = cons;
+
+		// 	if (participante.foto != "") {
+		// 		participante.fechaNacimiento = participante.fechaNacimiento.getUTCDate() + "-" + (participante.fechaNacimiento.getUTCMonth() + 1) + "-" + participante.fechaNacimiento.getUTCFullYear();
+		// 		var f = String(participante.foto);
+		// 		var tipo = f.substr(11, 4);
+		// 		if (tipo == 'jpeg') {
+		// 			participante.foto = f.replace('data:image/jpeg;base64,', '');
+		// 			// create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
+		// 			var bitmap = new Buffer(participante.foto, 'base64');
+		// 			//Usando Meteor_root
+		// 			fs.writeFileSync(produccionFotos + participante.curp + ".jpeg", bitmap);
+		// 			p.foto = produccionFotos + participante.curp + ".jpeg";
+		// 		}
+		// 		else if (tipo == 'png;') {
+		// 			participante.foto = f.replace('data:image/png;base64,', '');
+		// 			// create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
+		// 			var bitmap = new Buffer(participante.foto, 'base64');
+		// 			//Usando Meteor_root
+		// 			fs.writeFileSync(produccionFotos + participante.curp + ".png", bitmap);
+		// 			p.foto = produccionFotos + participante.curp + ".png";
+		// 		}
+		// 	}
+
+		// 	return p;
+		// });
+
+		// _.each(participantes, function (participante) {
+		// 	if (participante.foto != "") {
+		// 		var f = String(participante.foto);
+		// 		var tipo = f.substr(11, 4);
+		// 		if (tipo == 'jpeg') {
+		// 			participante.foto = f.replace('data:image/jpeg;base64,', '');
+		// 			// create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
+		// 			var bitmap = new Buffer(participante.foto, 'base64');
+		// 			//Usando Meteor_root
+		// 			fs.writeFileSync(produccionFotos + participante.curp + ".jpeg", bitmap);
+		// 			participante.foto = produccionFotos + participante.curp + ".jpeg";
+		// 		}
+		// 		else if (tipo == 'png;') {
+		// 			participante.foto = f.replace('data:image/png;base64,', '');
+		// 			// create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
+		// 			var bitmap = new Buffer(participante.foto, 'base64');
+		// 			//Usando Meteor_root
+		// 			fs.writeFileSync(produccionFotos + participante.curp + ".png", bitmap);
+		// 			participante.foto = produccionFotos + participante.curp + ".png";
+		// 		}
+		// 	}
+
+		// 	if (participante.apellidoMaterno == undefined)
+		// 		participante.apellidoMaterno = "";
+
+
+		// 	var cons = "0000";
+		// 	if (participante.con < 10) {
+		// 		cons = "000".concat(participante.con.toString());
+		// 	}
+		// 	else if (participante.con < 100) {
+		// 		cons = "00".concat(participante.con.toString());
+		// 	}
+		// 	else if (participante.con < 1000) {
+		// 		cons = "0".concat(participante.con.toString());
+		// 	}
+		// 	else {
+		// 		cons = participante.con;
+		// 	}
+		// 	participante.con = cons;
+
+		// 	participante.municipio = mun.nombre;
+		// 	participante.deporte = deporte.nombre;
+		// 	participante.categoria = cat.nombre;
+		// 	participante.rama = ram.nombre;
+
+		// 	participante.nombre = participante.nombre.toUpperCase();
+		// 	participante.apellidoPaterno = participante.apellidoPaterno.toUpperCase();
+		// 	participante.apellidoMaterno = participante.apellidoMaterno.toUpperCase();
+
+		// });
 		var content;
-		if (FE == "DEPORTISTA") {
-			if (evento.nombreGafeteDeportista == undefined || evento.nombreGafeteDeportista == "")
-				content = fs.readFileSync(produccion + "sinDefinir.docx", "binary");
-			else
-				content = fs.readFileSync(produccion + evento.nombreGafeteDeportista + ".docx", "binary");
-		}
-		else if (FE == "ENTRENADOR" || FE == "ENTRENADOR AUXILIAR" || FE == "DELEGADO POR DEPORTE" || FE == "AUXILIAR GENERAL" || FE == "ASOCIACIÓN") {
-			if (evento.nombreGafeteEntrenador == undefined || evento.nombreGafeteEntrenador == "")
-				content = fs.readFileSync(produccion + "sinDefinir.docx", "binary");
-			else
-				content = fs.readFileSync(produccion + evento.nombreGafeteEntrenador + ".docx", "binary");
+		// if (FE == "DEPORTISTA") {
+		// 	if (evento.nombreGafeteDeportista == undefined || evento.nombreGafeteDeportista == "")
+		// 		content = fs.readFileSync(produccion + "sinDefinir.docx", "binary");
+		// 	else
 
-		}
-		else if (FE == "DELEGADO GENERAL" || FE == "JUEZ") {
-			if (evento.nombreGafeteDelegadoGeneral == undefined || evento.nombreGafeteDelegadoGeneral == "")
-				content = fs.readFileSync(produccion + "sinDefinir.docx", "binary");
-			else
-				content = fs.readFileSync(produccion + evento.nombreGafeteDelegadoGeneral + ".docx", "binary");
+		content = fs.readFileSync(`${produccion}${evento.nombreGafeteDeportista}.docx`, "binary");
+		// }
+		// else if (FE == "ENTRENADOR" || FE == "ENTRENADOR AUXILIAR" || FE == "DELEGADO POR DEPORTE" || FE == "AUXILIAR GENERAL" || FE == "ASOCIACIÓN") {
+		// 	if (evento.nombreGafeteEntrenador == undefined || evento.nombreGafeteEntrenador == "")
+		// 		content = fs.readFileSync(produccion + "sinDefinir.docx", "binary");
+		// 	else
+		// 		content = fs.readFileSync(produccion + evento.nombreGafeteEntrenador + ".docx", "binary");
 
-		}
-		else if (FE == "DELEGADO AUXILIAR") {
-			if (evento.nombreGafeteDelegadoAuxiliar == undefined || evento.nombreGafeteDelegadoAuxiliar == "")
-				content = fs.readFileSync(produccion + "sinDefinir.docx", "binary");
-			else
-				content = fs.readFileSync(produccion + evento.nombreGafeteDelegadoAuxiliar + ".docx", "binary");
+		// }
+		// else if (FE == "DELEGADO GENERAL" || FE == "JUEZ") {
+		// 	if (evento.nombreGafeteDelegadoGeneral == undefined || evento.nombreGafeteDelegadoGeneral == "")
+		// 		content = fs.readFileSync(produccion + "sinDefinir.docx", "binary");
+		// 	else
+		// 		content = fs.readFileSync(produccion + evento.nombreGafeteDelegadoGeneral + ".docx", "binary");
 
-		}
-		else if (FE == "JEFE DE MISIÓN" || FE == "OFICIAL") {
-			if (evento.nombreGafeteOtros == undefined || evento.nombreGafeteOtros == "")
-				content = fs.readFileSync(produccion + "sinDefinir.docx", "binary");
-			else
-				content = fs.readFileSync(produccion + evento.nombreGafeteOtros + ".docx", "binary");
-		}
-		else if (FE == "COMITÉ ORGANIZADOR") {
-			if (evento.nombreGafeteComite == undefined || evento.nombreGafeteComite == "")
-				content = fs.readFileSync(produccion + "sinDefinir.docx", "binary");
-			else
-				content = fs.readFileSync(produccion + evento.nombreGafeteComite + ".docx", "binary");
-		}
-		else {
-			if (evento.nombreGafeteOtros == undefined || evento.nombreGafeteOtros == "")
-				content = fs.readFileSync(produccion + "sinDefinir.docx", "binary");
-			else
-				content = fs.readFileSync(produccion + evento.nombreGafeteOtros + ".docx", "binary");
+		// }
+		// else if (FE == "DELEGADO AUXILIAR") {
+		// 	if (evento.nombreGafeteDelegadoAuxiliar == undefined || evento.nombreGafeteDelegadoAuxiliar == "")
+		// 		content = fs.readFileSync(produccion + "sinDefinir.docx", "binary");
+		// 	else
+		// 		content = fs.readFileSync(produccion + evento.nombreGafeteDelegadoAuxiliar + ".docx", "binary");
 
-		}
+		// }
+		// else if (FE == "JEFE DE MISIÓN" || FE == "OFICIAL") {
+		// 	if (evento.nombreGafeteOtros == undefined || evento.nombreGafeteOtros == "")
+		// 		content = fs.readFileSync(produccion + "sinDefinir.docx", "binary");
+		// 	else
+		// 		content = fs.readFileSync(produccion + evento.nombreGafeteOtros + ".docx", "binary");
+		// }
+		// else if (FE == "COMITÉ ORGANIZADOR") {
+		// 	if (evento.nombreGafeteComite == undefined || evento.nombreGafeteComite == "")
+		// 		content = fs.readFileSync(produccion + "sinDefinir.docx", "binary");
+		// 	else
+		// 		content = fs.readFileSync(produccion + evento.nombreGafeteComite + ".docx", "binary");
+		// }
+		// else {
+		// 	if (evento.nombreGafeteOtros == undefined || evento.nombreGafeteOtros == "")
+		// 		content = fs.readFileSync(produccion + "sinDefinir.docx", "binary");
+		// 	else
+		// 		content = fs.readFileSync(produccion + evento.nombreGafeteOtros + ".docx", "binary");
+
+		// }
 
 		var zip = new JSZip(content);
 		var doc = new Docxtemplater()
@@ -157,12 +285,36 @@ Meteor.methods({
 		var buf = doc.getZip()
 			.generate({ type: "nodebuffer" });
 
+		//Eliminar la foto
+		participantes.forEach(p => {
+			if (p.foto != "") {
+				fs.unlink(p.foto, (error) => { /* handle error */ });
+				fs.unlink(p.qr, (error) => { /* handle error */ });
+			}
+		})
 		try {
+			const archivo = `${municipio.nombre}_${deporte.nombre}.docx`
 			fs.writeFileSync(produccionDescargas + "gafeteSalida.docx", buf);
 			var bitmap = fs.readFileSync(produccionDescargas + "gafeteSalida.docx");
-
-			res['return']({ uri: 'data:application/application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,' + bitmap.toString('base64'), nombre: archivo.archivoNombre });
+			fs.unlink(produccionDescargas + "gafeteSalida.docx", (error) => { /* handle error */ });
+			res['return']({ uri: 'data:application/application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,' + bitmap.toString('base64'), nombre: "gafeteSalida.docx" });
 			return res.wait();
+
+			// unoconv.convert(produccionDescargas + "gafeteSalida.docx", 'pdf', function (err, result) {
+			// 	if (err) {
+			// 		console.log(err)
+			// 	}
+			// 	if (result) {
+			// 		fs.unlink(produccionDescargas + "gafeteSalida.docx", function () { });
+			// 		res['return']({
+			// 			uri: 'data:application/pdf;base64,' + result.toString('base64'),
+			// 			nombre: archivo
+			// 		});
+			// 	}
+			// });
+
+			//res['return']({ uri: 'data:application/pdf,' + bitmap.toString('base64'), nombre: archivo });
+			//return res.wait();
 
 		} catch (error) {
 			console.log(error)
@@ -170,9 +322,11 @@ Meteor.methods({
 
 	},
 
-	getCredenciales: function (participantes, municipio, evento, FE, deporte, categoria, rama) {
+	getCredenciales: function (dato) {
 
 		var fs = require('fs');
+		var future = require('fibers/future');
+		var res = new future();
 		var Docxtemplater = require('docxtemplater');
 		var JSZip = require('jszip');
 		var ImageModule = require('docxtemplater-image-module')
@@ -206,17 +360,44 @@ Meteor.methods({
 
 		var imageModule = new ImageModule(opts);
 
+		const evento = Eventos.findOne({ _id: dato.evento_id });
+		const municipio = Municipios.findOne({ _id: dato.municipio_id });
+		const deporte = Deportes.findOne({ _id: dato.deporte_id });
+		const categoria = Categorias.findOne({ _id: dato.categoria_id });
+		const rama = Ramas.findOne({ _id: dato.rama_id });
 
-		var evento = eventos.findOne({ _id: evento });
-		var mun = Municipios.findOne({ _id: municipio });
-		var dep = Deportes.findOne({ _id: deporte });
-		var cat = Categorias.findOne({ _id: categoria });
-		var ram = Ramas.findOne({ _id: rama });
+		const participantes = [];
+		dato.participantes.map(p => {
+			//let participante = Participantes.findOne({ _id: p.participante_id })
+			let participante = p;
+			p.nombre = participante.nombre;
+			p.apellidoPaterno = participante.apellidoPaterno;
+			p.apellidoMaterno = participante.apellidoMaterno;
+			p.fechaNacimiento = `${participante.fechaNacimiento.getDate()}/${participante.fechaNacimiento.getMonth() + 1}/${participante.fechaNacimiento.getFullYear()}`;
+			p.sexo = participante.sexo;
+			p.curp = participante.curp;
 
+			p.municipio = municipio.nombre;
+			p.deporte = deporte.nombre;
+			p.categoria = categoria.nombre;
+			p.rama = rama.nombre;
+			var cons = "0000";
+			if (p.con < 10) {
+				cons = "000".concat(p.con.toString());
+			}
+			else if (p.con < 100) {
+				cons = "00".concat(p.con.toString());
+			}
+			else if (p.con < 1000) {
+				cons = "0".concat(p.con.toString());
+			}
+			else {
+				cons = p.con;
+			}
+			p.con = cons;
 
-		_.each(participantes, function (participante) {
 			if (participante.foto != "") {
-
+				//participante.fechaNacimiento = participante.fechaNacimiento.getUTCDate() + "-" + (participante.fechaNacimiento.getUTCMonth() + 1) + "-" + participante.fechaNacimiento.getUTCFullYear();
 				var f = String(participante.foto);
 				var tipo = f.substr(11, 4);
 				if (tipo == 'jpeg') {
@@ -225,7 +406,7 @@ Meteor.methods({
 					var bitmap = new Buffer(participante.foto, 'base64');
 					//Usando Meteor_root
 					fs.writeFileSync(produccionFotos + participante.curp + ".jpeg", bitmap);
-					participante.foto = produccionFotos + participante.curp + ".jpeg";
+					p.foto = produccionFotos + participante.curp + ".jpeg";
 				}
 				else if (tipo == 'png;') {
 					participante.foto = f.replace('data:image/png;base64,', '');
@@ -233,51 +414,76 @@ Meteor.methods({
 					var bitmap = new Buffer(participante.foto, 'base64');
 					//Usando Meteor_root
 					fs.writeFileSync(produccionFotos + participante.curp + ".png", bitmap);
-					participante.foto = produccionFotos + participante.curp + ".png";
+					p.foto = produccionFotos + participante.curp + ".png";
 				}
 			}
 
-			if (participante.apellidoMaterno == undefined)
-				participante.apellidoMaterno = "";
-
-
-			participante.fechaNacimiento = `${participante.fechaNacimiento.getDate()}/${participante.fechaNacimiento.getMonth() + 1}/${participante.fechaNacimiento.getFullYear()}`;
-
-
-			var cons = "0000";
-			if (participante.con < 10) {
-				cons = "000".concat(participante.con.toString());
-			}
-			else if (participante.con < 100) {
-				cons = "00".concat(participante.con.toString());
-			}
-			else if (participante.con < 1000) {
-				cons = "0".concat(participante.con.toString());
-			}
-			else {
-				cons = participante.con;
-			}
-			participante.con = cons;
-
-			participante.municipio = mun.nombre;
-			participante.deporte = dep.nombre;
-			participante.categoria = cat.nombre;
-			participante.rama = ram.nombre;
-
-			participante.nombre = participante.nombre.toUpperCase();
-			participante.apellidoPaterno = participante.apellidoPaterno.toUpperCase();
-			participante.apellidoMaterno = participante.apellidoMaterno.toUpperCase();
-
+			participantes.push(p);
+			return p;
 		});
 
-		var content;
+		// _.each(participantes, function (participante) {
+		// 	if (participante.foto != "") {
 
+		// 		var f = String(participante.foto);
+		// 		var tipo = f.substr(11, 4);
+		// 		if (tipo == 'jpeg') {
+		// 			participante.foto = f.replace('data:image/jpeg;base64,', '');
+		// 			// create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
+		// 			var bitmap = new Buffer(participante.foto, 'base64');
+		// 			//Usando Meteor_root
+		// 			fs.writeFileSync(produccionFotos + participante.curp + ".jpeg", bitmap);
+		// 			participante.foto = produccionFotos + participante.curp + ".jpeg";
+		// 		} 
+		// 		else if (tipo == 'png;') {
+		// 			participante.foto = f.replace('data:image/png;base64,', '');
+		// 			// create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
+		// 			var bitmap = new Buffer(participante.foto, 'base64');
+		// 			//Usando Meteor_root
+		// 			fs.writeFileSync(produccionFotos + participante.curp + ".png", bitmap);
+		// 			participante.foto = produccionFotos + participante.curp + ".png";
+		// 		}
+		// 	}
+
+		// 	if (participante.apellidoMaterno == undefined)
+		// 		participante.apellidoMaterno = "";
+
+
+		// 	participante.fechaNacimiento = `${participante.fechaNacimiento.getDate()}/${participante.fechaNacimiento.getMonth() + 1}/${participante.fechaNacimiento.getFullYear()}`;
+
+
+		// 	var cons = "0000";
+		// 	if (participante.con < 10) {
+		// 		cons = "000".concat(participante.con.toString());
+		// 	}
+		// 	else if (participante.con < 100) {
+		// 		cons = "00".concat(participante.con.toString());
+		// 	}
+		// 	else if (participante.con < 1000) {
+		// 		cons = "0".concat(participante.con.toString());
+		// 	}
+		// 	else {
+		// 		cons = participante.con;
+		// 	}
+		// 	participante.con = cons;
+
+		// 	participante.municipio = mun.nombre;
+		// 	participante.deporte = dep.nombre;
+		// 	participante.categoria = cat.nombre;
+		// 	participante.rama = ram.nombre;
+
+		// 	participante.nombre = participante.nombre.toUpperCase();
+		// 	participante.apellidoPaterno = participante.apellidoPaterno.toUpperCase();
+		// 	participante.apellidoMaterno = participante.apellidoMaterno.toUpperCase();
+
+		// });
+
+		var content;
 
 		if (evento.nombreCredencial == undefined || evento.nombreCredencial == "")
 			content = fs.readFileSync(produccion + "sinDefinir.docx", "binary");
 		else
-			content = fs.readFileSync(produccion + evento.nombreCredencial + ".docx", "binary");
-
+			content = fs.readFileSync(produccion + "credencial.docx", "binary");
 
 		var zip = new JSZip(content);
 		var doc = new Docxtemplater()
@@ -285,7 +491,6 @@ Meteor.methods({
 			.loadZip(zip)
 
 		doc.setData({ participantes })
-
 		doc.render();
 
 		var buf = doc.getZip()
@@ -294,14 +499,28 @@ Meteor.methods({
 		fs.writeFileSync(produccionDescargas + "credencialSalida.docx", buf);
 
 
-		//Pasar a base64
-		// read binary data
-		var bitmap = fs.readFileSync(produccionDescargas + "credencialSalida.docx");
+		//Eliminar la foto
+		participantes.forEach(p => {
+			if (p.foto != "") {
+				fs.unlink(p.foto, (error) => { /* handle error */ });
+			}
+		})
 
-		// convert binary data to base64 encoded string
-		return new Buffer(bitmap).toString('base64');
+		try {
+			const archivo = `credencialSalida.docx`;
+			fs.writeFileSync(produccionDescargas + "credencialSalida.docx", buf);
+			var bitmap = fs.readFileSync(produccionDescargas + "credencialSalida.docx");
+			fs.unlink(produccionDescargas + "credencialSalida.docx", (error) => {
+				//console.log(error)
+				/* handle error */
+			});
 
+			res['return']({ uri: 'data:application/application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,' + bitmap.toString('base64'), nombre: archivo });
+			return res.wait();
 
+		} catch (error) {
+			console.log(error)
+		}
 
 	},
 
@@ -314,8 +533,6 @@ Meteor.methods({
 		var future = require('fibers/future');
 		var res = new future();
 
-		var meteor_root = Npm.require('fs').realpathSync(process.cwd() + '/../');
-
 		var produccion = "";
 		var produccionFotos = "";
 		var produccionDescargas = "";
@@ -323,9 +540,12 @@ Meteor.methods({
 		//////////////////////////////////////////////////////////////////////////////////////////
 
 		if (Meteor.isDevelopment) {
+			var meteor_root = require('fs').realpathSync(process.cwd() + '/../');
 			produccion = meteor_root + "/web.browser/app/archivos/";
-			produccionFotos = meteor_root + "/web.browser/app/fotos/";
-			produccionDescargas = meteor_root + "/web.browser/app/descargas/";
+			var path = require('path');
+			var publicPath = path.resolve('.').split('.meteor')[0];
+			produccionFotos = publicPath + ".outputs/";
+			produccionDescargas = publicPath + ".outputs/";
 		} else {
 			produccion = "/var/www/isde/archivos/";
 			produccionFotos = "/var/www/isde/fotos/";
@@ -371,6 +591,7 @@ Meteor.methods({
 					//Usando Meteor_root
 					fs.writeFileSync(produccionFotos + participante.curp + ".jpeg", bitmap);
 					p.foto = produccionFotos + participante.curp + ".jpeg";
+					//fs.unlink(produccionFotos + participante.curp + ".jpeg", (error) => { /* handle error */ });
 				}
 				else if (tipo == 'png;') {
 					participante.foto = f.replace('data:image/png;base64,', '');
@@ -379,6 +600,7 @@ Meteor.methods({
 					//Usando Meteor_root
 					fs.writeFileSync(produccionFotos + participante.curp + ".png", bitmap);
 					p.foto = produccionFotos + participante.curp + ".png";
+					//fs.unlink(produccionFotos + participante.curp + ".png", (error) => { /* handle error */ });
 				}
 			}
 
@@ -435,15 +657,20 @@ Meteor.methods({
 		});
 
 		doc.render();
-
 		var buf = doc.getZip()
 			.generate({ type: "nodebuffer" });
 
+		//Eliminar la foto
+		participantes.forEach(p => {
+			if (p.foto != "") {
+				fs.unlink(p.foto, (error) => { /* handle error */ });
+			}
+		})
 
 		try {
 			fs.writeFileSync(produccionDescargas + "cedulaSalida.docx", buf);
 			var bitmap = fs.readFileSync(produccionDescargas + "cedulaSalida.docx");
-
+			fs.unlink(produccionDescargas + "cedulaSalida.docx", (error) => { /* handle error */ });
 			res['return']({ uri: 'data:application/application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,' + bitmap.toString('base64'), nombre: "cedulaSalida.docx" });
 			return res.wait();
 
@@ -470,16 +697,18 @@ Meteor.methods({
 
 		var wscols = [
 			{ wch: 5 },
-			{ wch: 15 },
-			{ wch: 18 },
-			{ wch: 18 },
+			{ wch: 25 },
+			{ wch: 20 },
+			{ wch: 20 },
 			{ wch: 20 },
 			{ wch: 25 },
-			{ wch: 15 },
-			{ wch: 20 },
+			{ wch: 25 },
+			{ wch: 30 },
+			{ wch: 40 },
 			{ wch: 10 },
 			{ wch: 15 },
-			{ wch: 20 }
+			{ wch: 20 },
+			{ wch: 5 },
 		];
 
 		if (typeof require !== 'undefined')
@@ -544,6 +773,7 @@ Meteor.methods({
 			/* write file */
 			XLSX.writeFile(wb, produccion + "sheetjs.xlsx");
 			var bitmap = fs.readFileSync(produccion + "sheetjs.xlsx");
+			fs.unlink(produccion + "sheetjs.xlsx", (error) => { /* handle error */ });
 			res['return']({ uri: 'data:application/xlsx;base64,' + bitmap.toString('base64'), nombre: "sheetjs.xlsx" });
 			return res.wait();
 
@@ -582,5 +812,12 @@ Meteor.methods({
 		}
 
 	},
+
+
+
+
 });
+
+
+
 

@@ -7,6 +7,7 @@ Meteor.methods({
     getDeportesEvento: function (evento_id) {
         return Deportes.find({ evento_id: evento_id }, { sort: { nombre: 1 } }).fetch();
     },
+
     getCategoriasEvento: function (evento_id, deporte_id) {
         return Categorias.find({ evento_id: evento_id, deporte_id: deporte_id }, { sort: { nombre: 1 } }).fetch();
     },
@@ -39,44 +40,76 @@ Meteor.methods({
     },
 
     getParticipantePerfil: function (id) {
-        const data = {};
-        data.objeto = {};
-        data.objeto = Participantes.findOne({ _id: id }, {
-            fileds: {
-                "foto": 1,
-                "nombre": 1,
-                "apellidoPaterno": 1,
-                "apellidoMaterno": 1,
-                "formacionacademica": 1,
-                "curp": 1,
-                "fechaNacimiento": 1
-            }
-        });
+		const data = {};
+		data.objeto = {};
+		data.objeto = Participantes.findOne({ _id: id }, {
+			fileds: {
+				"foto": 1,
+				"nombre": 1,
+				"apellidoPaterno": 1,
+				"apellidoMaterno": 1,
+				"formacionacademica": 1,
+				"curp": 1,
+				"fechaNacimiento": 1
+			}
+		});
 
-        data.arreglo = [];
+		data.arreglo = [];
 
-        ParticipanteEventos.find({ participante_id: id }).forEach(p => {
-            const objeto = {};
-            objeto.funcionEspecifica = p.funcionEspecifica;
-            objeto.evento = Eventos.findOne(p.evento_id).nombre;
-            objeto.deporte = Deportes.findOne({ _id: p.deporte_id, evento_id: p.evento_id }).nombre;
-            objeto.categoria = Categorias.findOne({ _id: p.categoria_id, deporte_id: p.deporte_id, evento_id: p.evento_id }).nombre;
-            if (p.pruebas != undefined && p.pruebas.length > 0) {
-                objeto.pruebas = [];
-                p.pruebas.forEach(t => {
-                    const prueba = {};
-                    prueba.nombre = Pruebas.findOne(t).nombre;
-                    objeto.pruebas.push(prueba.nombre);
-                })
-            }
-            objeto.rama = Ramas.findOne({ _id: p.rama_id }).nombre;
-            objeto.municipio = Municipios.findOne(p.municipio_id).nombre;
-            data.arreglo.push(objeto);
+		ParticipanteEventos.find({ participante_id: id }).forEach(p => {
+			const objeto = {};
+			objeto._id = p._id;
+			objeto.funcionEspecifica = p.funcionEspecifica;
+			const evento = Eventos.findOne(p.evento_id);
+			objeto.evento_id = evento._id;
+			objeto.evento = evento.nombre;
+			objeto.puedeInscribir = evento.puedeInscribir != undefined ? evento.puedeInscribir : false;
+			objeto.fecha = evento.fechainicio;
+			const deporte = Deportes.findOne({ _id: p.deporte_id, evento_id: p.evento_id });
+			objeto.deporte_id = deporte._id;
+			objeto.deporte = deporte.nombre;
+			const categoria = Categorias.findOne({ _id: p.categoria_id, deporte_id: p.deporte_id, evento_id: p.evento_id });
+			objeto.categoria_id = categoria._id;
+			objeto.categoria = categoria.nombre;
+			
+			if (p.pruebas != undefined && p.pruebas.length > 0) {
+				objeto.pruebas = [...p.pruebas];
+				objeto.pruebasNombres = [];
+				p.pruebas.forEach(t => {
+					const prueba = {};
+					prueba.nombre = Pruebas.findOne(t).nombre;
+					objeto.pruebasNombres.push(prueba.nombre);
+				})
+			}
+			const rama = Ramas.findOne({ _id: p.rama_id });
+			objeto.rama_id = rama._id;
+			objeto.rama = rama.nombre;
+			const municipio = Municipios.findOne(p.municipio_id);
+			objeto.municipio_id = municipio._id;
+			objeto.municipio = municipio.nombre;
+			data.arreglo.push(objeto);
 
-        })
-        return data;
+		})
 
-    },
+        try {
+            data.arreglo.sort(function (a, b) {
+                if (a.fecha.getTime() > b.fecha.getTime()) {
+                    return -1;
+                }
+                if (a.fecha.getTime() < b.fecha.getTime()) {
+                    return 1;
+                }
+                // a must be equal to b
+                return 0;
+            });
+            
+        } catch (error) {
+            
+        }
+
+		return data;
+
+	},
 
     getValidarParticipante: function (curp) {
         const data = {};
@@ -176,21 +209,23 @@ Meteor.methods({
         data.arreglo = ParticipanteEventos.find(selector).map(p => {
             p.pruebasNombre = [];
             const partcipante = Participantes.findOne(p.participante_id);
-            p.nombre = partcipante.nombre;
-            p.apellidoPaterno = partcipante.apellidoPaterno;
-            p.apellidoMaterno = partcipante.apellidoMaterno;
-            p.fechaNacimiento = partcipante.fechaNacimiento;
-            p.sexo = partcipante.sexo;
-            p.curp = partcipante.curp;
-            p.municipio = Municipios.findOne(p.municipio_id).nombre;
-            p.deporte = Deportes.findOne(p.deporte_id).nombre;
-            p.categoria = p.categoria_id == "s/a" ? "Sin Categoria" : Categorias.findOne(p.categoria_id).nombre;
-            p.rama = p.rama_id == "s/a" ? "Sin Rama" : Ramas.findOne(p.rama_id).nombre;
-            if (p.pruebas != undefined && p.pruebas.length > 0) {
-                p.pruebas.forEach(t => {
-                    const prueba = Pruebas.findOne(t);
-                    p.pruebasNombre.push({ nombre: prueba.nombre })
-                })
+            if (partcipante != undefined){
+                p.nombre = partcipante.nombre;
+                p.apellidoPaterno = partcipante.apellidoPaterno;
+                p.apellidoMaterno = partcipante.apellidoMaterno;
+                p.fechaNacimiento = partcipante.fechaNacimiento;
+                p.sexo = partcipante.sexo;
+                p.curp = partcipante.curp;
+                p.municipio = Municipios.findOne(p.municipio_id).nombre;
+                p.deporte = Deportes.findOne(p.deporte_id).nombre;
+                p.categoria = p.categoria_id == "s/a" ? "Sin Categoria" : Categorias.findOne(p.categoria_id).nombre;
+                p.rama = p.rama_id == "s/a" ? "Sin Rama" : Ramas.findOne(p.rama_id).nombre;
+                if (p.pruebas != undefined && p.pruebas.length > 0) {
+                    p.pruebas.forEach(t => {
+                        const prueba = Pruebas.findOne(t);
+                        p.pruebasNombre.push({ nombre: prueba.nombre })
+                    })
+                }
             }
             return p;
         });
@@ -201,17 +236,18 @@ Meteor.methods({
         const data = {};
         data.arreglo = [];
         data.arreglo = ParticipanteEventos.find({
+            municipio_id: param.municipio_id,
             evento_id: param.evento_id,
             deporte_id: param.deporte_id,
             categoria_id: param.categoria_id,
             rama_id: param.rama_id,
-            municipio_id: param.municipio_id
         }).map(p => {
             p.pruebasNombre = [];
             const partcipante = Participantes.findOne(p.participante_id);
             p.nombre = partcipante.nombre;
             p.apellidoPaterno = partcipante.apellidoPaterno;
             p.apellidoMaterno = partcipante.apellidoMaterno;
+            p.nombreCompleto = partcipante.nombreCompleto;
             p.fechaNacimiento = partcipante.fechaNacimiento;
             p.sexo = partcipante.sexo;
             p.curp = partcipante.curp;

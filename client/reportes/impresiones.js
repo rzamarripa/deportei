@@ -18,84 +18,18 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 	this.validation = false;
 
 
-	let part = this.subscribe('participanteEventos', () => {
-		return [{
-			municipio_id: this.getReactively('evento.municipio_id') != undefined ? this.getReactively('evento.municipio_id') : ""
-			, evento_id: this.getReactively('evento.evento_id') != undefined ? this.getReactively('evento.evento_id') : ""
-			, deporte_id: this.getReactively('evento.deporte_id') != undefined ? this.getReactively('evento.deporte_id') : ""
-			, categoria_id: this.getReactively('evento.categoria_id') != undefined ? this.getReactively('evento.categoria_id') : ""
-			, rama_id: this.getReactively('evento.rama_id') != undefined ? this.getReactively('evento.rama_id') : ""
-			, funcionEspecifica: this.getReactively('evento.funcionEspecifica') != undefined ? this.getReactively('evento.funcionEspecifica') : ""
-		}]
-	});
+	this.seleccionaEvento = async function (evento_id) {
+		rc.deportes = await Meteor.callSync("getDeportes", evento_id);
+		$scope.$apply();
+	}
 
-
-	this.subscribe('municipios', () => {
-		return [{ estatus: true }]
-	});
-
-	this.subscribe('eventos', () => {
-		return [{ estatus: true }]
-	});
-
-	this.subscribe('deportes', () => {
-		return [{
-			evento_id: this.getReactively('evento.evento_id') ? this.getReactively('evento.evento_id') : ""
-			, estatus: true
-		}]
-	});
-
-	this.subscribe('categorias', () => {
-		return [{
-			evento_id: this.getReactively('evento.evento_id') ? this.getReactively('evento.evento_id') : ""
-			, deporte_id: this.getReactively('evento.deporte_id') != undefined ? this.getReactively('evento.deporte_id') : ""
-			, estatus: true
-		}]
-	});
-
-	this.subscribe('pruebas', () => {
-		return [{
-			evento_id: this.getReactively('evento.evento_id') ? this.getReactively('evento.evento_id') : ""
-		}]
-	});
-
-	this.subscribe('ramas', () => {
-		return [{ estatus: true }]
-	});
-
-
-	this.helpers({
-		participantes: () => {
-			return ParticipanteEventos.find();
-		},
-		municipios: () => {
-			return Municipios.find();
-		},
-		eventos: () => {
-			return Eventos.find({}, { sort: { fechainicio: -1 } });
-		},
-		deportes: () => {
-			return Deportes.find({}, { sort: { nombre: 1 } });
-		},
-		categorias: () => {
-			return Categorias.find({}, { sort: { nombre: 1 } });
-		},
-		pruebas: () => {
-			return Pruebas.find({}, { sort: { nombre: 1 } });
-		},
-		ramas: () => {
-			return Ramas.find({}, { sort: { nombre: 1 } });
-		},
-
-		todosParticipantes: () => {
-			if (part.ready()) {
-				_.each(rc.participantes, function (participante) {
-					participante.imprimir = true;
-				})
-			}
-		}
-
-	});
+	this.seleccionaDeporte = async function (evento_id, deporte_id) {
+		const param = {};
+		param.evento_id = evento_id;
+		param.deporte_id = deporte_id;
+		rc.categorias = await Meteor.callSync("getCategorias", param);
+		$scope.$apply();
+	}
 
 	this.tieneFoto = function (sexo, foto) {
 		if (foto === undefined) {
@@ -112,12 +46,11 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 		}
 	}
 
-	this.download = function (participantes, op) {
+	this.download = function (op) {
 
 		var p = rc.participantes.filter(function (ele) {
 			return ele.imprimir === true;
 		});
-
 
 		if (p.length == 0) {
 			toastr.error("No hay participantes seleccionados para imprmir");
@@ -125,128 +58,99 @@ function ImpresionesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParam
 		}
 
 
-
 		if (op == 1) {
-
 			$("#credencial").prop("disabled", true);
-			Meteor.call('getCredenciales', p, rc.evento.municipio_id,
-				rc.evento.evento_id,
-				rc.evento.funcionEspecifica,
-				rc.evento.deporte_id,
-				rc.evento.categoria_id,
-				rc.evento.rama_id, function (error, response) {
-					if (error) {
-						console.log('ERROR :', error);
-						$("#credencial").prop("disabled", false);
-						return;
-					}
-					else {
-
-						function b64toBlob(b64Data, contentType, sliceSize) {
-							contentType = contentType || '';
-							sliceSize = sliceSize || 512;
-
-							var byteCharacters = atob(b64Data);
-							var byteArrays = [];
-
-							for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-								var slice = byteCharacters.slice(offset, offset + sliceSize);
-
-								var byteNumbers = new Array(slice.length);
-								for (var i = 0; i < slice.length; i++) {
-									byteNumbers[i] = slice.charCodeAt(i);
-								}
-
-								var byteArray = new Uint8Array(byteNumbers);
-
-								byteArrays.push(byteArray);
-							}
-
-							var blob = new Blob(byteArrays, { type: contentType });
-							return blob;
-						}
-
-						var blob = b64toBlob(response, "application/docx");
-						var url = window.URL.createObjectURL(blob);
-
-						//console.log(url);
-						var dlnk = document.getElementById('dwnldLnkG');
-						dlnk.download = "Credenciales.docx";
-						dlnk.href = url;
-						dlnk.click();
-						window.URL.revokeObjectURL(url);
-						$("#credencial").prop("disabled", false);
-
-					}
-				});
+			const param = {};
+			param.municipio_id = rc.evento.municipio_id;
+			param.evento_id = rc.evento.evento_id;
+			param.deporte_id = rc.evento.deporte_id;
+			param.categoria_id = rc.evento.categoria_id;
+			param.rama_id = rc.evento.rama_id;
+			param.funcionEspecifica = rc.evento.funcionEspecifica;
+			param.participantes = p;
+			loading(true);
+			Meteor.call('getCredenciales', param, function (error, file) {
+				if (!error) {
+					loading(false);
+					downloadFile(file);
+					toastr.success('Listo.');
+				}
+				else {
+					loading(false);
+					console.log(err)
+					toastr.warning("Error al generar el reporte");
+					$("#credencial").prop("disabled", false);
+				}
+			});
 		}
 		else if (op == 2) {
-
 			$("#gafete").prop("disabled", true);
-			Meteor.call('getGafetes', p, rc.evento.municipio_id,
-				rc.evento.evento_id,
-				rc.evento.funcionEspecifica,
-				rc.evento.deporte_id,
-				rc.evento.categoria_id,
-				rc.evento.rama_id, function (error, response) {
-					if (error) {
-						console.log('ERROR :', error);
-						$("#gafete").prop("disabled", false);
-						return;
-					}
-					else {
-
-						function b64toBlob(b64Data, contentType, sliceSize) {
-							contentType = contentType || '';
-							sliceSize = sliceSize || 512;
-
-							var byteCharacters = atob(b64Data);
-							var byteArrays = [];
-
-							for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-								var slice = byteCharacters.slice(offset, offset + sliceSize);
-
-								var byteNumbers = new Array(slice.length);
-								for (var i = 0; i < slice.length; i++) {
-									byteNumbers[i] = slice.charCodeAt(i);
-								}
-
-								var byteArray = new Uint8Array(byteNumbers);
-
-								byteArrays.push(byteArray);
-							}
-
-							var blob = new Blob(byteArrays, { type: contentType });
-							return blob;
-						}
-
-						var blob = b64toBlob(response, "application/docx");
-						var url = window.URL.createObjectURL(blob);
-
-						//console.log(url);
-						var dlnk = document.getElementById('dwnldLnkG');
-						dlnk.download = "Gafetes.docx";
-						dlnk.href = url;
-						dlnk.click();
-						window.URL.revokeObjectURL(url);
-						$("#gafete").prop("disabled", false);
-
-					}
-				});
+			const param = {};
+			param.municipio_id = rc.evento.municipio_id;
+			param.evento_id = rc.evento.evento_id;
+			param.deporte_id = rc.evento.deporte_id;
+			param.categoria_id = rc.evento.categoria_id;
+			param.rama_id = rc.evento.rama_id;
+			param.funcionEspecifica = rc.evento.funcionEspecifica;
+			param.participantes = p;
+			loading(true);
+			Meteor.call('getGafetes', param, function (err, file) {
+				if (!err) {
+					loading(false);
+					downloadFile(file);
+					toastr.success('Listo.');
+					$("#gafete").prop("disabled", false);
+				} else {
+					loading(false);
+					console.log(err)
+					toastr.warning("Error al generar el reporte");
+					$("#gafete").prop("disabled", false);
+				}
+			});
 		}
-
 	};
+
+	this.buscar = async function (form) {
+
+		// if (form.$invalid) {
+		// 	toastr.error('Seleccione todos los campos.');
+		// 	return;
+		// }
+		rc.participantes = [];
+
+		loading(true);
+		const param = {};
+		param.evento_id = rc.evento.evento_id;
+		param.deporte_id = rc.evento.deporte_id;
+		param.categoria_id = rc.evento.categoria_id;
+		param.rama_id = rc.evento.rama_id;
+		param.municipio_id = rc.evento.municipio_id;
+		param.funcionEspecifica = rc.evento.funcionEspecifica;
+		const r = await Meteor.callSync("getParticipanteEventos", param);
+		console.log(r);
+		rc.participantes = r.arreglo;
+		$scope.$apply();
+
+		loading(false);
+
+	}
 
 	this.cambiar = function () {
-		var chkImprimir = document.getElementById('todos');
-		console.log(chkImprimir.checked);
-
-		if (part.ready()) {
-			_.each(rc.participantes, function (participante) {
-				participante.imprimir = chkImprimir.checked;
-			})
-		}
-
+		const chkImprimir = document.getElementById('todos');
+		rc.participantes.forEach(p => {
+			p.imprimir = chkImprimir.checked;
+		})
 	};
+
+	rc.cargarDatos = async function () {
+		rc.eventos = await Meteor.callSync("getEventosActivos");
+		rc.ramas = await Meteor.callSync("getRamas");
+		rc.municipios = await Meteor.callSync("getMunicipios");
+		$scope.$apply();
+	}
+
+	$(function () {
+		rc.cargarDatos();
+	});
 
 };	

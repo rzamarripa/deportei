@@ -90,41 +90,41 @@ function GafetesCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 		ramas : () => {
 			return Ramas.find();
 		},
-		todosParticipantes : () => {
-			if(part.ready()){
-				_.each(rc.participantes, function(participante){
-					var m = Municipios.findOne(participante.municipio_id);
-					participante.municipio = m.nombre;
-					var e = Eventos.findOne(participante.evento_id);
-					participante.evento = e.nombre;
-					var d = Deportes.findOne(participante.deporte_id);
-					participante.deporte = d.nombre;
-					var c = Categorias.findOne(participante.categoria_id);
-					participante.categoria = 	c.nombre;
-					var r = Ramas.findOne(participante.rama_id);
-					participante.rama = 	r.nombre;
+		// todosParticipantes : () => {
+		// 	if(part.ready()){
+		// 		_.each(rc.participantes, function(participante){
+		// 			var m = Municipios.findOne(participante.municipio_id);
+		// 			participante.municipio = m.nombre;
+		// 			var e = Eventos.findOne(participante.evento_id);
+		// 			participante.evento = e.nombre;
+		// 			var d = Deportes.findOne(participante.deporte_id);
+		// 			participante.deporte = d.nombre;
+		// 			var c = Categorias.findOne(participante.categoria_id);
+		// 			participante.categoria = 	c.nombre;
+		// 			var r = Ramas.findOne(participante.rama_id);
+		// 			participante.rama = 	r.nombre;
 					
-					var f = String(participante.foto);
-					participante.foto = f.replace('data:image/jpeg;base64,', '');
+		// 			var f = String(participante.foto);
+		// 			participante.foto = f.replace('data:image/jpeg;base64,', '');
 					
-					participante.pruebasNombre = [];
-					_.each(participante.pruebas, function(prueba){
-							participante.pruebasNombre.push(Pruebas.findOne(prueba, { fields : { nombre : 1}}))
-					})
-				})
+		// 			participante.pruebasNombre = [];
+		// 			_.each(participante.pruebas, function(prueba){
+		// 					participante.pruebasNombre.push(Pruebas.findOne(prueba, { fields : { nombre : 1}}))
+		// 			})
+		// 		})
 				
-				Meteor.call('getGafetes',rc.participantes, function(error, response) {
-				   if(error){
-				    console.log('ERROR :', error);
-				    return;
-				   }else{
-				    console.log('response:', response);
+		// 		Meteor.call('getGafetes',rc.participantes, function(error, response) {
+		// 		   if(error){
+		// 		    console.log('ERROR :', error);
+		// 		    return;
+		// 		   }else{
+		// 		    console.log('response:', response);
 							
-		    	 }
-				});
+		//     	 }
+		// 		});
 				
-			}
-		}
+		// 	}
+		// }
 		
 	});
 

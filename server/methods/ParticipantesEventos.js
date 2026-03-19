@@ -67,4 +67,40 @@ Meteor.methods({
 		return eventos;
 
 	},
+	getParticipanteEventos: function (param) {
+		const data = {};
+		data.arreglo = [];
+		data.arreglo = ParticipanteEventos.find({
+			municipio_id: param.municipio_id,
+			evento_id: param.evento_id,
+			deporte_id: param.deporte_id,
+			categoria_id: param.categoria_id,
+			rama_id: param.rama_id,
+			funcionEspecifica: param.funcionEspecifica
+		}).map(p => {
+			p.pruebasNombre = [];
+			const partcipante = Participantes.findOne(p.participante_id);
+			if (partcipante != undefined) {
+				p.nombre = partcipante.nombre;
+				p.apellidoPaterno = partcipante.apellidoPaterno;
+				p.apellidoMaterno = partcipante.apellidoMaterno;
+				p.fechaNacimiento = partcipante.fechaNacimiento;
+				p.sexo = partcipante.sexo;
+				p.curp = partcipante.curp;
+				p.foto = partcipante.foto;
+				p.imprimir = true;
+				// if (p.pruebas != undefined && p.pruebas.length > 0) {
+				// 	p.pruebas.forEach(t => {
+				// 		const prueba = Pruebas.findOne(t);
+				// 		p.pruebasNombre.push({ nombre: prueba.nombre })
+				// 	})
+				// }
+			}
+			else {
+				ParticipanteEventos.remove({ _id: p._id })
+			}
+			return p;
+		});
+		return data;
+	},
 });

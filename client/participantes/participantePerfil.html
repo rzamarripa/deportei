@@ -40,17 +40,35 @@
 							<span ng-if="c.objeto.curpImagen != ''">
 								<a href="#" ng-click="c.descargar(c.objeto.curpImagen)">Descargar</a>
 							</span>
+							<span ng-if="c.objeto.curpImagen.estatus == 1" class="label label-warning">
+								Sin Validar
+							</span>
+							<span ng-if="c.objeto.curpImagen.estatus == 2" class="label label-success">
+								Correcto
+							</span>
+							<span ng-if="c.objeto.curpImagen.estatus == 3" class="label label-danger">
+								Error
+							</span>
 						</p>
 					</li>
 					<li>
 						<p class="text-muted">
-							<i class="fa fa-file-text"></i>&nbsp;&nbsp;<span class="txt-color-darken"> A. Nacimiento:
+							<i class="fa fa-file-text"></i>&nbsp;&nbsp;<span class="txt-color-darken"> C. Consentimiento:
 							</span>
 							<span ng-if="c.objeto.actaNacimiento == ''" class="label label-warning">
 								Sin Cargar Archivo
 							</span>
 							<span ng-if="c.objeto.actaNacimiento != ''">
 								<a href="#" ng-click="c.descargar(c.objeto.actaNacimiento)">Descargar</a>
+							</span>
+							<span ng-if="c.objeto.actaNacimiento.estatus == 1" class="label label-warning">
+								Sin Validar
+							</span>
+							<span ng-if="c.objeto.actaNacimiento.estatus == 2" class="label label-success">
+								Correcto
+							</span>
+							<span ng-if="c.objeto.actaNacimiento.estatus == 3" class="label label-danger">
+								Error
 							</span>
 						</p>
 					</li>
@@ -64,6 +82,15 @@
 							<span ng-if="c.objeto.identificacion != ''">
 								<a href="#" ng-click="c.descargar(c.objeto.identificacion)">Descargar</a>
 								Vence {{c.objeto.identificacion.fechaVencimiento | date : "dd/MM/yyyy"}}
+							</span>
+							<span ng-if="c.objeto.identificacion.estatus == 1" class="label label-warning">
+								Sin Validar
+							</span>
+							<span ng-if="c.objeto.identificacion.estatus == 2" class="label label-success">
+								Correcto
+							</span>
+							<span ng-if="c.objeto.identificacion.estatus == 3" class="label label-danger">
+								Error
 							</span>
 						</p>
 					</li>
@@ -92,7 +119,7 @@
 							<a href="javascript:void(0);" ng-click="c.modalSubirCurp()">Agregar Curp</a>
 						</li>
 						<li>
-							<a href="javascript:void(0);" ng-click="c.modalSubirActa()">Agregar Acta Nacimiento</a>
+							<a href="javascript:void(0);" ng-click="c.modalSubirActa()">Agregar Carta de Consentimiento</a>
 						</li>
 						<li>
 							<a href="javascript:void(0);" ng-click="c.modalSubirCredencial()">Agregar Identificación</a>
@@ -102,40 +129,6 @@
 			</div>
 		</div>
 
-		<!-- <div class="row">
-			<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2"></div>
-			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-				<div class="col-sm-12">
-					<div class="btn-group">
-						<button class="btn btn-primary">
-							Acciones
-						</button>
-						<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-							<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu">
-							<li>
-								<a href="javascript:void(0);" ng-click="c.modalEditarParticipante()">Editar Participante</a>
-							</li>
-							<li>
-								<a href="javascript:void(0);" ng-click="c.modalAgregarEvento()">Agregar a Evento</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="javascript:void(0);" ng-click="c.modalSubirCurp()">Agregar Curp</a>
-							</li>
-							<li>
-								<a href="javascript:void(0);" ng-click="c.modalSubirActa()">Agregar Acta Nacimiento</a>
-							</li>
-							<li>
-								<a href="javascript:void(0);" ng-click="c.modalSubirCredencial()">Agregar Identificación</a>
-							</li>
-						</ul>
-					</div>
-
-				</div>
-			</div>
-		</div> -->
 	</div>
 
 	<div class="row">
@@ -162,6 +155,7 @@
 											<th style="text-align: center;" width="10%">Pruebas</th>
 											<th style="text-align: center;" width="5%">Rama</th>
 											<th style="text-align: center;" width="5%">Municipio</th>
+											<th style="text-align: center;" width="8%"></th>
 										</tr>
 									</thead>
 									<tbody>
@@ -171,9 +165,16 @@
 											<td style="text-align: left;">{{objeto.funcionEspecifica}}</td>
 											<td style="text-align: left;">{{objeto.deporte}}</td>
 											<td style="text-align: left;">{{objeto.categoria}}</td>
-											<td style="text-align: left;">{{objeto.pruebas}}</td>
+											<td style="text-align: left;">{{objeto.pruebasNombres}}</td>
 											<td style="text-align: left;">{{objeto.rama}}</td>
 											<td style="text-align: left;">{{objeto.municipio}}</td>
+											<td>
+												<a class="btn btn-success" href="javascript:void(0);"
+													ng-click="c.editarEventoParticipante(objeto)" ng-disabled="!objeto.puedeInscribir"><i
+														class="fa fa-pencil"></i></a>
+												<a class="btn btn-danger" href="javascript:void(0);"
+													ng-click="c.eliminarEventoParticipante(objeto)"><i class="fa fa-remove"></i></a>
+											</td>
 										</tr>
 									</tbody>
 								</table>
@@ -228,13 +229,13 @@
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
 						aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel">Actualizar Acta Nacimiento</h4>
+				<h4 class="modal-title" id="myModalLabel">Actualizar Carta de Consentimiento</h4>
 			</div>
 			<div class="modal-body">
 				<form name="form" novalidate>
 					<div class="row">
 						<div class="col-sm-4">
-							<label>Acta Nacimiento * (máximo 1MB)</label>
+							<label>Carta de Consentimiento * (máximo 1MB)</label>
 							<div>
 								<input type="file" id="fileInputActa" accept="application/pdf, image/jpeg">
 							</div>

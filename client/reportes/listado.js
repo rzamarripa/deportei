@@ -41,16 +41,22 @@ function listadoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 		}
 		loading(true);
 		const r = await Meteor.callSync("getParticipantesEventosListado", param);
+		//console.log(r)
 		loading(false);
 		rc.arreglo = r.arreglo;
 		$scope.$apply();
 	}
 
 	this.exportarExcel = function () {
-
 		const participantesArray = [];
 		let con = 1;
 		rc.arreglo.forEach(participante => {
+			let pruebas = "";
+			participante.pruebasNombre.forEach(p => {
+				pruebas += `${p.nombre},`;
+			})
+			pruebas = pruebas.slice(0, -1);
+
 			participantesArray.push([con,
 				participante.nombre,
 				participante.apellidoPaterno,
@@ -58,14 +64,15 @@ function listadoCtrl($scope, $meteor, $reactive, $state, toastr, $stateParams) {
 				(participante.fechaNacimiento.getUTCDate() + "/" + (participante.fechaNacimiento.getUTCMonth() + 1) + "/" + participante.fechaNacimiento.getUTCFullYear()),
 				participante.curp,
 				participante.deporte,
+				pruebas,
 				participante.categoria,
 				participante.rama,
 				participante.municipio,
-				participante.funcionEspecifica]);
+				participante.funcionEspecifica,
+				participante.con]);
 			con++;
 		});
 
-		console.log(participantesArray)
 		loading(true);
 		Meteor.call('getExcel', participantesArray, function (error, file) {
 			if (error) {

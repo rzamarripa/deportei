@@ -267,7 +267,7 @@ angular.module('insude').config(['$injector', function ($injector) {
     })
     .state('anon.gafetes', {
       url: '/gafetes/:evento/:municipio/:deporte/:categoria/:rama',
-      templateUrl: 'client/reportes/gafetes.ng.html',
+      templateUrl: 'client/reportes/gafetes.html',
       controller: 'GafetesCtrl as gaf',
       resolve: {
         "currentUser": ["$meteor", function ($meteor) {
@@ -277,7 +277,7 @@ angular.module('insude').config(['$injector', function ($injector) {
     })
     .state('root.impresiones', {
       url: '/impresiones',
-      templateUrl: 'client/reportes/impresiones.ng.html',
+      templateUrl: 'client/reportes/impresiones.html',
       controller: 'ImpresionesCtrl as imp',
       resolve: {
         "currentUser": ["$meteor", function ($meteor) {

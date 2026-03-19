@@ -2,7 +2,7 @@
 	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
 		<h1 class="alge-title txt-color-blueDark">
 			<i class="fa fa-list fa-fw "></i>
-			Descarga de Documentos
+			Validación y Descarga de Documentos
 		</h1>
 	</div>
 </div>
@@ -64,37 +64,109 @@
 	</div>
 </div>
 
-<table class="table" width="600" align="center" bs-table>
+<table class="table" align="center">
 	<thead>
 		<tr>
-			<th>Foto</th>
-			<th>CURP</th>
-			<th>Nombre</th>
-			<th>Sexo</th>
-			<th>Fecha Nacimiento</th>
-			<th>Documentos</th>
+			<th style="text-align: center;" width="5%">Foto</th>
+			<th style="text-align: center;" width="8%">CURP</th>
+			<th style="text-align: center;" width="10%">Nombre</th>
+			<th style="text-align: center;" width="5%">Sexo</th>
+			<th style="text-align: center;" width="8%">Fecha Nacimiento</th>
+			<th style="text-align: center;" width="5%">Curp</th>
+			<th style="text-align: center;" width="5%">Carta de Consentimiento</th>
+			<th style="text-align: center;" width="5%">Identificación</th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr ng-repeat="participante in dc.arreglo">
-			<td>
+			<td style="text-align: center;">
 				<img src="{{dc.tieneFoto(participante.sexo, participante.foto)}}" alt="" class="img-rounded img-responsive"
 					style="width:60px; height:60px;" />
 			</td>
-			<td>{{participante.curp}}</td>
-			<td>{{participante.nombre}} {{participante.apellidoPaterno}} {{participante.apellidoMaterno}}</td>
-			<td>{{participante.sexo}}</td>
-			<td>{{participante.fechaNacimiento | date: "dd/MM/yyyy"}}</td>
-			<td>
-				<input type="button" class="btn btn-primary" ng-click="dc.descargar(participante.curpImagen,1)" value="Curp" />
-				<input type="button" class="btn btn-primary" ng-click="dc.descargar(participante.actaNacimiento,2)"
-					value="Acta Nac." />
-				<input type="button" class="btn btn-primary" ng-click="dc.descargar(participante.identificacion,3)"
-					value="Identificación" />
+			<td style="text-align: center;">{{participante.curp}}</td>
+			<td style="text-align: left;">{{participante.nombre}} {{participante.apellidoPaterno}}
+				{{participante.apellidoMaterno}}</td>
+			<td style="text-align: center;">{{participante.sexo}}</td>
+			<td style="text-align: center;">{{participante.fechaNacimiento | date: "dd/MM/yyyy"}}</td>
+			<td style="text-align: center;" ng-if="participante.curpImagen != ''">
+				<a class="btn btn-primary btn-xs" href="javascript:void(0);" ng-click="dc.descargar(participante.curpImagen)"><i
+						class="fa fa-cloud-download"></i></a>
+				</span>
+				<a class="btn btn-success btn-xs" href="javascript:void(0);" ng-click="dc.validar(participante, 1, 2)"
+					ng-if="!participante.curpImagen.estaValidado"><i class="fa fa-check"></i></a>
+				<a class="btn btn-danger btn-xs" href="javascript:void(0);" ng-click="dc.validar(participante, 1, 3)"
+					ng-if="!participante.curpImagen.estaValidado"><i class="fa fa-times"></i></a>
+				<div class="text-center">
+					<span ng-if="participante.curpImagen.estatus == 1" class="label label-warning">
+						Sin Validar
+					</span>
+					<span ng-if="participante.curpImagen.estatus == 2" class="label label-success">
+						Correcto
+					</span>
+					<span ng-if="participante.curpImagen.estatus == 3" class="label label-danger">
+						Error
+					</span>
+				</div>
 			</td>
+			<td style="text-align: center;" ng-if="participante.curpImagen == ''">
+				<div class="text-center">
+					<span class="label label-info">
+						Sin Subir
+				</div>
+			</td>
+
+			<td style="text-align: center;" ng-if="participante.actaNacimiento != ''">
+				<a class="btn btn-primary btn-xs" href="javascript:void(0);"
+					ng-click="dc.descargar(participante.actaNacimiento)"><i class="fa fa-cloud-download"></i></a>
+				<a class="btn btn-success btn-xs" href="javascript:void(0);" ng-click="dc.validar(participante, 2, 2)"
+					ng-if="!participante.actaNacimiento.estaValidado"><i class="fa fa-check"></i></a>
+				<a class="btn btn-danger btn-xs" href="javascript:void(0);" ng-click="dc.validar(participante, 2, 3)"
+					ng-if="!participante.actaNacimiento.estaValidado"><i class="fa fa-times"></i></a>
+				<div class="text-center">
+					<span ng-if="participante.actaNacimiento.estatus == 1" class="label label-warning">
+						Sin Validar
+					</span>
+					<span ng-if="participante.actaNacimiento.estatus == 2" class="label label-success">
+						Correcto
+					</span>
+					<span ng-if="participante.actaNacimiento.estatus == 3" class="label label-danger">
+						Error
+					</span>
+				</div>
+			</td>
+			<td style="text-align: center;" ng-if="participante.actaNacimiento == ''">
+				<div class="text-center">
+					<span class="label label-info">
+						Sin Subir
+				</div>
+			</td>
+
+			<td style="text-align: center;" ng-if="participante.identificacion != ''">
+				<a class="btn btn-primary btn-xs" href="javascript:void(0);"
+					ng-click="dc.descargar(participante.identificacion)"><i class="fa fa-cloud-download"></i></a>
+				<a class="btn btn-success btn-xs" href="javascript:void(0);" ng-click="dc.validar(participante, 3, 2)"
+					ng-if="!participante.identificacion.estaValidado"><i class="fa fa-check"></i></a>
+				<a class="btn btn-danger btn-xs" href="javascript:void(0);" ng-click="dc.validar(participante, 3, 3)"
+					ng-if="!participante.identificacion.estaValidado"><i class="fa fa-times"></i></a>
+				<div class="text-center">
+					<span ng-if="participante.identificacion.estatus == 1" class="label label-warning">
+						Sin Validar
+					</span>
+					<span ng-if="participante.identificacion.estatus == 2" class="label label-success">
+						Correcto
+					</span>
+					<span ng-if="participante.identificacion.estatus == 3" class="label label-danger">
+						Error
+					</span>
+				</div>
+			</td>
+			<td style="text-align: center;" ng-if="participante.identificacion == ''">
+				<div class="text-center">
+					<span class="label label-info">
+						Sin Subir
+				</div>
+			</td>
+
 		</tr>
 	</tbody>
 </table>
-
-<a id='dwnldLnk' style="display:none;" hidden="true"></a>
-<!-- <a href="#" ng-click="dc.download('')" title='o ficheirinho de tostas.pdf'>clica aqui</a>-->

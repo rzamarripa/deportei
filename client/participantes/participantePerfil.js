@@ -141,7 +141,7 @@ function ParticipantePerfilCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 	this.modalAgregarEvento = async function () {
 
 		if (rc.objeto.actaNacimiento == "") {
-			toastr.error("Antes de Agregar a un evento debe de subir el documento de Acta de Nacimiento");
+			toastr.error("Antes de Agregar a un evento debe de subir el documento de Carta de Consentimiento");
 			return;
 		}
 		if (rc.objeto.identificacion == "") {
@@ -244,7 +244,6 @@ function ParticipantePerfilCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 		param.categoria_id = categoria_id;
 		param.rama_id = rama_id;
 		rc.pruebas = await Meteor.callSync("getPruebas", param);
-		console.log(rc.pruebas)
 		$scope.$apply();
 	}
 
@@ -272,6 +271,7 @@ function ParticipantePerfilCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 		rc.archivo.tipo = file.type;
 		rc.archivo.anio = rc.objeto.fechaNacimiento.getFullYear();
 		rc.archivo.estaValidado = false;
+		rc.archivo.estatus = 1;
 	}
 
 	this.AlmacenaFoto = function (imagen) {
@@ -422,35 +422,49 @@ function ParticipantePerfilCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 
 	};
 
-	// this.ValidaCurpParticipante = function (curp) {
-	// 	//console.log(curp);
-	// 	loading(true);
-	// 	Meteor.call('getParticipanteCurp', curp, function (error, response) {
-	// 		if (error) {
-	// 			console.log('ERROR :', error);
-	// 			loading(false);
-	// 			return;
-	// 		} else {
-	// 			if (response) {
+	this.eliminarEventoParticipante = function (objeto) {
 
-	// 				toastr.info('El Participante ya se encuentra en la base de datos se cargara sus datos de Curp, Acta de Nacimiento e Identificación');
-	// 				rc.participante = response;
+		let cadena = `¿Estás seguro de eliminar al participante del evento ${objeto.evento}, función ${objeto.funcionEspecifica},` +
+			` deporte: ${objeto.deporte}, Categoria ${objeto.categoria} y rama ${objeto.rama}?`;
+		customConfirm(cadena, function () {
+			loading(true);
+			Meteor.call("setEliminarParticipanteEvento", objeto._id, function (error, r) {
+				if (!error) {
+					toastr.success("Eliminado Correctamente");
+					rc.cargarDatos();
+				}
+				else
+					toastr.error("Error al eliminar");
+				loading(false);
+			});
+		});
 
-	// 				fileDisplayArea1.innerHTML = "";
 
-	// 				var img = new Image();
+	}
 
-	// 				img.id = "fotoCargada";
-	// 				img.src = rc.participante.foto;
-	// 				img.width = 200;
-	// 				img.height = 200;
+	this.editarEventoParticipante = async function (objeto) {
+		if (!objeto.puedeInscribir) return;
+		rc.evento = {};
+		rc.evento = objeto;
+		rc.eventos = await Meteor.callSync("getEventosActivosInscribir");
+		rc.ramas = await Meteor.callSync("getRamas");
+		const param = {};
+		param.evento_id = objeto.evento_id;
+		param.deporte_id = objeto.deporte_id;
+		rc.deportes = await Meteor.callSync("getDeportes", objeto.evento_id);
+		rc.categorias = await Meteor.callSync("getCategorias", param);
+		param.categoria_id = objeto.categoria_id;
+		param.rama_id = objeto.rama_id;
+		rc.pruebas = await Meteor.callSync("getPruebas", param);
+		$scope.$apply();
 
-	// 				fileDisplayArea1.appendChild(img);
-	// 				loading(false);
-	// 			}
-	// 		}
-	// 	});
-	// }
+		$("#modalAgregarEvento").modal('show');
+	}
+
+	this.cerrarEvento = function () {
+		rc.cargarDatos();
+	}
+
 
 	$(function () {
 
@@ -522,7 +536,7 @@ function ParticipantePerfilCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 			}
 		});
 
-		// //JavaScript para agregar el Acta Nacimiento
+		// //JavaScript para agregar el Carta de Consentimiento
 		fileInputActa.addEventListener('change', function (e) {
 			const file = fileInputActa.files[0];
 			var imageType;

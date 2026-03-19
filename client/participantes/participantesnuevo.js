@@ -126,7 +126,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 			return;
 		}
 		if (participante.actaNacimiento == undefined) {
-			toastr.error('Error no se ha cargado el comprobante del Acta de Nacimiento del participante.');
+			toastr.error('Error no se ha cargado el comprobante del Carta de Consentimiento del participante.');
 			return;
 		}
 		var mun = String(Meteor.user() != undefined ? Meteor.user().profile.municipio_id : "");
@@ -751,7 +751,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 			} else {
 				if (response) {
 
-					toastr.info('El Participante ya se encuentra en la base de datos se cargara sus datos de Curp, Acta de Nacimiento e Identificación');
+					toastr.info('El Participante ya se encuentra en la base de datos se cargara sus datos de Curp, Carta de Consentimiento e Identificación');
 					rc.participante = response;
 
 					fileDisplayArea1.innerHTML = "";
@@ -869,7 +869,7 @@ function ParticipantesNuevoCtrl($scope, $meteor, $reactive, $state, toastr, $sta
 
 		});
 
-		//JavaScript para agregar el Acta Nacimiento
+		//JavaScript para agregar la Carta de Consentimiento
 		fileInputActa.addEventListener('change', function (e) {
 			var file = fileInputActa.files[0];
 
